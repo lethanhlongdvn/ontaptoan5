@@ -1,0 +1,250 @@
+{
+  "week": 25,
+  "stationName": "Ninh Thuận (Tháp Po Klong Garai)",
+  "config": {
+    "week": 25,
+    "openTime": "2027-03-12T14:00:00",
+    "openStr": "14:00 ngày 12/03/2027"
+  },
+  "souvenirs": {
+    "cap1": "Chùm nho ngọc Ninh Thuận Đồng (50đ)",
+    "cap2": "Tượng thần Shiva Po Klong Garai Bạc (90đ)",
+    "cap3": "Hạt ngọc Vĩnh Hy Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Công thức tính diện tích xung quanh của hình lập phương cạnh a là gì?",
+        "a": "Sxq = a × a × 4"
+      },
+      {
+        "q": "Công thức tính diện tích toàn phần của hình lập phương cạnh a là gì?",
+        "a": "Stp = a × a × 6"
+      },
+      {
+        "q": "Công thức tính thể tích của hình hộp chữ nhật có 3 kích thước a, b, c là gì?",
+        "a": "V = a × b × c"
+      },
+      {
+        "q": "Công thức tính thể tích của hình lập phương cạnh a là gì?",
+        "a": "V = a × a × a"
+      },
+      {
+        "q": "Tính diện tích xung quanh của hình lập phương cạnh 5 cm",
+        "a": "100 cm² (5 × 5 × 4 = 100)"
+      },
+      {
+        "q": "Quần thể tháp Chăm Po Klong Garai cổ kính nằm trên ngọn đồi nào tại Ninh Thuận?",
+        "a": "Đồi Trầu (Phan Rang)"
+      },
+      {
+        "q": "Loại cây ăn quả đặc sản trứ danh phủ bóng những giàn xanh tại Ninh Thuận là gì?",
+        "a": "Nho Ninh Thuận (Nho Ba Mọi)"
+      },
+      {
+        "q": "Vịnh biển tuyệt mỹ được ví như viên ngọc bích hoang sơ ở Ninh Thuận là vịnh nào?",
+        "a": "Vịnh Vĩnh Hy"
+      },
+      {
+        "q": "Cánh đồng muối lớn nhất nước ta tại Ninh Thuận có sản lượng hàng trăm nghìn tấn là gì?",
+        "a": "Cánh đồng muối Cà Ná"
+      },
+      {
+        "q": "Tính thể tích của hình lập phương có cạnh 2 cm",
+        "a": "8 cm³ (2 × 2 × 2 = 8)"
+      },
+      {
+        "q": "Tính diện tích toàn phần của hình lập phương có cạnh 3 dm",
+        "a": "54 dm² (3 × 3 × 6 = 54)"
+      },
+      {
+        "q": "Tính thể tích hình hộp chữ nhật có dài 5 cm, rộng 4 cm, cao 3 cm",
+        "a": "60 cm³"
+      },
+      {
+        "q": "Một hình lập phương có diện tích một mặt là 16 cm². Tính diện tích toàn phần",
+        "a": "96 cm² (16 × 6 = 96)"
+      },
+      {
+        "q": "Một hình lập phương có diện tích xung quanh là 36 cm². Tính diện tích một mặt",
+        "a": "9 cm² (36 : 4 = 9)"
+      },
+      {
+        "q": "Nếu gấp cạnh hình lập phương lên 2 lần thì thể tích gấp lên mấy lần?",
+        "a": "8 lần (2 × 2 × 2 = 8)"
+      },
+      {
+        "q": "Lễ hội truyền thống lớn nhất trong năm của đồng bào Chăm tại tháp Po Klong Garai là gì?",
+        "a": "Lễ hội Kate"
+      },
+      {
+        "q": "Làng gốm cổ truyền Bàu Trúc ở Ninh Thuận được UNESCO công nhận di sản là làm bằng gì?",
+        "a": "Gốm làm thủ công bằng tay (không dùng bàn xoay)"
+      },
+      {
+        "q": "Đồi cát vàng mênh mông uốn lượn cạnh TP Phan Rang là đồi cát gì?",
+        "a": "Đồi cát Nam Cương"
+      },
+      {
+        "q": "Tính thể tích hình lập phương có cạnh 10 cm theo đơn vị đề-xi-mét khối",
+        "a": "1 dm³ (1 000 cm³ = 1 dm³)"
+      },
+      {
+        "q": "Một hình lập phương có diện tích toàn phần 24 cm². Cạnh của nó là bao nhiêu cm?",
+        "a": "2 cm (24 : 6 = 4 = 2 × 2)"
+      },
+      {
+        "q": "Tính thể tích hình hộp chữ nhật có diện tích đáy 25 cm² và chiều cao 8 cm",
+        "a": "200 cm³ (25 × 8 = 200)"
+      },
+      {
+        "q": "Một hình lập phương có Stp = 150 dm². Tính thể tích của hình lập phương đó",
+        "a": "125 dm³ (cạnh 5 dm)"
+      },
+      {
+        "q": "Nếu gấp cạnh hình lập phương lên 3 lần thì diện tích toàn phần tăng mấy lần?",
+        "a": "9 lần (3 × 3 = 9)"
+      },
+      {
+        "q": "Tính diện tích một mặt hình lập phương có thể tích 27 cm³",
+        "a": "9 cm² (cạnh 3 cm)"
+      },
+      {
+        "q": "Công viên đá Ninh Thuận với vô số tảng đá tự nhiên kỳ thú nằm trong VQG nào?",
+        "a": "Vườn quốc gia Núi Chúa"
+      },
+      {
+        "q": "Vườn quốc gia Núi Chúa ở Ninh Thuận được UNESCO công nhận danh hiệu gì năm 2021?",
+        "a": "Khu dự trữ sinh quyển thế giới"
+      },
+      {
+        "q": "Món đặc sản bánh giòn rụm nhân tôm mực đổ khuôn đất nung ở Phan Rang là gì?",
+        "a": "Bánh căn Phan Rang"
+      },
+      {
+        "q": "Tính diện tích xung quanh của hình lập phương cạnh 1,2 m",
+        "a": "5,76 m²"
+      },
+      {
+        "q": "Đổi 0,5 m³ sang lít",
+        "a": "500 lít"
+      },
+      {
+        "q": "Một bể cá hình lập phương không có nắp cạnh 40 cm. Diện tích kính làm bể là bao nhiêu?",
+        "a": "8 000 cm² (40 × 40 × 5 = 8 000)"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một chiếc thùng gỗ đóng nho Ba Mọi hình lập phương có cạnh 4 dm. Diện tích toàn phần của chiếc thùng gỗ đó là ... dm².",
+        "a": "96"
+      },
+      {
+        "q": "Một bể chứa nước tưới giàn nho hình hộp chữ nhật có chiều dài 3 m, chiều rộng 2 m và chiều sâu 1,5 m. Thể tích bể nước là ... m³.",
+        "a": "9"
+      },
+      {
+        "q": "Một khối tượng đá thần Shiva nhỏ hình lập phương có thể tích 64 cm³. Độ dài mỗi cạnh của khối tượng là ... cm.",
+        "a": "4"
+      },
+      {
+        "q": "Một hộp quà bánh căn hình lập phương có diện tích xung quanh là 144 cm². Cạnh của hộp quà đó là ... cm.",
+        "a": "6"
+      },
+      {
+        "q": "Một bình gốm Bàu Trúc hình hộp chữ nhật có kích thước đáy 15 cm và 12 cm, chiều cao 20 cm. Thể tích bình gốm là ... cm³.",
+        "a": "3600"
+      },
+      {
+        "q": "Một bồn chứa muối hạt Cà Ná hình lập phương có cạnh dài 1,5 m. Thể tích bồn chứa muối đó là ... m³.",
+        "a": "3,375"
+      },
+      {
+        "q": "Người ta dán giấy màu xung quanh một hộp quà lưu niệm tháp Chăm hình lập phương cạnh 10 cm. Diện tích giấy dán xung quanh là ... cm².",
+        "a": "400"
+      },
+      {
+        "q": "Một chiếc tàu ngắm san hô Vịnh Vĩnh Hy có đáy kính hình hộp chữ nhật dài 4 m, rộng 2,5 m, chiều cao 0,8 m. Thể tích khoang đáy tàu là ... m³.",
+        "a": "8"
+      },
+      {
+        "q": "Người ta sơn toàn bộ 6 mặt của một thùng đựng nho hình lập phương cạnh 0,8 m. Diện tích cần sơn là ... m².",
+        "a": "3,84"
+      },
+      {
+        "q": "Một bể nước ngầm hình hộp chữ nhật dài 5 m, rộng 3 m. Khi đổ vào bể 18 m³ nước thì mực nước trong bể sâu ... m.",
+        "a": "1,2"
+      },
+      {
+        "q": "Tính thể tích của hình lập phương có diện tích toàn phần bằng 216 cm². Thể tích là ... cm³.",
+        "a": "216"
+      },
+      {
+        "q": "Một thùng hàng chứa 120 hộp nho sấy dẻo, mỗi hộp có thể tích 500 cm³. Tổng thể tích của các hộp nho là ... dm³.",
+        "a": "60"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một bể cá cảnh hình hộp chữ nhật có chiều dài 80 cm, chiều rộng 50 cm và mực nước sâu 35 cm. Người ta thả vào bể một khối đá san hô Vĩnh Hy thì thấy mực nước dâng lên cao 40 cm. Tính thể tích của khối đá san hô đó theo đơn vị đề-xi-mét khối.",
+        "opts": [
+          "20 dm³",
+          "16 dm³",
+          "24 dm³",
+          "18 dm³"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một khối gỗ hình lập phương có cạnh 9 cm. Người ta đem cưa khối gỗ đó thành các khối lập phương nhỏ cạnh 3 cm. Hỏi cưa được tất cả bao nhiêu khối lập phương nhỏ (bỏ qua hao phí khi cưa)?",
+        "opts": [
+          "27 khối",
+          "9 khối",
+          "18 khối",
+          "36 khối"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Người ta xếp 1 000 khối lập phương nhỏ cạnh 1 cm thành một khối lập phương lớn rồi sơn toàn bộ 6 mặt của khối lập phương lớn. Hỏi có bao nhiêu khối lập phương nhỏ không được sơn mặt nào?",
+        "opts": [
+          "512 khối",
+          "729 khối",
+          "384 khối",
+          "486 khối"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một bể bơi mini hình hộp chữ nhật có chiều dài gấp đôi chiều rộng và chiều cao 1,5 m. Biết diện tích xung quanh của bể bơi là 54 m². Tính thể tích của bể bơi đó.",
+        "opts": [
+          "108 m³",
+          "54 m³",
+          "72 m³",
+          "90 m³"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Nếu tăng cạnh của một hình lập phương thêm 50% thì thể tích của hình lập phương đó tăng thêm bao nhiêu phần trăm?",
+        "opts": [
+          "237,5%",
+          "150%",
+          "125%",
+          "225%"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một cano du lịch trên Vịnh Vĩnh Hy đi xuôi dòng từ bến ra bãi san hô dài 15 km hết 30 phút. Vận tốc dòng nước là 3 km/giờ. Tính vận tốc thực của cano khi nước yên lặng.",
+        "opts": [
+          "27 km/giờ",
+          "30 km/giờ",
+          "33 km/giờ",
+          "25 km/giờ"
+        ],
+        "c": 0
+      }
+    ]
+  }
+}

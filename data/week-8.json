@@ -1,0 +1,250 @@
+{
+  "week": 8,
+  "stationName": "Vịnh Hạ Long & Yên Tử (Quảng Ninh)",
+  "config": {
+    "week": 8,
+    "openTime": "2026-10-30T14:00:00",
+    "openStr": "14:00 ngày 30/10/2026"
+  },
+  "souvenirs": {
+    "cap1": "Vỏ sò Vịnh Rồng Biển Đông Đồng (50đ)",
+    "cap2": "Chuông đồng Yên Tử Mạ Bạc (90đ)",
+    "cap3": "Trúc Lâm Ngọc Tỷ Long Châu Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Tính kết quả phép cộng: 15,3 + 4,5",
+        "a": "19,8"
+      },
+      {
+        "q": "Tính kết quả phép cộng: 28,75 + 11,25",
+        "a": "40"
+      },
+      {
+        "q": "Tính nhanh: 3,6 + 4,7 + 6,4",
+        "a": "14,7 ((3,6 + 6,4) + 4,7 = 14,7)"
+      },
+      {
+        "q": "Phép cộng số thập phân có tính chất a + b = b + a gọi là tính chất gì?",
+        "a": "Tính chất giao hoán"
+      },
+      {
+        "q": "Phép cộng số thập phân (a + b) + c = a + (b + c) là tính chất gì?",
+        "a": "Tính chất kết hợp"
+      },
+      {
+        "q": "Vịnh Hạ Long được UNESCO bao nhiêu lần công nhận là Di sản Thiên nhiên Thế giới?",
+        "a": "2 lần (1994, 2000)"
+      },
+      {
+        "q": "Vịnh Hạ Long có khoảng bao nhiêu hòn đảo lớn nhỏ?",
+        "a": "1 969 hòn đảo"
+      },
+      {
+        "q": "Đỉnh núi thiêng Yên Tử có ngôi chùa Đồng nằm ở độ cao bao nhiêu mét?",
+        "a": "1 068 m"
+      },
+      {
+        "q": "Tính nhẩm: 4,8 + 0,2",
+        "a": "5"
+      },
+      {
+        "q": "Tính nhẩm: 19,95 + 0,05",
+        "a": "20"
+      },
+      {
+        "q": "Tính kết quả: 34,82 + 9,7",
+        "a": "44,52"
+      },
+      {
+        "q": "Tính kết quả: 125,6 + 74,4",
+        "a": "200"
+      },
+      {
+        "q": "Tính nhanh: 12,5 + 8,9 + 7,5",
+        "a": "28,9"
+      },
+      {
+        "q": "Tính nhanh: 5,45 + 3,8 + 4,55 + 6,2",
+        "a": "20 ((5,45 + 4,55) + (3,8 + 6,2) = 20)"
+      },
+      {
+        "q": "Biểu tượng nổi tiếng của Vịnh Hạ Long trên tờ tiền 200.000 đồng là hòn đảo đá nào?",
+        "a": "Hòn Đỉnh Hương (Lư Hương)"
+      },
+      {
+        "q": "Cặp hòn đảo đá biểu tượng cho tình yêu và du lịch Hạ Long là hòn gì?",
+        "a": "Hòn Trống Mái (hòn Gà Chọi)"
+      },
+      {
+        "q": "Người sáng lập nên Thiền phái Trúc Lâm Yên Tử là vị vua nào?",
+        "a": "Vua Trần Nhân Tông"
+      },
+      {
+        "q": "Tính nhẩm: 6,75 + 10",
+        "a": "16,75"
+      },
+      {
+        "q": "Tìm x, biết: x - 4,5 = 12,3",
+        "a": "x = 16,8"
+      },
+      {
+        "q": "Số nào cộng với bất kỳ số thập phân a nào cũng bằng chính số a?",
+        "a": "Số 0"
+      },
+      {
+        "q": "Tính kết quả: 0,85 + 0,35",
+        "a": "1,2"
+      },
+      {
+        "q": "Tính kết quả: 67,9 + 32,1",
+        "a": "100"
+      },
+      {
+        "q": "Tính nhanh: 1,2 + 2,3 + 3,4 + 8,8 + 7,7 + 6,6",
+        "a": "30"
+      },
+      {
+        "q": "Vịnh biển tuyệt đẹp nằm liền kề phía đông bắc Vịnh Hạ Long là vịnh gì?",
+        "a": "Vịnh Bái Tử Long"
+      },
+      {
+        "q": "Hang động lộng lẫy bậc nhất trên Vịnh Hạ Long có tên là gì?",
+        "a": "Hang Sửng Sốt"
+      },
+      {
+        "q": "Chùa Đồng Yên Tử được đúc hoàn toàn bằng kim loại gì?",
+        "a": "Đồng nguyên chất"
+      },
+      {
+        "q": "Tính kết quả: 9,99 + 0,01",
+        "a": "10"
+      },
+      {
+        "q": "Tính kết quả: 45,6 + 0,54",
+        "a": "46,14"
+      },
+      {
+        "q": "Tìm y, biết: y - 8,75 = 11,25",
+        "a": "y = 20"
+      },
+      {
+        "q": "Tổng của 3 số thập phân: 2,5 + 3,5 + 4,5 bằng bao nhiêu?",
+        "a": "10,5"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một du thuyền tham quan Vịnh Hạ Long: buổi sáng chạy 24,5 km; buổi chiều chạy nhiều hơn buổi sáng 5,8 km. Cả ngày du thuyền chạy được ... km.",
+        "a": "54,8"
+      },
+      {
+        "q": "Tính nhanh giá trị biểu thức: 4,65 + 7,89 + 5,35 + 2,11. Kết quả là ...",
+        "a": "20"
+      },
+      {
+        "q": "Ba kiện hàng hải sản Quảng Ninh cân nặng lần lượt là 23,5 kg; 18,75 kg và 26,25 kg. Tổng khối lượng ba kiện hàng là ... kg.",
+        "a": "68,5"
+      },
+      {
+        "q": "Tìm x, biết: x - 15,8 = 24,6. Giá trị của x là ...",
+        "a": "40,4"
+      },
+      {
+        "q": "Tuyến cáp treo lên đỉnh Yên Tử chặng 1 dài 1,2 km, chặng 2 dài 0,9 km. Tổng chiều dài hai chặng cáp treo là ... km.",
+        "a": "2,1"
+      },
+      {
+        "q": "Một gia đình mua vé tham quan Vịnh Hạ Long: vé người lớn hết 580 000 đồng, vé trẻ em hết 320 000 đồng, tiền ăn trưa hết 850 000 đồng. Tổng chi phí là ... đồng.",
+        "a": "1750000 (hoặc 1 750 000)"
+      },
+      {
+        "q": "Tính nhanh giá trị biểu thức: 1,1 + 2,2 + 3,3 + 6,7 + 7,8 + 8,9. Kết quả là ...",
+        "a": "30"
+      },
+      {
+        "q": "Một bể nuôi hải sản ở Tuần Châu chứa 15,5 m³ nước, người ta bơm thêm vào bể 8,75 m³ nước nữa. Lúc này trong bể có ... m³ nước.",
+        "a": "24,25"
+      },
+      {
+        "q": "Đoàn thám hiểm leo núi Yên Tử: giờ đầu đi được 1,8 km; giờ thứ hai đi được 1,5 km; giờ thứ ba đi được 1,2 km. Cả ba giờ đoàn đi được ... km.",
+        "a": "4,5"
+      },
+      {
+        "q": "Tìm y, biết: y - 3,45 - 2,55 = 14. Giá trị của y là ...",
+        "a": "20"
+      },
+      {
+        "q": "Một hòn đảo đá trên Vịnh Hạ Long có chu vi đáy dạng tam giác với 3 cạnh là 12,4 m; 15,8 m và 11,8 m. Chu vi chân đảo đá là ... m.",
+        "a": "40"
+      },
+      {
+        "q": "Lượng mưa đo được tại Quảng Ninh ngày thứ nhất là 34,5 mm; ngày thứ hai là 45,8 mm. Cả hai ngày lượng mưa đo được là ... mm.",
+        "a": "80,3"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Khi cộng một số tự nhiên với một số thập phân có một chữ số ở phần thập phân, bạn Nam đã quên dấu phẩy của số thập phân nên thực hiện phép cộng như hai số tự nhiên và được tổng là 465. Biết tổng đúng là 202,2. Tìm số tự nhiên đó.",
+        "opts": [
+          "173",
+          "176",
+          "182",
+          "165"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tính tổng của 20 số hạng đầu tiên trong dãy số thập phân sau:\n0,2; 0,4; 0,6; 0,8; 1,0; 1,2; ...",
+        "opts": [
+          "40",
+          "42",
+          "44",
+          "50"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Ba người cùng mua chung vé tham quan Vịnh Hạ Long. Người thứ nhất trả 1/3 tổng số tiền. Người thứ hai trả ít hơn người thứ nhất 50 000 đồng. Người thứ ba trả 250 000 đồng thì vừa đủ. Hỏi tổng số tiền vé của cả 3 người là bao nhiêu?",
+        "opts": [
+          "600 000 đồng",
+          "750 000 đồng",
+          "540 000 đồng",
+          "450 000 đồng"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Hai cabin cáp treo Yên Tử xuất phát cùng lúc từ hai đầu tuyến cáp dài 1 800 m đi ngược chiều nhau. Vận tốc cabin A là 5 m/giây, vận tốc cabin B là 4 m/giây. Hỏi sau bao lâu hai cabin gặp nhau?",
+        "opts": [
+          "200 giây (3 phút 20 giây)",
+          "180 giây",
+          "240 giây",
+          "150 giây"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một người đi xe máy từ Hạ Long sang Yên Tử (Quảng Ninh) với vận tốc 40 km/giờ hết 1,2 giờ. Khi từ Yên Tử trở về Hạ Long người đó đi với vận tốc 30 km/giờ. Tính thời gian người đó đi từ Yên Tử về Hạ Long.",
+        "opts": [
+          "1,6 giờ (1 giờ 36 phút)",
+          "1,5 giờ",
+          "1,4 giờ",
+          "1,8 giờ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một hình chữ nhật có chu vi là 48 m. Nếu tăng chiều rộng thêm 4 m và giảm chiều dài 4 m thì hình chữ nhật trở thành hình vuông. Tính diện tích của hình chữ nhật ban đầu.",
+        "opts": [
+          "128 m²",
+          "140 m²",
+          "144 m²",
+          "120 m²"
+        ],
+        "c": 0
+      }
+    ]
+  }
+}

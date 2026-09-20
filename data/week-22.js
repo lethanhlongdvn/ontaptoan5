@@ -1,0 +1,250 @@
+window.WEEK_DATA_22 = {
+  "week": 22,
+  "stationName": "Đắk Nông (Hồ Tà Đùng)",
+  "config": {
+    "week": 22,
+    "openTime": "2027-02-19T14:00:00",
+    "openStr": "14:00 ngày 19/02/2027"
+  },
+  "souvenirs": {
+    "cap1": "Huy hiệu Đảo xanh Tà Đùng Đồng (50đ)",
+    "cap2": "Thạch anh núi lửa Chư Blúk Bạc (90đ)",
+    "cap3": "Vương miện Vịnh Tà Đùng Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "1 đề-xi-mét khối (dm³) bằng bao nhiêu xăng-ti-mét khối (cm³)?",
+        "a": "1 000 cm³"
+      },
+      {
+        "q": "1 đề-xi-mét khối (dm³) tương đương với bao nhiêu lít?",
+        "a": "1 lít"
+      },
+      {
+        "q": "1 lít bằng bao nhiêu xăng-ti-mét khối?",
+        "a": "1 000 cm³"
+      },
+      {
+        "q": "Đổi 4 dm³ sang xăng-ti-mét khối",
+        "a": "4 000 cm³"
+      },
+      {
+        "q": "Đổi 2 500 cm³ sang đề-xi-mét khối",
+        "a": "2,5 dm³"
+      },
+      {
+        "q": "Hồ Tà Đùng ở Đắk Nông được mệnh danh là danh thắng gì trên Tây Nguyên?",
+        "a": "Vịnh Hạ Long trên Tây Nguyên"
+      },
+      {
+        "q": "Hồ Tà Đùng có khoảng bao nhiêu hòn đảo lớn nhỏ nhấp nhô tuyệt đẹp?",
+        "a": "Hơn 40 hòn đảo"
+      },
+      {
+        "q": "Hệ thống hang động núi lửa dài nhất Đông Nam Á tại Đắk Nông có tên là gì?",
+        "a": "Hang động núi lửa Chư Blúk"
+      },
+      {
+        "q": "Công viên địa chất Đắk Nông được UNESCO công nhận là gì?",
+        "a": "Công viên Địa chất Toàn cầu UNESCO"
+      },
+      {
+        "q": "So sánh: 1,5 dm³ và 1 500 cm³",
+        "a": "Bằng nhau (=)"
+      },
+      {
+        "q": "Đổi 0,8 dm³ sang xăng-ti-mét khối",
+        "a": "800 cm³"
+      },
+      {
+        "q": "Đổi 750 cm³ sang đề-xi-mét khối",
+        "a": "0,75 dm³"
+      },
+      {
+        "q": "3 dm³ 50 cm³ bằng bao nhiêu xăng-ti-mét khối?",
+        "a": "3 050 cm³"
+      },
+      {
+        "q": "Một hình lập phương có cạnh 1 dm thì thể tích là bao nhiêu?",
+        "a": "1 dm³ (1 000 cm³)"
+      },
+      {
+        "q": "Nếu hình A được ghép từ 12 hình lập phương nhỏ 1 cm³ thì thể tích hình A là gì?",
+        "a": "12 cm³"
+      },
+      {
+        "q": "Đỉnh núi cao nhất tỉnh Đắk Nông soi bóng xuống Hồ Tà Đùng là đỉnh gì?",
+        "a": "Đỉnh Tà Đùng (1 982 m)"
+      },
+      {
+        "q": "Loại đá bán quý lấp lánh hình thành từ dòng dung nham núi lửa Đắk Nông là đá gì?",
+        "a": "Đá thạch anh (hoặc đá Opal, Chalcedony)"
+      },
+      {
+        "q": "Sông Đồng Nai đoạn chảy qua Đắk Nông tạo nên hồ chứa thủy điện nào?",
+        "a": "Thủy điện Đồng Nai 3 (Hồ Tà Đùng)"
+      },
+      {
+        "q": "So sánh: 2 dm³ 5 cm³ và 2 050 cm³",
+        "a": "2 dm³ 5 cm³ < 2 050 cm³ (vì 2 005 cm³ < 2 050 cm³)"
+      },
+      {
+        "q": "Đổi 5 lít sang đề-xi-mét khối",
+        "a": "5 dm³"
+      },
+      {
+        "q": "Đổi 12 dm³ sang lít",
+        "a": "12 lít"
+      },
+      {
+        "q": "Đổi 3/4 dm³ sang xăng-ti-mét khối",
+        "a": "750 cm³"
+      },
+      {
+        "q": "Số thập phân 0,005 dm³ bằng bao nhiêu xăng-ti-mét khối?",
+        "a": "5 cm³"
+      },
+      {
+        "q": "Hình hộp chữ nhật được tạo thành từ bao nhiêu mặt hình chữ nhật?",
+        "a": "6 mặt"
+      },
+      {
+        "q": "Hình lập phương có mấy đỉnh, mấy cạnh và mấy mặt?",
+        "a": "8 đỉnh, 12 cạnh, 6 mặt"
+      },
+      {
+        "q": "Loài vượn má vàng quý hiếm được bảo tồn nghiêm ngặt tại VQG Tà Đùng là gì?",
+        "a": "Vượn đen má hung (má vàng)"
+      },
+      {
+        "q": "Dân tộc Mạ và M’Nông ở Đắk Nông có sử thi truyền miệng nổi tiếng là gì?",
+        "a": "Sử thi Ot Ndrong"
+      },
+      {
+        "q": "Tính: 350 cm³ + 650 cm³ bằng bao nhiêu dm³?",
+        "a": "1 dm³"
+      },
+      {
+        "q": "Tính: 5 dm³ - 1 200 cm³ bằng bao nhiêu cm³?",
+        "a": "3 800 cm³"
+      },
+      {
+        "q": "Đổi 1/2 lít sang xăng-ti-mét khối",
+        "a": "500 cm³"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một can đựng nước khoáng mang theo thám hiểm Hồ Tà Đùng có thể tích 5 dm³. Đổi thể tích can nước sang xăng-ti-mét khối là ... cm³.",
+        "a": "5000"
+      },
+      {
+        "q": "Một bể kính nuôi cá cảnh nhỏ hình hộp chữ nhật có thể tích 24 dm³. Hiện tại bể chứa 3/4 thể tích nước. Lượng nước trong bể là ... lít.",
+        "a": "18"
+      },
+      {
+        "q": "Một khối đá thạch anh Chư Blúk có thể tích 1 250 cm³. Đổi thể tích khối đá này sang đề-xi-mét khối dưới dạng số thập phân là ... dm³.",
+        "a": "1,25"
+      },
+      {
+        "q": "Một hộp quà lưu niệm lưu giữ đất bazan Tà Đùng hình lập phương có cạnh 8 cm. Thể tích hộp quà đó là ... cm³.",
+        "a": "512"
+      },
+      {
+        "q": "Một thuyền du lịch chạy trên Hồ Tà Đùng tiêu thụ hết 12,5 lít dầu cho chuyến đi 2 giờ. Thể tích dầu tiêu thụ đổi ra đề-xi-mét khối là ... dm³.",
+        "a": "12,5"
+      },
+      {
+        "q": "Người ta xếp các khối lập phương nhỏ 1 cm³ thành một hình hộp chữ nhật có chiều dài 6 cm, chiều rộng 4 cm, chiều cao 5 cm. Cần tất cả ... khối lập phương nhỏ.",
+        "a": "120"
+      },
+      {
+        "q": "Một bình nước hình trụ có thể tích 1,8 dm³. Người ta đã uống hết 650 cm³ nước. Lượng nước còn lại trong bình là ... cm³.",
+        "a": "1150"
+      },
+      {
+        "q": "Tìm x, biết: x dm³ + 450 cm³ = 2 dm³. Giá trị của x là ... (nhập số thập phân).",
+        "a": "1,55"
+      },
+      {
+        "q": "Hồ Tà Đùng có hơn 40 đảo lớn nhỏ, một hòn đảo đất đỏ có diện tích mặt nước bao quanh hình tam giác với đáy 150 m và chiều cao 80 m. Diện tích mặt nước là ... m².",
+        "a": "6000"
+      },
+      {
+        "q": "Một thùng nhựa chứa nước sinh hoạt trên nhà bè Tà Đùng có thể tích 120 dm³. Người ta dùng một xô 15 dm³ để múc nước. Cần múc ... xô thì đầy thùng.",
+        "a": "8"
+      },
+      {
+        "q": "Đổi 4 080 cm³ sang đề-xi-mét khối ta được kết quả là ... dm³.",
+        "a": "4,08"
+      },
+      {
+        "q": "Một khối gỗ lũa Tà Đùng chiếm thể tích 3,5 dm³, nặng 2,8 kg. Một khối gỗ cùng loại có thể tích 5 dm³ sẽ nặng ... kg.",
+        "a": "4"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một hình lập phương A có cạnh 4 cm. Một hình lập phương B có cạnh dài gấp đôi cạnh hình lập phương A. Hỏi thể tích hình lập phương B gấp mấy lần thể tích hình lập phương A?",
+        "opts": [
+          "8 lần",
+          "4 lần",
+          "6 lần",
+          "2 lần"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Người ta dùng các hình lập phương nhỏ cạnh 1 cm để xếp thành một hình hộp chữ nhật có kích thước dài 8 cm, rộng 6 cm, cao 5 cm rồi sơn tất cả 6 mặt ngoài. Hỏi có bao nhiêu hình lập phương nhỏ được sơn đúng 2 mặt?",
+        "opts": [
+          "52 hình",
+          "48 hình",
+          "60 hình",
+          "56 hình"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một bể kính nuôi cá hình hộp chữ nhật có chiều dài 40 cm, chiều rộng 25 cm và mực nước đang cao 15 cm. Người ta thả vào bể một khối đá san hô thì thấy nước dâng lên cao 18 cm. Tính thể tích của khối đá san hô đó.",
+        "opts": [
+          "3 000 cm³ (3 dm³)",
+          "2 500 cm³",
+          "3 500 cm³",
+          "4 000 cm³"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Người ta xếp 216 khối lập phương nhỏ cạnh 1 cm thành một khối lập phương lớn. Hỏi cạnh của khối lập phương lớn dài bao nhiêu xăng-ti-mét?",
+        "opts": [
+          "6 cm",
+          "8 cm",
+          "7 cm",
+          "5 cm"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một bình chứa nước dạng hình hộp chữ nhật có đáy là hình vuông cạnh 20 cm, đang chứa 6 lít nước. Hỏi chiều cao của cột nước trong bình là bao nhiêu xăng-ti-mét?",
+        "opts": [
+          "15 cm",
+          "12 cm",
+          "18 cm",
+          "20 cm"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một thuyền du lịch chở 12 người tham quan Hồ Tà Đùng. Vé người lớn là 120 000 đồng, vé trẻ em là 80 000 đồng. Tổng số tiền vé thu được là 1 200 000 đồng. Hỏi đoàn có bao nhiêu người lớn?",
+        "opts": [
+          "6 người lớn",
+          "8 người lớn",
+          "7 người lớn",
+          "5 người lớn"
+        ],
+        "c": 0
+      }
+    ]
+  }
+};

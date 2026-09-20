@@ -1,0 +1,12 @@
+# Loại trừ các tài nguyên không dùng trên Web Hosting để Vercel deploy siêu nhanh
+docs/
+Đề/
+tools/
+backup/
+edubot-zmp/
+*.py
+*.pyc
+__pycache__/
+.gitignore
+README.md
+database.rules.json

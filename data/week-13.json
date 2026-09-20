@@ -1,0 +1,250 @@
+{
+  "week": 13,
+  "stationName": "VQG Phong Nha - Kẻ Bàng (Quảng Bình)",
+  "config": {
+    "week": 13,
+    "openTime": "2026-12-04T14:00:00",
+    "openStr": "14:00 ngày 04/12/2026"
+  },
+  "souvenirs": {
+    "cap1": "Tinh thể nhũ đá Khởi Hoang Đồng (50đ)",
+    "cap2": "Đèn pin xuyên hang Bạc Băng (90đ)",
+    "cap3": "Trượng thần Động Tiên Sơn Hoàng Kim Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Hình thang là hình tứ giác có đặc điểm gì?",
+        "a": "Có một cặp cạnh đối diện song song"
+      },
+      {
+        "q": "Hai cạnh song song của hình thang được gọi là gì?",
+        "a": "Hai đáy (đáy lớn và đáy bé)"
+      },
+      {
+        "q": "Đoạn thẳng vuông góc nối giữa hai đáy của hình thang gọi là gì?",
+        "a": "Chiều cao của hình thang"
+      },
+      {
+        "q": "Công thức tính diện tích hình thang có hai đáy a, b và chiều cao h là gì?",
+        "a": "S = ((a + b) × h) : 2"
+      },
+      {
+        "q": "Hình thang có một góc vuông được gọi là hình gì?",
+        "a": "Hình thang vuông"
+      },
+      {
+        "q": "Hang động tự nhiên lớn nhất thế giới nằm trong VQG Phong Nha - Kẻ Bàng là hang gì?",
+        "a": "Hang Sơn Đoòng"
+      },
+      {
+        "q": "Động khô dài nhất châu Á với hệ thống thạch nhũ lung linh ở Quảng Bình là động gì?",
+        "a": "Động Thiên Đường"
+      },
+      {
+        "q": "Dòng sông xanh ngọc bích nơi thuyền chở du khách vào Động Phong Nha là sông gì?",
+        "a": "Sông Son"
+      },
+      {
+        "q": "Tính diện tích hình thang có hai đáy 6 cm và 4 cm, chiều cao 5 cm",
+        "a": "25 cm²"
+      },
+      {
+        "q": "Trung bình cộng hai đáy của hình thang bằng gì?",
+        "a": "(a + b) : 2"
+      },
+      {
+        "q": "Hình thang có hai cạnh bên bằng nhau và hai góc kề một đáy bằng nhau là hình gì?",
+        "a": "Hình thang cân"
+      },
+      {
+        "q": "Tính diện tích hình thang có đáy lớn 8 m, đáy bé 5 m và chiều cao 4 m",
+        "a": "26 m²"
+      },
+      {
+        "q": "Nếu giữ nguyên hai đáy của hình thang và gấp chiều cao lên 2 lần thì diện tích thay đổi thế nào?",
+        "a": "Gấp lên 2 lần"
+      },
+      {
+        "q": "Diện tích hình thang bằng tích của trung bình cộng hai đáy với cái gì?",
+        "a": "Chiều cao"
+      },
+      {
+        "q": "Một hình thang có diện tích 40 cm², chiều cao 5 cm. Tổng độ dài hai đáy là bao nhiêu cm?",
+        "a": "16 cm (40 × 2 : 5 = 16)"
+      },
+      {
+        "q": "Hang Sơn Đoòng có chiều dài ước tính khoảng bao nhiêu ki-lô-mét?",
+        "a": "Hơn 9 km"
+      },
+      {
+        "q": "Vòm hang Sơn Đoòng lớn tới mức có thể chứa được một tòa nhà cao bao nhiêu tầng?",
+        "a": "Tòa nhà 40 tầng"
+      },
+      {
+        "q": "Bức tường thạch nhũ khổng lồ cao gần 90 m bên trong hang Sơn Đoòng được gọi là gì?",
+        "a": "Bức tường Việt Nam"
+      },
+      {
+        "q": "Tính diện tích hình thang vuông có hai đáy 10 cm và 6 cm, cạnh bên vuông góc dài 4 cm",
+        "a": "32 cm²"
+      },
+      {
+        "q": "Muốn tính chiều cao hình thang khi biết diện tích và hai đáy ta làm thế nào?",
+        "a": "h = (S × 2) : (a + b)"
+      },
+      {
+        "q": "Tính diện tích hình thang có hai đáy 1,2 m và 0,8 m, chiều cao 0,5 m",
+        "a": "0,5 m²"
+      },
+      {
+        "q": "Một hình thang có tổng hai đáy là 24 cm và chiều cao là 7 cm. Diện tích là bao nhiêu cm²?",
+        "a": "84 cm²"
+      },
+      {
+        "q": "Nếu đáy lớn và đáy bé cùng gấp 2 lần, chiều cao giữ nguyên thì diện tích hình thang thay đổi thế nào?",
+        "a": "Gấp lên 2 lần"
+      },
+      {
+        "q": "Hai cạnh bên của hình thang không song song cắt nhau tại đâu?",
+        "a": "Tại một điểm ngoài hình thang"
+      },
+      {
+        "q": "Động Phong Nha nổi tiếng với mấy tiêu chí nhất thế giới do Hoàng gia Anh bình chọn?",
+        "a": "7 tiêu chí nhất"
+      },
+      {
+        "q": "Người đầu tiên phát hiện ra lối vào hang Sơn Đoòng năm 1991 là ai?",
+        "a": "Ông Hồ Khanh (người dân địa phương)"
+      },
+      {
+        "q": "Hệ thống hang động Phong Nha - Kẻ Bàng được kiến tạo trong vùng núi đá vôi (Karst) bao nhiêu triệu năm?",
+        "a": "Hơn 400 triệu năm"
+      },
+      {
+        "q": "Tính trung bình cộng hai đáy hình thang biết diện tích là 50 m² và chiều cao 5 m",
+        "a": "10 m"
+      },
+      {
+        "q": "Tính diện tích hình tam giác có đáy 12 cm và chiều cao 7 cm",
+        "a": "42 cm²"
+      },
+      {
+        "q": "Đổi 0,8 ha sang mét vuông",
+        "a": "8 000 m²"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một mảnh đất hình thang lối vào Động Thiên Đường có đáy lớn 35 m, đáy bé 25 m và chiều cao 18 m. Diện tích mảnh đất đó là ... m².",
+        "a": "540"
+      },
+      {
+        "q": "Một chiếc thuyền chở khách ngược dòng sông Son vào Động Phong Nha dài 6 km hết 45 phút. Vận tốc thuyền ngược dòng là ... km/giờ.",
+        "a": "8"
+      },
+      {
+        "q": "Thửa ruộng hình thang có đáy lớn 40 m, đáy bé bằng 3/4 đáy lớn, chiều cao 16 m. Diện tích thửa ruộng là ... m².",
+        "a": "560"
+      },
+      {
+        "q": "Tìm x, biết: (x + 8) × 5 : 2 = 45. Giá trị của x là ...",
+        "a": "10"
+      },
+      {
+        "q": "Cầu thang gỗ phục vụ du khách khám phá Động Thiên Đường dài 1 000 m. Một du khách đi với vận tốc trung bình 40 m/phút. Du khách đi hết cầu thang sau ... phút.",
+        "a": "25"
+      },
+      {
+        "q": "Một bồn hoa hình thang có diện tích 36 m², chiều cao 4,5 m. Tổng độ dài hai đáy của bồn hoa đó là ... m.",
+        "a": "16"
+      },
+      {
+        "q": "Một đoàn thám hiểm Sơn Đoòng có 10 người, mỗi người mang theo 12,5 kg hành lý. Tổng khối lượng hành lý của cả đoàn là ... kg.",
+        "a": "125"
+      },
+      {
+        "q": "Tính giá trị biểu thức: (15,4 + 9,6) × 8,5 : 2. Kết quả là ...",
+        "a": "106,25"
+      },
+      {
+        "q": "Một thửa đất hình thang vuông có đáy bé 15 m, đáy lớn 25 m và cạnh bên vuông góc với đáy dài 12 m. Diện tích thửa đất là ... m².",
+        "a": "240"
+      },
+      {
+        "q": "Một hố sụt trong hang Sơn Đoòng có thảm rừng nguyên sinh hình tam giác với đáy 120 m và chiều cao 65 m. Diện tích thảm rừng là ... m².",
+        "a": "3900"
+      },
+      {
+        "q": "Tìm chiều cao của hình thang có diện tích 150 m², đáy lớn 22 m và đáy bé 18 m. Chiều cao là ... m.",
+        "a": "7,5"
+      },
+      {
+        "q": "Đội tuần tra VQG Phong Nha đi bộ kiểm tra rừng: ngày thứ nhất đi được 14,2 km; ngày thứ hai đi được 16,8 km. Trung bình mỗi ngày đội đi được ... km.",
+        "a": "15,5"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một thửa ruộng hình thang có đáy lớn 45 m, đáy bé 30 m. Nếu mở rộng đáy lớn thêm 5 m thì diện tích thửa ruộng tăng thêm 40 m². Tính diện tích thửa ruộng hình thang ban đầu.",
+        "opts": [
+          "600 m²",
+          "560 m²",
+          "640 m²",
+          "720 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một đoàn thám hiểm hang Sơn Đoòng gồm 12 người vượt qua vách đá cao bằng dây thừng. Mỗi người leo mất trung bình 15 phút, sau mỗi lần leo phải nghỉ ngơi kiểm tra an toàn 5 phút rồi người tiếp theo mới bắt đầu. Hỏi người cuối cùng leo xong vách đá sau bao lâu?",
+        "opts": [
+          "3 giờ 55 phút (235 phút)",
+          "4 giờ",
+          "3 giờ 40 phút",
+          "4 giờ 15 phút"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một hình thang có đáy bé bằng 2/3 đáy lớn và chiều cao là 12 m. Biết diện tích hình thang là 180 m². Tính độ dài đáy lớn của hình thang đó.",
+        "opts": [
+          "18 m",
+          "12 m",
+          "24 m",
+          "15 m"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một thửa ruộng hình thang có diện tích 450 m², chiều cao 15 m. Nếu đáy lớn giảm đi 4 m và đáy bé tăng thêm 4 m thì diện tích thửa ruộng mới sẽ như thế nào so với diện tích ban đầu?",
+        "opts": [
+          "Không đổi",
+          "Tăng 30 m²",
+          "Giảm 30 m²",
+          "Tăng 60 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Cho hình thang ABCD có đáy nhỏ AB = 10 cm, đáy lớn CD = 20 cm. Chiều cao hình thang là 12 cm. Hai đường chéo AC và BD cắt nhau tại O. Tính diện tích tam giác AOB.",
+        "opts": [
+          "20 cm²",
+          "25 cm²",
+          "30 cm²",
+          "15 cm²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một thuyền máy du lịch xuôi dòng từ bến sông Son đến cửa hang Phong Nha mất 20 phút, và chạy ngược dòng từ cửa hang về bến mất 30 phút. Biết vận tốc dòng nước là 2 km/giờ. Tính chiều dài quãng đường sông đó.",
+        "opts": [
+          "4 km",
+          "6 km",
+          "5 km",
+          "4,5 km"
+        ],
+        "c": 0
+      }
+    ]
+  }
+}

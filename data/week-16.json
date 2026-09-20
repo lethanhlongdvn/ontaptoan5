@@ -1,0 +1,250 @@
+{
+  "week": 16,
+  "stationName": "Cầu Rồng & Ngũ Hành Sơn (Đà Nẵng)",
+  "config": {
+    "week": 16,
+    "openTime": "2026-12-25T14:00:00",
+    "openStr": "14:00 ngày 25/12/2026"
+  },
+  "souvenirs": {
+    "cap1": "Mảnh đá Non Nước Ngũ Hành Đồng (50đ)",
+    "cap2": "Móng vuốt Rồng Bay Bạc Ánh (90đ)",
+    "cap3": "Viên ngọc Rồng Ngũ Hành Thần Lực Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Tính kết quả phép tính: 24,5 + 15,7 - 10,2",
+        "a": "30"
+      },
+      {
+        "q": "Tính kết quả phép tính: 3,5 × 4 : 2",
+        "a": "7"
+      },
+      {
+        "q": "Cây cầu hình rồng thép bắc qua sông Hàn có khả năng phun lửa và phun nước là cầu gì?",
+        "a": "Cầu Rồng (Đà Nẵng)"
+      },
+      {
+        "q": "Chiều dài tổng thể của Cầu Rồng Đà Nẵng là bao nhiêu mét?",
+        "a": "666 m"
+      },
+      {
+        "q": "Danh thắng Ngũ Hành Sơn gồm 5 ngọn núi đá vôi mang tên theo thuyết ngũ hành nào?",
+        "a": "Kim, Mộc, Thủy, Hỏa, Thổ"
+      },
+      {
+        "q": "Ngọn núi lớn nhất và đẹp nhất trong quần thể Ngũ Hành Sơn là ngọn núi nào?",
+        "a": "Thủy Sơn"
+      },
+      {
+        "q": "Tượng Phật Bà Quan Âm cao nhất Việt Nam (67 m) ngự tại ngôi chùa nào ở bán đảo Sơn Trà?",
+        "a": "Chùa Linh Ứng (Bãi Bụt)"
+      },
+      {
+        "q": "Tính nhẩm: 15 : 0,5",
+        "a": "30"
+      },
+      {
+        "q": "Tính nhẩm: 4,8 × 0,25",
+        "a": "1,2 (4,8 : 4 = 1,2)"
+      },
+      {
+        "q": "Tìm x, biết: x + 4,8 = 12",
+        "a": "x = 7,2"
+      },
+      {
+        "q": "Tính kết quả phép tính: 100 - (24,5 + 35,5)",
+        "a": "40"
+      },
+      {
+        "q": "Tính kết quả phép tính: 1,2 × (3,4 + 6,6)",
+        "a": "12"
+      },
+      {
+        "q": "Cầu Rồng thường trình diễn phun lửa và phun nước vào những tối nào trong tuần?",
+        "a": "Thứ Bảy và Chủ Nhật"
+      },
+      {
+        "q": "Bãi biển quyến rũ hàng đầu hành tinh tại Đà Nẵng do tạp chí Forbes bình chọn là biển nào?",
+        "a": "Bãi biển Mỹ Khê"
+      },
+      {
+        "q": "Làng nghề đá mỹ nghệ truyền thống hàng trăm năm dưới chân núi Ngũ Hành Sơn là làng gì?",
+        "a": "Làng đá mỹ nghệ Non Nước"
+      },
+      {
+        "q": "Đỉnh núi cao nhất bán đảo Sơn Trà nơi có bàn cờ đá ông tiên là đỉnh gì?",
+        "a": "Đỉnh Bàn Cờ"
+      },
+      {
+        "q": "Tính giá trị biểu thức: 45,6 : 3 + 5,4 : 3",
+        "a": "17 ((45,6 + 5,4) : 3 = 17)"
+      },
+      {
+        "q": "Tính giá trị biểu thức: 2,5 × 7,8 × 4",
+        "a": "78"
+      },
+      {
+        "q": "Tìm y, biết: y × 4 = 18,4",
+        "a": "y = 4,6"
+      },
+      {
+        "q": "Tính nhẩm: 0,36 : 0,09",
+        "a": "4"
+      },
+      {
+        "q": "Tính kết quả: 0,8 × 0,5 × 0,2",
+        "a": "0,08"
+      },
+      {
+        "q": "Tính kết quả: 54 : 4,5",
+        "a": "12"
+      },
+      {
+        "q": "Tính kết quả: 15,5 × 2 + 15,5 × 8",
+        "a": "155"
+      },
+      {
+        "q": "Tìm x, biết: x : 1,2 = 5",
+        "a": "x = 6"
+      },
+      {
+        "q": "Cây cầu quay duy nhất ở Việt Nam bắc qua sông Hàn tại Đà Nẵng là cầu gì?",
+        "a": "Cầu sông Hàn"
+      },
+      {
+        "q": "Cây cầu đi bộ nổi tiếng hình đôi bàn tay khổng lồ trên đỉnh Bà Nà là cầu gì?",
+        "a": "Cầu Vàng (Golden Bridge)"
+      },
+      {
+        "q": "Động đá huyền ảo lớn nhất trên đỉnh Thủy Sơn là động gì?",
+        "a": "Động Huyền Không"
+      },
+      {
+        "q": "Tính nhanh: 1,25 × 16",
+        "a": "20 (1,25 × 8 × 2 = 20)"
+      },
+      {
+        "q": "Một ngày có 24 giờ, 1,5 ngày bằng bao nhiêu giờ?",
+        "a": "36 giờ"
+      },
+      {
+        "q": "Tìm số tự nhiên liền sau của số 99,99",
+        "a": "100"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Cầu Rồng dài 666 m, mặt cầu rộng 37,5 m. Diện tích mặt Cầu Rồng là ... m².",
+        "a": "24975"
+      },
+      {
+        "q": "Một vòi rồng phun nước trên cầu trong 3 phút phun được 4,5 m³ nước. Trong 5 phút vòi phun được ... m³ nước.",
+        "a": "7,5"
+      },
+      {
+        "q": "Tìm x, biết: (x + 3,5) × 4 = 30. Giá trị của x là ...",
+        "a": "4"
+      },
+      {
+        "q": "Một nhóm du khách leo thang máy lên đỉnh Thủy Sơn (Ngũ Hành Sơn) cao 43 m với vận tốc 1,25 m/giây. Thời gian thang máy chạy là ... giây (làm tròn số thập phân).",
+        "a": "34,4"
+      },
+      {
+        "q": "Một cơ sở điêu khắc đá Non Nước tạc 5 pho tượng đá hết 12,5 ngày. Để tạc 8 pho tượng cùng loại như thế cần ... ngày (năng suất như nhau).",
+        "a": "20"
+      },
+      {
+        "q": "Một chiếc cano du lịch trên sông Hàn chạy 18 km hết 0,45 giờ. Vận tốc của cano là ... km/giờ.",
+        "a": "40"
+      },
+      {
+        "q": "Tính giá trị biểu thức: 48,6 : 3,6 + 1,5 × 4. Kết quả là ...",
+        "a": "19,5"
+      },
+      {
+        "q": "Tìm y, biết: 85,5 - y : 2 = 70. Giá trị của y là ...",
+        "a": "31"
+      },
+      {
+        "q": "Đoàn xe 6 chiếc chở 270 du khách từ sân bay Đà Nẵng đi bán đảo Sơn Trà. Trung bình mỗi xe chở ... hành khách.",
+        "a": "45"
+      },
+      {
+        "q": "Một mảnh sân hình chữ nhật cạnh bờ biển Mỹ Khê có chu vi 120 m, chiều dài hơn chiều rộng 12 m. Diện tích mảnh sân là ... m².",
+        "a": "864"
+      },
+      {
+        "q": "Một bể cá cảnh nước mặn tại Đà Nẵng có chiều dài 2,5 m; chiều rộng 1,2 m và mực nước sâu 0,8 m. Lượng nước trong bể là ... m³.",
+        "a": "2,4"
+      },
+      {
+        "q": "Tính nhanh giá trị biểu thức: 3,75 × 12 - 3,75 × 2. Kết quả là ...",
+        "a": "37,5"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một cano du lịch chạy trên sông Hàn xuôi dòng từ Cầu Rồng đến cửa biển dài 12 km hết 24 phút, và chạy ngược dòng về lại Cầu Rồng hết 40 phút. Tính vận tốc dòng nước trên sông Hàn.",
+        "opts": [
+          "6 km/giờ",
+          "5 km/giờ",
+          "4 km/giờ",
+          "3 km/giờ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tìm số thập phân X có hai chữ số ở phần thập phân, biết rằng nếu lấy X nhân với 4 rồi trừ đi 4,5 thì bằng X nhân với 2 cộng thêm 5,5.",
+        "opts": [
+          "5",
+          "4,5",
+          "5,2",
+          "4,8"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tính giá trị biểu thức sau bằng cách thuận tiện nhất:\nA = (13,75 × 4 - 27,5 × 2) × (1/2 + 1/4 + 1/8 + 1/16)",
+        "opts": [
+          "0",
+          "1",
+          "15/16",
+          "27,5"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Hai người thợ đá mỹ nghệ Non Nước cùng làm chung một tác phẩm đá thì sau 6 ngày sẽ hoàn thành. Nếu người thứ nhất làm một mình thì phải mất 10 ngày mới xong. Hỏi nếu người thứ hai làm một mình thì mất bao nhiêu ngày mới xong?",
+        "opts": [
+          "15 ngày",
+          "12 ngày",
+          "14 ngày",
+          "18 ngày"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một mảnh đất hình chữ nhật có chiều dài gấp 3 lần chiều rộng. Nếu giảm chiều dài đi 4 m và tăng chiều rộng thêm 4 m thì diện tích tăng thêm 96 m². Tính diện tích ban đầu của mảnh đất.",
+        "opts": [
+          "588 m²",
+          "648 m²",
+          "768 m²",
+          "540 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Trong một bãi đỗ xe du lịch tại Ngũ Hành Sơn có tất cả 40 chiếc xe gồm xe ô tô con 4 bánh và xe khách lớn 6 bánh. Bác bảo vệ đếm được tất cả 190 bánh xe. Hỏi có bao nhiêu chiếc xe khách loại 6 bánh?",
+        "opts": [
+          "15 chiếc",
+          "25 chiếc",
+          "20 chiếc",
+          "18 chiếc"
+        ],
+        "c": 0
+      }
+    ]
+  }
+}

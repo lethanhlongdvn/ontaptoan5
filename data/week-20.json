@@ -1,0 +1,250 @@
+{
+  "week": 20,
+  "stationName": "Gia Lai (Biển Hồ Tơ Nưng)",
+  "config": {
+    "week": 20,
+    "openTime": "2027-01-22T14:00:00",
+    "openStr": "14:00 ngày 22/01/2027"
+  },
+  "souvenirs": {
+    "cap1": "Huy hiệu Giọt ngọc Tơ Nưng Đồng (50đ)",
+    "cap2": "Hoa dã quỳ Chư Đăng Ya Bạc (90đ)",
+    "cap3": "Đôi mắt Pleiku Hoàng Kim Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Tìm hai số có hiệu là 20 và tỉ số là 1/3",
+        "a": "10 và 30"
+      },
+      {
+        "q": "Hiệu số phần bằng nhau của hai số có tỉ số là 2/7 là mấy phần?",
+        "a": "5 phần (7 - 2 = 5)"
+      },
+      {
+        "q": "Muốn tìm hai số khi biết hiệu và tỉ số, bước 1 ta tìm cái gì?",
+        "a": "Hiệu số phần bằng nhau"
+      },
+      {
+        "q": "Tìm hai số có hiệu là 15 và tỉ số là 2/5",
+        "a": "10 và 25"
+      },
+      {
+        "q": "Biển Hồ Tơ Nưng được nhạc sĩ Nguyễn Cường ví như điều gì của Pleiku?",
+        "a": "Đôi mắt Pleiku"
+      },
+      {
+        "q": "Biển Hồ Tơ Nưng thực chất được hình thành từ miệng của cái gì?",
+        "a": "Miệng núi lửa cổ đã tắt"
+      },
+      {
+        "q": "Ngọn núi lửa hình phễu nổi tiếng rực sắc hoa dã quỳ vàng ở Gia Lai là núi gì?",
+        "a": "Núi lửa Chư Đăng Ya"
+      },
+      {
+        "q": "Hàng thông trăm tuổi cổ kính dẫn vào đồi chè tuyệt đẹp ở Gia Lai là gì?",
+        "a": "Hàng thông Biển Hồ chè"
+      },
+      {
+        "q": "Tìm x, biết: x - 12 = 36",
+        "a": "x = 48"
+      },
+      {
+        "q": "Tìm hai số có tổng là 50 và hiệu là 10",
+        "a": "20 và 30"
+      },
+      {
+        "q": "Tìm hai số có hiệu là 36 và số lớn gấp 4 lần số bé",
+        "a": "Số bé: 12; Số lớn: 48"
+      },
+      {
+        "q": "Tìm hai số có hiệu là 40 và tỉ số là 3/5",
+        "a": "60 và 100"
+      },
+      {
+        "q": "Một sợi dây dài hơn sợi dây kia 18 m và dài gấp 3 lần sợi dây kia. Độ dài sợi dây ngắn là gì?",
+        "a": "9 m (18 : 2 = 9)"
+      },
+      {
+        "q": "Thành phố trung tâm hành chính của tỉnh Gia Lai là thành phố nào?",
+        "a": "Thành phố Pleiku"
+      },
+      {
+        "q": "Món ăn đặc sản sợi phở ăn kèm hai tô (một tô khô, một tô nước dùng) ở Gia Lai là gì?",
+        "a": "Phở hai tô (Phở khô Gia Lai)"
+      },
+      {
+        "q": "Mùa hoa dã quỳ vàng nở rộ khắp sườn núi Chư Đăng Ya vào tháng mấy?",
+        "a": "Tháng 11 hàng năm"
+      },
+      {
+        "q": "Quảng trường lớn nhất TP Pleiku có tượng Bác Hồ với các dân tộc Tây Nguyên là gì?",
+        "a": "Quảng trường Đại Đoàn Kết"
+      },
+      {
+        "q": "Tìm y, biết: y : 3 - 5 = 10",
+        "a": "y = 45"
+      },
+      {
+        "q": "Tìm hai số có tổng là 80 và tỉ số là 1/3",
+        "a": "20 và 60"
+      },
+      {
+        "q": "Hiệu của hai số bằng 0 khi nào?",
+        "a": "Khi hai số bằng nhau"
+      },
+      {
+        "q": "Tìm hai số có hiệu là 24 và tỉ số là 1/4",
+        "a": "8 và 32"
+      },
+      {
+        "q": "Tìm hai số có hiệu là 50 và tỉ số là 4/9",
+        "a": "40 và 90"
+      },
+      {
+        "q": "Bố hơn con 28 tuổi. Tuổi con bằng 1/5 tuổi bố. Tuổi con là bao nhiêu?",
+        "a": "7 tuổi (28 : 4 = 7)"
+      },
+      {
+        "q": "Hồ Tơ Nưng có độ sâu trung bình khoảng bao nhiêu mét?",
+        "a": "Khoảng 16 m đến 19 m"
+      },
+      {
+        "q": "Thác nước hùng vĩ bậc nhất Gia Lai nằm giữa thung lũng nguyên sinh là thác gì?",
+        "a": "Thác Phú Cường"
+      },
+      {
+        "q": "Công trình thủy điện nổi tiếng đầu tiên trên sông Sê San tại Gia Lai là gì?",
+        "a": "Thủy điện Ialy"
+      },
+      {
+        "q": "Dân tộc bản địa sinh sống lâu đời với truyền thống cồng chiêng ở Gia Lai là dân tộc nào?",
+        "a": "Gia Rai và Ba Na"
+      },
+      {
+        "q": "Tìm hai số có hiệu là 14 và số lớn bằng 8/6 số bé",
+        "a": "42 và 56"
+      },
+      {
+        "q": "Tính nhanh: 12,5 × 4 - 2,5 × 4",
+        "a": "40"
+      },
+      {
+        "q": "Viết số thập phân 0,08 dưới dạng tỉ số phần trăm",
+        "a": "8%"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Đội thuyền chèo kayak trên Biển Hồ Tơ Nưng có số thuyền đôi nhiều hơn số thuyền đơn là 12 chiếc. Biết số thuyền đơn bằng 3/5 số thuyền đôi. Số thuyền đôi là ... chiếc.",
+        "a": "30"
+      },
+      {
+        "q": "Vườn chè cổ thụ Biển Hồ có chiều dài hơn chiều rộng 120 m, chiều rộng bằng 2/3 chiều dài. Chiều dài vườn chè là ... m.",
+        "a": "360"
+      },
+      {
+        "q": "Một đoàn du khách tham quan lễ hội hoa dã quỳ Chư Đăng Ya gồm người lớn và trẻ em. Người lớn nhiều hơn trẻ em 24 người và số trẻ em bằng 3/7 số người lớn. Có ... trẻ em.",
+        "a": "18"
+      },
+      {
+        "q": "Tìm hai số có hiệu là 45 và tỉ số là 2/5. Số bé là ...",
+        "a": "30"
+      },
+      {
+        "q": "Quảng trường Đại Đoàn Kết (Pleiku) có diện tích sân lớn hơn diện tích vườn hoa là 4 ha. Diện tích vườn hoa bằng 1/3 diện tích sân. Diện tích sân quảng trường là ... ha.",
+        "a": "6"
+      },
+      {
+        "q": "Hai đội công nhân hái cà phê ở Chư Păh: đội một hái nhiều hơn đội hai 15 tạ quả tươi. Biết đội hai hái bằng 4/7 đội một. Đội một hái được ... tạ quả tươi.",
+        "a": "35"
+      },
+      {
+        "q": "Một gia đình trồng tiêu ở Gia Lai: vụ này thu được lượng tiêu đen nhiều hơn tiêu sọ là 36 tạ. Biết lượng tiêu sọ bằng 1/4 tiêu đen. Lượng tiêu đen thu được là ... tạ.",
+        "a": "48"
+      },
+      {
+        "q": "Tìm y, biết: y - 25% × y = 60. Giá trị của y là ...",
+        "a": "80"
+      },
+      {
+        "q": "Hồ Tơ Nưng có diện tích mặt nước mùa mưa nhiều hơn mùa khô là 60 ha. Biết diện tích mùa khô bằng 3/4 diện tích mùa mưa. Diện tích mặt nước mùa mưa là ... ha.",
+        "a": "240"
+      },
+      {
+        "q": "Đường hoa dã quỳ lên núi Chư Đăng Ya dài hơn đoạn đường bằng là 1 500 m. Biết đoạn đường bằng dài bằng 2/5 đoạn đường dốc hoa. Đoạn đường hoa dài ... m.",
+        "a": "2500"
+      },
+      {
+        "q": "Tìm hai số có hiệu là 72 và tỉ số là 5/9. Số lớn là ...",
+        "a": "162"
+      },
+      {
+        "q": "Một cửa hàng đặc sản Pleiku bán mật ong hoa cà phê: can loại 1 nhiều hơn can loại 2 là 15 lít, tỉ số là 5/2. Can loại 1 có ... lít mật ong.",
+        "a": "25"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một mảnh đất hình chữ nhật trồng hoa dã quỳ ở Chư Đăng Ya có chiều dài hơn chiều rộng 25 m. Nếu kéo dài chiều rộng thêm 5 m thì chiều rộng bằng 2/3 chiều dài. Tính diện tích mảnh đất ban đầu.",
+        "opts": [
+          "2 100 m²",
+          "1 800 m²",
+          "2 000 m²",
+          "1 600 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Hiện nay tuổi chú hơn tuổi cháu là 24 tuổi. Biết rằng 3 năm trước, tuổi chú gấp 4 lần tuổi cháu. Hỏi hiện nay cháu bao nhiêu tuổi?",
+        "opts": [
+          "11 tuổi",
+          "8 tuổi",
+          "12 tuổi",
+          "10 tuổi"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một trang trại bò sữa tại Gia Lai có số bò sữa nhiều hơn số bê con là 180 con. Sau khi bán đi 20 con bê thì số bê còn lại bằng 1/5 số bò. Hỏi ban đầu trang trại có bao nhiêu con bê?",
+        "opts": [
+          "70 con",
+          "60 con",
+          "50 con",
+          "80 con"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tìm một phân số có giá trị bằng 3/5, biết rằng nếu thêm 8 đơn vị vào tử số và giữ nguyên mẫu số thì ta được phân số mới có giá trị bằng 7/9.",
+        "opts": [
+          "27/45",
+          "36/60",
+          "45/75",
+          "18/30"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Hai thùng đựng trà Biển Hồ có tất cả 160 hộp. Nếu lấy 15 hộp từ thùng 1 chuyển sang thùng 2 thì thùng 2 nhiều hơn thùng 1 là 20 hộp. Hỏi ban đầu thùng 1 có bao nhiêu hộp trà?",
+        "opts": [
+          "85 hộp",
+          "75 hộp",
+          "90 hộp",
+          "80 hộp"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Hai người thợ cùng dệt một tấm thổ cẩm truyền thống Gia Lai. Người thứ nhất dệt mỗi ngày được 1,5 m; người thứ hai mỗi ngày dệt được 1,2 m. Sau một số ngày làm việc, người thứ nhất dệt được nhiều hơn người thứ hai 4,5 m vải. Hỏi cả hai người đã dệt được tổng cộng bao nhiêu mét vải?",
+        "opts": [
+          "40,5 m",
+          "36 m",
+          "45 m",
+          "42 m"
+        ],
+        "c": 0
+      }
+    ]
+  }
+}

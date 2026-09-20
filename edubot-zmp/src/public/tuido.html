@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Túi Đồ Nhà Thám Hiểm (Trọn Bộ 35 Chặng) - Học toán 5 cùng Robot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        :root {
+            --primary: #FF9800;
+            --primary-glow: rgba(255, 152, 0, 0.4);
+            --gold: #FFD700;
+            --silver: #E2E8F0;
+            --bronze: #CD7F32;
+            --bg-dark: #0b1329;
+            --card-bg: #16223f;
+            --border-color: #2a3b63;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            padding: 20px 15px;
+            max-width: 950px;
+            margin: auto;
+            flex: 1;
+            width: 95%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            font-family: 'Bungee', cursive;
+            color: var(--gold);
+            margin: 0 0 8px;
+            font-size: 1.8rem;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+        }
+
+        .student-badge {
+            font-size: 0.95rem;
+            color: #94a3b8;
+        }
+
+        /* MEDAL STATS */
+        .medal-section {
+            display: flex;
+            justify-content: space-around;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1.5px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .medal-item {
+            text-align: center;
+        }
+
+        .medal-icon {
+            font-size: 2.2rem;
+            display: block;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
+        }
+
+        .medal-count {
+            font-size: 1.6rem;
+            font-family: 'Bungee', cursive;
+            color: var(--gold);
+            margin-top: 2px;
+        }
+
+        .medal-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* FILTER TABS */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .btn-filter {
+            background: #1e293b;
+            border: 1.5px solid #334155;
+            color: #94a3b8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'Bungee', cursive;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .btn-filter:hover, .btn-filter.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #000;
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        /* ITEM GRID */
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+            gap: 14px;
+            margin-top: 15px;
+        }
+
+        .item-card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 12px 10px;
+            text-align: center;
+            border: 1.5px solid #2a3b63;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: grayscale(100%);
+            opacity: 0.45;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 165px;
+        }
+
+        .item-card.unlocked {
+            filter: grayscale(0%);
+            opacity: 1;
+            border-color: #475569;
+            background: linear-gradient(180deg, #1e293b, #0f172a);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .item-card.unlocked.gold-tier {
+            border-color: var(--gold);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
+        }
+
+        .item-card.unlocked.silver-tier {
+            border-color: #cbd5e1;
+            box-shadow: 0 0 12px rgba(203, 213, 225, 0.3);
+        }
+
+        .item-card.unlocked.bronze-tier {
+            border-color: #cd7f32;
+            box-shadow: 0 0 10px rgba(205, 127, 50, 0.3);
+        }
+
+        .item-card.unlocked:hover {
+            transform: translateY(-4px);
+            z-index: 10;
+        }
+
+        .item-card .station-num {
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            font-size: 0.65rem;
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        .item-card .icon {
+            font-size: 2.5rem;
+            margin: 12px 0 6px;
+            display: block;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+        }
+
+        .item-card .name {
+            font-size: 0.76rem;
+            font-weight: 700;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.25;
+            color: #f8fafc;
+        }
+
+        .item-card .tier-badge {
+            font-size: 0.68rem;
+            font-weight: bold;
+            padding: 3px 6px;
+            border-radius: 12px;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+
+        .tier-gold { background: rgba(255, 215, 0, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+        .tier-silver { background: rgba(203, 213, 225, 0.2); color: #cbd5e1; border: 1px solid #cbd5e1; }
+        .tier-bronze { background: rgba(205, 127, 50, 0.2); color: #cd7f32; border: 1px solid #cd7f32; }
+        .tier-locked { background: rgba(100, 116, 139, 0.2); color: #64748b; border: 1px dashed #64748b; }
+
+        .btn-back {
+            display: inline-block;
+            margin: 30px auto;
+            background: linear-gradient(135deg, var(--primary), #ea580c);
+            color: white;
+            text-decoration: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-family: 'Bungee', cursive;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.6);
+        }
+
+        .game-footer {
+            background: #0f172a;
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🎒 TÚI ĐỒ NHÀ THÁM HIỂM</h1>
+        <div class="student-badge">
+            👤 Nhà thám hiểm: <b id="student-name" style="color:var(--gold);">Đang tải...</b>
+            <span id="student-info" style="color:#94a3b8; margin-left:8px;"></span>
+        </div>
+    </div>
+
+    <div class="medal-section">
+        <div class="medal-item">
+            <span class="medal-icon">🥇</span>
+            <div id="gold-count" class="medal-count">0</div>
+            <div class="medal-label">Thần Bảo Vàng (100đ)</div>
+        </div>
+        <div class="medal-item">
+            <span class="medal-icon">🥈</span>
+            <div id="silver-count" class="medal-count">0</div>
+            <div class="medal-label">Bảo Vật Bạc (90đ)</div>
+        </div>
+        <div class="medal-item">
+            <span class="medal-icon">🥉</span>
+            <div id="bronze-count" class="medal-count">0</div>
+            <div class="medal-label">Huy Hiệu Đồng (50đ)</div>
+        </div>
+    </div>
+
+    <!-- BỘ LỌC HỌC KỲ -->
+    <div class="filter-bar">
+        <button class="btn-filter active" id="btn-all" onclick="setFilter('all')">TOÀN BỘ (35 TRẠM)</button>
+        <button class="btn-filter" id="btn-hk1" onclick="setFilter('hk1')">HỌC KỲ 1 (TRẠM 1 - 18)</button>
+        <button class="btn-filter" id="btn-hk2" onclick="setFilter('hk2')">HỌC KỲ 2 (TRẠM 19 - 35)</button>
+    </div>
+
+    <div class="item-grid" id="item-list"></div>
+
+    <center><a href="index.html" class="btn-back">QUAY LẠI BẢN ĐỒ</a></center>
+</div>
+
+<footer class="game-footer">
+        <div style="font-size:0.8rem; color:#94a3b8;">@Học toán 5 cùng RoBot - Phát triển bởi: <b>LÊ THÀNH LONG</b></div>
+    </footer>
+
+<script>
+    const firebaseConfig = {
+        databaseURL: "https://gamhoctap-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const ITEMS_DATA = {
+    "1": {
+        "name": "Hà Giang - Cột cờ Lũng Cú",
+        "icon": "🚩",
+        "cap1": "Huy hiệu Cột cờ Lũng Cú Đồng",
+        "cap2": "Kính viễn vọng Cực Bắc Bạc",
+        "cap3": "Ngọn cờ Thần Phong Hoàng Kim Vàng"
+    },
+    "2": {
+        "name": "Hà Giang - Tu Sản & Nho Quế",
+        "icon": "🛶",
+        "cap1": "Mảnh ngọc lục bảo Nho Quế Đồng",
+        "cap2": "Cung tên Hẻm núi Bạc",
+        "cap3": "Song kiếm Tu Sản Long Phụng Vàng"
+    },
+    "3": {
+        "name": "Cao Bằng - Thác Bản Giốc",
+        "icon": "🌊",
+        "cap1": "Thạch nhũ Bản Giốc Khởi Nguyên Đồng",
+        "cap2": "Khiên chắn Thác Bạc Hùng Vĩ",
+        "cap3": "Băng Thần Phù Thác Bản Giốc Vàng"
+    },
+    "4": {
+        "name": "Bắc Kạn - Hồ Ba Bể",
+        "icon": "⛵",
+        "cap1": "Mảnh gỗ Thuyền độc mộc Đồng",
+        "cap2": "Ngọc bội Hồ Xanh Bạch Ngân Bạc",
+        "cap3": "Minh châu Ba Bể Tỏa Sáng Vàng"
+    },
+    "5": {
+        "name": "Yên Bái - Mù Cang Chải",
+        "icon": "🌾",
+        "cap1": "Bông lúa nếp nương Đồng Vàng",
+        "cap2": "Liềm gặt Mùa Vàng Bạc Ánh",
+        "cap3": "Vương miện Sóng Vàng Mù Cang Chải Vàng"
+    },
+    "6": {
+        "name": "Lào Cai - Đỉnh Fansipan",
+        "icon": "🏔️",
+        "cap1": "Khối đá hoa cương Tây Bắc Đồng",
+        "cap2": "La bàn Đỉnh Mây Bạc Tuyết",
+        "cap3": "Cây gậy Fansipan Hoàng Kim Vàng"
+    },
+    "7": {
+        "name": "Hà Nội - Hồ Gươm & Cột cờ",
+        "icon": "🐢",
+        "cap1": "Mảnh Rùa Vàng Thăng Long Đồng",
+        "cap2": "Tháp Bút Trí Tuệ Bạc Trắng",
+        "cap3": "Thần kiếm Thuận Thiên Hoàng Kim Vàng"
+    },
+    "8": {
+        "name": "Quảng Ninh - Hạ Long & Yên Tử",
+        "icon": "🐉",
+        "cap1": "Vỏ sò Vịnh Rồng Biển Đông Đồng",
+        "cap2": "Chuông đồng Yên Tử Mạ Bạc",
+        "cap3": "Trúc Lâm Ngọc Tỷ Long Châu Vàng"
+    },
+    "9": {
+        "name": "Ninh Bình - Tràng An & Hoa Lư",
+        "icon": "🏛️",
+        "cap1": "Phiến đá Hoa Lư Cố Đô Đồng",
+        "cap2": "Ngọc bội Tràng An Tinh Khiết Bạc",
+        "cap3": "Ấn Hoàng Đế Đinh Tiên Hoàng Vàng"
+    },
+    "10": {
+        "name": "Thanh Hóa - Thành Nhà Hồ",
+        "icon": "🧱",
+        "cap1": "Viên gạch cổ Tây Đô Đồng",
+        "cap2": "Búa thần Đẽo Đá Bạch Kim Bạc",
+        "cap3": "Thành Lũy Thần Thuẫn Hoàng Kim Vàng"
+    },
+    "11": {
+        "name": "Nghệ An - Làng Sen Quê Bác",
+        "icon": "🪷",
+        "cap1": "Huy hiệu Hoa Sen Đất Việt Đồng",
+        "cap2": "Đèn dầu soi sáng Trí Tuệ Bạc",
+        "cap3": "Búp Sen Hoàng Kim Đại Trí Vàng"
+    },
+    "12": {
+        "name": "Hà Tĩnh - Ngã ba Đồng Lộc",
+        "icon": "⭐",
+        "cap1": "Vỏ đạn đồng Lưu Niệm",
+        "cap2": "Chuông gió Hòa Bình Bạc Sáng",
+        "cap3": "Ngôi sao Chiến công Mười Cô Gái Vàng"
+    },
+    "13": {
+        "name": "Quảng Bình - Phong Nha Kẻ Bàng",
+        "icon": "🦇",
+        "cap1": "Tinh thể nhũ đá Khởi Hoang Đồng",
+        "cap2": "Đèn pin xuyên hang Bạc Băng",
+        "cap3": "Trượng thần Động Tiên Sơn Hoàng Kim Vàng"
+    },
+    "14": {
+        "name": "Quảng Trị - Cầu Hiền Lương",
+        "icon": "🕊️",
+        "cap1": "Mảnh phù điêu Hiền Lương Đồng",
+        "cap2": "Nhành Oliu Hòa Bình Mạ Bạc",
+        "cap3": "Chuông Khải Hoàn Non Sông Liền Dải Vàng"
+    },
+    "15": {
+        "name": "Huế - Quần thể Cố đô Huế",
+        "icon": "👑",
+        "cap1": "Tách trà Cung đình Đồng Hun",
+        "cap2": "Quạt lụa Ngự Uyển Dát Bạc",
+        "cap3": "Bảo kiếm Hoàng Gia Triều Nguyễn Vàng"
+    },
+    "16": {
+        "name": "Đà Nẵng - Cầu Rồng & Ngũ Hành",
+        "icon": "🌉",
+        "cap1": "Mảnh đá Non Nước Ngũ Hành Đồng",
+        "cap2": "Móng vuốt Rồng Bay Bạc Ánh",
+        "cap3": "Viên ngọc Rồng Ngũ Hành Thần Lực Vàng"
+    },
+    "17": {
+        "name": "Quảng Nam - Phố cổ Hội An",
+        "icon": "🏮",
+        "cap1": "Đèn lồng đất nung Hội An Đồng",
+        "cap2": "Phù điêu Apsara Chăm-pa Bạc",
+        "cap3": "Thần Đăng Cổ Kính Phố Hội Hoàng Kim Vàng"
+    },
+    "18": {
+        "name": "Quảng Ngãi - Đảo Lý Sơn",
+        "icon": "🛡️",
+        "cap1": "Viên đá núi lửa Lý Sơn Đồng",
+        "cap2": "Kính thiên văn Biển Bạch Kim Bạc",
+        "cap3": "Cờ lệnh Hùng Binh Hoàng Sa Hoàng Kim Vàng"
+    },
+    "19": {
+        "name": "Kon Tum - Bờ Y Ngã ba ĐD",
+        "icon": "🔭",
+        "cap1": "Huy hiệu Cột mốc Bờ Y Đồng",
+        "cap2": "Mô hình Nhà thờ Gỗ Bạc",
+        "cap3": "Chuông bạc Kon Klor Vàng"
+    },
+    "20": {
+        "name": "Gia Lai - Biển Hồ Tơ Nưng",
+        "icon": "💧",
+        "cap1": "Huy hiệu Giọt ngọc Tơ Nưng Đồng",
+        "cap2": "Hoa dã quỳ Chư Đăng Ya Bạc",
+        "cap3": "Đôi mắt Pleiku Hoàng Kim Vàng"
+    },
+    "21": {
+        "name": "Đắk Lắk - Buôn Đôn & Dray Nur",
+        "icon": "🐘",
+        "cap1": "Vòng ngà voi Bản Đôn Đồng",
+        "cap2": "Cồng chiêng Đại ngàn Bạc",
+        "cap3": "Hạt cà phê Vàng Buôn Ma Thuột"
+    },
+    "22": {
+        "name": "Đắk Nông - Hồ Tà Đùng",
+        "icon": "🏞️",
+        "cap1": "Huy hiệu Đảo xanh Tà Đùng Đồng",
+        "cap2": "Thạch anh núi lửa Chư Blúk Bạc",
+        "cap3": "Vương miện Vịnh Tà Đùng Vàng"
+    },
+    "23": {
+        "name": "Phú Yên - Gành Đá Đĩa",
+        "icon": "🗿",
+        "cap1": "Phiến đá lục giác Bazan Đồng",
+        "cap2": "Hải đăng Mũi Điện Bạc",
+        "cap3": "Ánh bình minh Đại Lãnh Vàng"
+    },
+    "24": {
+        "name": "Khánh Hòa - Nha Trang & Trầm Hương",
+        "icon": "🏖️",
+        "cap1": "Vỏ ốc ngọc Nha Trang Đồng",
+        "cap2": "Tháp Trầm Hương Bạc",
+        "cap3": "San hô biển Ngọc Hoàng Kim Vàng"
+    },
+    "25": {
+        "name": "Ninh Thuận - Tháp Po Klong Garai",
+        "icon": "🛕",
+        "cap1": "Chùm nho ngọc Ninh Thuận Đồng",
+        "cap2": "Tượng thần Shiva Po Klong Garai Bạc",
+        "cap3": "Hạt ngọc Vĩnh Hy Vàng"
+    },
+    "26": {
+        "name": "Bình Thuận - Mũi Né & Bàu Trắng",
+        "icon": "⏳",
+        "cap1": "Đồng hồ cát Mũi Né Đồng",
+        "cap2": "Đóa sen Bàu Trắng Bạc",
+        "cap3": "Ngọn đuốc Kê Gà Hoàng Kim Vàng"
+    },
+    "27": {
+        "name": "Lâm Đồng - Đỉnh Lang Biang",
+        "icon": "🌸",
+        "cap1": "Cành hoa bất tử Đà Lạt Đồng",
+        "cap2": "Chiếc sừng hươu Lang Biang Bạc",
+        "cap3": "Trái tim ngàn hoa Đà Lạt Vàng"
+    },
+    "28": {
+        "name": "TP.HCM - Củ Chi & Rừng Sác",
+        "icon": "🎖️",
+        "cap1": "Vành mũ tai bèo Đồng",
+        "cap2": "Chiếc khăn rằn Chiến khu Bạc",
+        "cap3": "Ngôi sao Đất Thép Thành Đồng Vàng"
+    },
+    "29": {
+        "name": "Tây Ninh - Núi Bà Đen",
+        "icon": "⛰️",
+        "cap1": "Chuông gió đỉnh Mây Núi Bà Đồng",
+        "cap2": "Tượng Phật Bà Tây Bổ Đà Sơn Bạc",
+        "cap3": "Vương trượng Núi Bà Đen Vàng"
+    },
+    "30": {
+        "name": "TP.HCM - Bến Nhà Rồng & LM81",
+        "icon": "🏙️",
+        "cap1": "Bánh lái Tàu Bến Nhà Rồng Đồng",
+        "cap2": "Mô hình Tòa tháp Landmark 81 Bạc",
+        "cap3": "Kim khánh Thành phố Bác Vàng"
+    },
+    "31": {
+        "name": "Đồng Tháp - Sa Đéc & Sen Tháp Mười",
+        "icon": "🪷",
+        "cap1": "Chiếc giỏ hoa Sa Đéc Đồng",
+        "cap2": "Cánh chim Sếu Tràm Chim Bạc",
+        "cap3": "Búp sen Ngọc Tháp Mười Vàng"
+    },
+    "32": {
+        "name": "Cà Mau - Đất Mũi Cà Mau",
+        "icon": "🧭",
+        "cap1": "Chiếc mỏ neo Mũi Cà Mau Đồng",
+        "cap2": "Cột mốc Tọa độ GPS 0001 Bạc",
+        "cap3": "Con thuyền Cực Nam No Gió Vàng"
+    },
+    "33": {
+        "name": "Kiên Giang - Đảo Ngọc Phú Quốc",
+        "icon": "🐚",
+        "cap1": "Vỏ trai đảo ngọc Đồng",
+        "cap2": "Cabin cáp treo Hòn Thơm Bạc",
+        "cap3": "Viên ngọc trai Phú Quốc Hoàng Gia Vàng"
+    },
+    "34": {
+        "name": "Khánh Hòa - Quần đảo Trường Sa",
+        "icon": "🇻🇳",
+        "cap1": "Quả bàng vuông Trường Sa Đồng",
+        "cap2": "Cột mốc Chủ quyền Đảo Bạc",
+        "cap3": "Ngôi sao Hải quân Trường Sa Vàng"
+    },
+    "35": {
+        "name": "Đà Nẵng - Quần đảo Hoàng Sa",
+        "icon": "🏆",
+        "cap1": "Huy chương Chiến sĩ Hoàng Sa Đồng",
+        "cap2": "Phiến đá Chủ quyền Hoàng Sa Bạc",
+        "cap3": "Cúp Vàng Quán Quân Xuyên Việt"
+    }
+};
+
+    const currentUsername = localStorage.getItem('studentUsername') || '';
+    const currentStudent = localStorage.getItem('studentName');
+    const currentClass = localStorage.getItem('studentClass');
+    const currentSchool = localStorage.getItem('studentSchool');
+
+    let currentFilter = 'all';
+    let cachedScores = {};
+
+    async function loadInventory() {
+        if (!currentStudent) {
+            alert("⚠️ Vui lòng đăng ký / đăng nhập tại Bản đồ trước!");
+            window.location.href = "index.html";
+            return;
+        }
+        document.getElementById('student-name').innerText = currentStudent;
+        document.getElementById('student-info').innerText = `• Lớp ${currentClass || '5'} ${currentSchool ? '• ' + currentSchool : ''}`;
+
+        // Tải bảng scores từ Firebase
+        try {
+            const snap = await db.ref('scores').once('value');
+            cachedScores = snap.val() || {};
+        } catch(e) {
+            console.error(e);
+            cachedScores = {};
+        }
+
+        renderItems();
+    }
+
+    function setFilter(mode) {
+        currentFilter = mode;
+        document.getElementById('btn-all').classList.toggle('active', mode === 'all');
+        document.getElementById('btn-hk1').classList.toggle('active', mode === 'hk1');
+        document.getElementById('btn-hk2').classList.toggle('active', mode === 'hk2');
+        renderItems();
+    }
+
+    function renderItems() {
+        let medals = { gold: 0, silver: 0, bronze: 0 };
+        const itemContainer = document.getElementById('item-list');
+        itemContainer.innerHTML = '';
+
+        for (let week = 1; week <= 35; week++) {
+            const item = ITEMS_DATA[week];
+            const weekKey = "Tuan_" + week;
+            const weekData = cachedScores[weekKey] || {};
+
+            let bestScore = -1;
+            for (let id in weekData) {
+                const rec = weekData[id];
+                const matchUser = currentUsername && rec.username && (rec.username === currentUsername);
+                const matchName = (rec.fullName || rec.name || "").trim().toLowerCase() === currentStudent.trim().toLowerCase();
+                if (matchUser || matchName) {
+                    if (rec.score > bestScore) {
+                        bestScore = rec.score;
+                    }
+                }
+            }
+
+            let unlocked = (bestScore >= 50);
+            let tierClass = "";
+            let tierBadgeText = "Chưa mở khóa";
+            let tierBadgeClass = "tier-locked";
+            let displayItemName = item.name;
+
+            if (bestScore >= 100) {
+                medals.gold++;
+                tierClass = "gold-tier";
+                tierBadgeText = "🥇 Vàng (100đ)";
+                tierBadgeClass = "tier-gold";
+                displayItemName = item.cap3;
+            } else if (bestScore >= 90) {
+                medals.silver++;
+                tierClass = "silver-tier";
+                tierBadgeText = "🥈 Bạc (" + bestScore + "đ)";
+                tierBadgeClass = "tier-silver";
+                displayItemName = item.cap2;
+            } else if (bestScore >= 50) {
+                medals.bronze++;
+                tierClass = "bronze-tier";
+                tierBadgeText = "🥉 Đồng (" + bestScore + "đ)";
+                tierBadgeClass = "tier-bronze";
+                displayItemName = item.cap1;
+            }
+
+            // Filter check
+            if (currentFilter === 'hk1' && week > 18) continue;
+            if (currentFilter === 'hk2' && week <= 18) continue;
+
+            const card = document.createElement('div');
+            card.className = `item-card ${unlocked ? 'unlocked ' + tierClass : ''}`;
+            card.title = `Trạm ${week}: ${item.name}\n- Cấp 1 (50đ): ${item.cap1}\n- Cấp 2 (90đ): ${item.cap2}\n- Cấp 3 (100đ): ${item.cap3}`;
+            card.innerHTML = `
+                <span class="station-num">T${week}</span>
+                <span class="icon">${unlocked ? item.icon : '🔒'}</span>
+                <div class="name">${unlocked ? displayItemName : 'Trạm ' + week + ' (Khóa)'}</div>
+                <div class="tier-badge ${tierBadgeClass}">${tierBadgeText}</div>
+            `;
+            itemContainer.appendChild(card);
+        }
+
+        // Cập nhật số lượng huy chương
+        document.getElementById('gold-count').innerText = medals.gold;
+        document.getElementById('silver-count').innerText = medals.silver;
+        document.getElementById('bronze-count').innerText = medals.bronze;
+    }
+
+    loadInventory();
+</script>
+</body>
+</html>

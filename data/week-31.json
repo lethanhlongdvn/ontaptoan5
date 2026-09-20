@@ -1,0 +1,250 @@
+{
+  "week": 31,
+  "stationName": "Đồng Tháp (Sa Đéc, Tràm Chim, Sen Tháp Mười)",
+  "config": {
+    "week": 31,
+    "openTime": "2027-04-23T14:00:00",
+    "openStr": "14:00 ngày 23/04/2027"
+  },
+  "souvenirs": {
+    "cap1": "Chiếc giỏ hoa Sa Đéc Đồng (50đ)",
+    "cap2": "Cánh chim Sếu Tràm Chim Bạc (90đ)",
+    "cap3": "Búp sen Ngọc Tháp Mười Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Số tự nhiên lớn nhất có 7 chữ số là số nào?",
+        "a": "9 999 999"
+      },
+      {
+        "q": "Giá trị của chữ số 5 trong số 25 841 020 là bao nhiêu?",
+        "a": "5 000 000 (năm triệu)"
+      },
+      {
+        "q": "Phân số 15/35 rút gọn về phân số tối giản là gì?",
+        "a": "3/7 (chia cả tử và mẫu cho 5)"
+      },
+      {
+        "q": "Số thập phân gồm 7 đơn vị và 8 phần trăm viết là gì?",
+        "a": "7,08"
+      },
+      {
+        "q": "So sánh: 0,85 và 0,849",
+        "a": "0,85 > 0,849"
+      },
+      {
+        "q": "Thủ phủ hoa kiểng lớn nhất miền Tây Nam Bộ nằm tại thành phố nào?",
+        "a": "Làng hoa Sa Đéc (TP Sa Đéc)"
+      },
+      {
+        "q": "Vườn quốc gia nổi tiếng là nơi cư trú của loài Sếu đầu đỏ quý hiếm ở Đồng Tháp là gì?",
+        "a": "VQG Tràm Chim (Tam Nông)"
+      },
+      {
+        "q": "Vùng đất trứ danh với câu thơ 'Tháp Mười đẹp nhất bông sen' là địa danh nào?",
+        "a": "Đồng sen Tháp Mười"
+      },
+      {
+        "q": "Ngôi nhà cổ nổi tiếng gắn liền với chuyện tình văn học lãng mạn tại Sa Đéc là gì?",
+        "a": "Nhà cổ Huỳnh Thủy Lê"
+      },
+      {
+        "q": "Số thập phân 3,1415 làm tròn đến hàng phần trăm được số nào?",
+        "a": "3,14"
+      },
+      {
+        "q": "Số gồm 3 chục triệu, 5 trăm nghìn và 4 chục viết là gì?",
+        "a": "30 500 040"
+      },
+      {
+        "q": "Quy đồng mẫu số hai phân số 3/4 và 5/6 với MSC nhỏ nhất là bao nhiêu?",
+        "a": "9/12 và 10/12 (MSC = 12)"
+      },
+      {
+        "q": "Phân số nào bé hơn 1 trong các phân số sau: 5/4; 7/7; 8/9; 11/10?",
+        "a": "8/9"
+      },
+      {
+        "q": "Chuyển phân số 23/100 thành số thập phân",
+        "a": "0,23"
+      },
+      {
+        "q": "Xếp theo thứ tự từ bé đến lớn: 2,15; 2,05; 2,5; 2,51",
+        "a": "2,05; 2,15; 2,5; 2,51"
+      },
+      {
+        "q": "Khu di tích lịch sử nơi an nghỉ của cụ Phó bảng Nguyễn Sinh Sắc (thân sinh Bác Hồ) ở đâu?",
+        "a": "TP Cao Lãnh (Đồng Tháp)"
+      },
+      {
+        "q": "Đặc sản nem chua nổi tiếng truyền thống nức tiếng vùng đất Sa Đéc là gì?",
+        "a": "Nem Lai Vung"
+      },
+      {
+        "q": "Cây cầu dây văng lớn bắc qua sông Tiền kết nối Đồng Tháp với Tiền Giang là cầu gì?",
+        "a": "Cầu Cao Lãnh"
+      },
+      {
+        "q": "Tìm số tự nhiên x, biết: 8,9 < x < 10,1",
+        "a": "x = 9 và x = 10"
+      },
+      {
+        "q": "Số nghịch đảo của phân số 7/12 là gì?",
+        "a": "12/7"
+      },
+      {
+        "q": "Số tự nhiên bé nhất có 5 chữ số khác nhau là số nào?",
+        "a": "10 234"
+      },
+      {
+        "q": "Chuyển hỗn số 3 2/5 thành phân số",
+        "a": "17/5"
+      },
+      {
+        "q": "Chuyển phân số thập phân 45/1000 thành số thập phân",
+        "a": "0,045"
+      },
+      {
+        "q": "Trong số thập phân 12,345 chữ số 4 thuộc hàng nào?",
+        "a": "Hàng phần trăm"
+      },
+      {
+        "q": "So sánh hai phân số: 5/8 và 7/12",
+        "a": "5/8 > 7/12 (15/24 > 14/24)"
+      },
+      {
+        "q": "Loài sen khổng lồ có lá to như chiếc nia người ngồi lên không chìm ở chùa Phước Kiển là gì?",
+        "a": "Sen Vua (Sen nia)"
+      },
+      {
+        "q": "Khu căn cứ kháng chiến xưa nằm giữa rừng tràm rậm rạp Đồng Tháp Mười là gì?",
+        "a": "Khu di tích Xẻo Quýt"
+      },
+      {
+        "q": "Vựa trái cây trứ danh với đặc sản xoài cát chu thơm ngọt ở Đồng Tháp là gì?",
+        "a": "Xoài cát Cao Lãnh"
+      },
+      {
+        "q": "Tính: 3/4 + 1/2",
+        "a": "5/4 (hoặc 1 1/4)"
+      },
+      {
+        "q": "Số thập phân 0,75 viết dưới dạng phân số tối giản là gì?",
+        "a": "3/4"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Làng hoa Sa Đéc trồng hơn 2 000 loài hoa kiểng. Trong dịp Tết, một nhà vườn xuất bán 3 500 chậu cúc mâm xôi, đã bán được 80% số chậu. Số chậu cúc còn lại là ... chậu.",
+        "a": "700"
+      },
+      {
+        "q": "Khu du lịch Đồng sen Tháp Mười rộng 25 ha. Người ta dùng 3/5 diện tích trồng sen lấy hoa và hạt. Diện tích trồng sen là ... ha.",
+        "a": "15"
+      },
+      {
+        "q": "Đàn Sếu đầu đỏ bay về VQG Tràm Chim gồm 36 con. Số sếu non bằng 1/3 số sếu trưởng thành. Đàn có ... con sếu non.",
+        "a": "9"
+      },
+      {
+        "q": "Tìm x là số tự nhiên, biết: 15,2 < x < 16,8. Giá trị của x là ...",
+        "a": "16"
+      },
+      {
+        "q": "Một cơ sở làm nem Lai Vung đóng gói 450 chùm nem trong 3 ngày. Trong 5 ngày cơ sở đó đóng được ... chùm nem (năng suất như nhau).",
+        "a": "750"
+      },
+      {
+        "q": "Cầu Cao Lãnh dài hơn 2 000 m bắc qua sông Tiền. Một chiếc xe buýt chạy qua cầu với vận tốc 40 km/h hết 3 phút. Chiều dài quãng đường xe đi là ... m.",
+        "a": "2000"
+      },
+      {
+        "q": "Một vườn xoài cát Cao Lãnh thu hoạch được 4,5 tấn xoài. Người ta bán đi 60% số xoài đó. Khối lượng xoài còn lại là ... tạ.",
+        "a": "18"
+      },
+      {
+        "q": "Tìm phân số có tử số là 8 và bằng phân số 2/5. Mẫu số của phân số đó là ...",
+        "a": "20"
+      },
+      {
+        "q": "Một hồ sen Tháp Mười hình chữ nhật có chu vi 160 m, chiều dài gấp 3 lần chiều rộng. Diện tích hồ sen là ... m².",
+        "a": "1200"
+      },
+      {
+        "q": "Một hộp trà sen Đồng Tháp có giá 120 000 đồng. Khách mua 5 hộp được giảm 10%. Số tiền khách phải trả là ... đồng.",
+        "a": "540000 (hoặc 540 000)"
+      },
+      {
+        "q": "Xếp các số sau theo thứ tự giảm dần: 3,45; 3,54; 3,5; 3,4. Số lớn nhất trong dãy là ...",
+        "a": "3,54"
+      },
+      {
+        "q": "Một bạn học sinh đếm được một chiếc lá sen Vua có đường kính 2 m. Bán kính chiếc lá sen đó là ... m.",
+        "a": "1"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một thửa đất trồng hoa tại Sa Đéc hình chữ nhật có chiều dài 40 m, chiều rộng 25 m. Người ta làm các lối đi bê tông xung quanh và chính giữa chia thửa đất thành 4 luống nhỏ bằng nhau. Biết diện tích các lối đi chiếm 15% diện tích thửa đất. Tính tổng diện tích của 4 luống hoa.",
+        "opts": [
+          "850 m²",
+          "800 m²",
+          "900 m²",
+          "750 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tìm hai số có tổng bằng 231, biết rằng nếu viết thêm chữ số 0 vào bên phải số bé thì được số lớn.",
+        "opts": [
+          "21 và 210",
+          "22 và 220",
+          "19 và 190",
+          "24 và 240"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một chiếc xuồng máy chở khách ngắm rừng tràm Xẻo Quýt xuôi dòng 12 km hết 30 phút và quay ngược dòng hết 45 phút. Tính vận tốc của dòng nước trên kênh rạch.",
+        "opts": [
+          "4 km/giờ",
+          "2 km/giờ",
+          "3 km/giờ",
+          "5 km/giờ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một hợp tác xã sen Tháp Mười có số hạt sen tươi loại 1 gấp 3 lần loại 2. Sau khi xuất khẩu 15 tạ hạt sen loại 1 thì số hạt sen loại 1 còn lại bằng số hạt sen loại 2. Tính tổng số tạ hạt sen ban đầu của cả hai loại.",
+        "opts": [
+          "30 tạ",
+          "25 tạ",
+          "35 tạ",
+          "40 tạ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Khi cộng một số tự nhiên với một số thập phân có một chữ số ở phần thập phân, một bạn quên viết dấu phẩy của số thập phân nên được tổng là 382. Biết tổng đúng là 134,5. Tìm số tự nhiên ban đầu.",
+        "opts": [
+          "107",
+          "105",
+          "110",
+          "100"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Có bao nhiêu số thập phân có hai chữ số ở phần thập phân mà lớn hơn 5,2 và bé hơn 5,3?",
+        "opts": [
+          "9 số",
+          "10 số",
+          "8 số",
+          "Vô số"
+        ],
+        "c": 0
+      }
+    ]
+  }
+}

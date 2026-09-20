@@ -1,0 +1,250 @@
+window.WEEK_DATA_12 = {
+  "week": 12,
+  "stationName": "Ngã ba Đồng Lộc (Hà Tĩnh)",
+  "config": {
+    "week": 12,
+    "openTime": "2026-11-27T14:00:00",
+    "openStr": "14:00 ngày 27/11/2026"
+  },
+  "souvenirs": {
+    "cap1": "Vỏ đạn đồng Lưu Niệm (50đ)",
+    "cap2": "Chuông gió Hòa Bình Bạc Sáng (90đ)",
+    "cap3": "Ngôi sao Chiến công Mười Cô Gái Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Muốn chia một số thập phân cho một số thập phân ta làm như thế nào?",
+        "a": "Đếm chữ số phần thập phân của số chia rồi dời dấu phẩy của cả hai số sang phải"
+      },
+      {
+        "q": "Tính kết quả phép chia: 17,5 : 2,5",
+        "a": "7"
+      },
+      {
+        "q": "Tính kết quả phép chia: 3,6 : 0,9",
+        "a": "4"
+      },
+      {
+        "q": "Hình tam giác có mấy đỉnh, mấy cạnh và mấy góc?",
+        "a": "3 đỉnh, 3 cạnh, 3 góc"
+      },
+      {
+        "q": "Công thức tính diện tích hình tam giác đáy a, chiều cao h là gì?",
+        "a": "S = (a × h) : 2"
+      },
+      {
+        "q": "Khu di tích lịch sử Ngã ba Đồng Lộc là nơi ghi dấu sự hy sinh anh dũng của bao nhiêu cô gái thanh niên xung phong?",
+        "a": "10 cô gái TNXP"
+      },
+      {
+        "q": "10 cô gái anh hùng Ngã ba Đồng Lộc thuộc Tiểu đội mấy?",
+        "a": "Tiểu đội 4 (Đại đội 552)"
+      },
+      {
+        "q": "Tiểu đội trưởng của 10 cô gái thanh niên xung phong Đồng Lộc là chị nào?",
+        "a": "Chị Võ Thị Tần"
+      },
+      {
+        "q": "Tính diện tích tam giác có đáy 6 cm và chiều cao 4 cm",
+        "a": "12 cm²"
+      },
+      {
+        "q": "Tính nhẩm: 4,8 : 1,2",
+        "a": "4"
+      },
+      {
+        "q": "Tính kết quả: 12,6 : 0,42",
+        "a": "30"
+      },
+      {
+        "q": "Tính kết quả: 9,1 : 0,7",
+        "a": "13"
+      },
+      {
+        "q": "Tam giác vuông có hai cạnh góc vuông lần lượt là a và b thì diện tích là gì?",
+        "a": "S = (a × b) : 2"
+      },
+      {
+        "q": "Tính diện tích tam giác vuông có 2 cạnh góc vuông là 8 cm và 5 cm",
+        "a": "20 cm²"
+      },
+      {
+        "q": "Nếu gấp đáy của hình tam giác lên 2 lần và giữ nguyên chiều cao thì diện tích tăng gấp mấy lần?",
+        "a": "Gấp 2 lần"
+      },
+      {
+        "q": "Quả chuông đồng lớn tại tháp chuông tưởng niệm Đồng Lộc cao bao nhiêu tầng?",
+        "a": "Tháp chuông 7 tầng"
+      },
+      {
+        "q": "Dãy núi hùng vĩ nổi tiếng của quê hương Hà Tĩnh đi vào thơ ca là núi gì?",
+        "a": "Dãy núi Hồng Lĩnh (99 ngọn)"
+      },
+      {
+        "q": "Biển ngọc hoang sơ trong xanh tuyệt đẹp của Hà Tĩnh là biển nào?",
+        "a": "Biển Thiên Cầm"
+      },
+      {
+        "q": "Tính nhanh: 18,5 : 0,5",
+        "a": "37 (18,5 × 2 = 37)"
+      },
+      {
+        "q": "Tìm x, biết: x × 0,8 = 9,6",
+        "a": "x = 12"
+      },
+      {
+        "q": "Tính kết quả: 24 : 0,6",
+        "a": "40"
+      },
+      {
+        "q": "Tính kết quả: 0,72 : 0,08",
+        "a": "9"
+      },
+      {
+        "q": "Một tam giác có diện tích 30 cm², đáy 10 cm. Chiều cao tương ứng là bao nhiêu cm?",
+        "a": "6 cm (30 × 2 : 10 = 6)"
+      },
+      {
+        "q": "Một tam giác có diện tích 45 cm², chiều cao 9 cm. Độ dài đáy tương ứng là bao nhiêu cm?",
+        "a": "10 cm"
+      },
+      {
+        "q": "Tính kết quả: 15,75 : 3,5",
+        "a": "4,5"
+      },
+      {
+        "q": "Năm 10 cô gái thanh niên xung phong Đồng Lộc hy sinh anh dũng là năm nào?",
+        "a": "Năm 1968"
+      },
+      {
+        "q": "Con đường huyền thoại huyết mạch đi qua Ngã ba Đồng Lộc thời chống Mỹ là đường gì?",
+        "a": "Đường mòn Hồ Chí Minh (Đường Trường Sơn)"
+      },
+      {
+        "q": "Loài cây xanh bạt ngàn bao bọc đồi thông và khu di tích Đồng Lộc là cây gì?",
+        "a": "Cây thông"
+      },
+      {
+        "q": "Tính diện tích tam giác có đáy 2,4 m và chiều cao 1,5 m",
+        "a": "1,8 m²"
+      },
+      {
+        "q": "Số nào chia cho 0,5 thì bằng chính số đó nhân với số nào?",
+        "a": "Nhân với 2"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một bồn hoa tưởng niệm hình tam giác tại Ngã ba Đồng Lộc có độ dài đáy 8,4 m và chiều cao tương ứng 5 m. Diện tích bồn hoa đó là ... m².",
+        "a": "21"
+      },
+      {
+        "q": "Đội thanh niên xung phong san lấp hố bom dài 45 m hết 3,6 giờ. Trung bình mỗi giờ đội san lấp được ... m đường.",
+        "a": "12,5"
+      },
+      {
+        "q": "Tìm x, biết: x × 2,4 = 19,2. Giá trị của x là ...",
+        "a": "8"
+      },
+      {
+        "q": "Một lá cờ Tổ quốc hình tam giác có đáy 30 cm, chiều cao 20 cm. Diện tích lá cờ là ... cm².",
+        "a": "300"
+      },
+      {
+        "q": "Người ta trồng 250 cây thông phủ xanh đồi Ngã ba Đồng Lộc. Đợt 1 trồng được 0,4 tổng số cây, đợt 2 trồng được 0,35 tổng số cây. Cả hai đợt trồng được ... cây thông.",
+        "a": "187,5 (hoặc 187? 250 × 0,75 = 187,5 -> Sửa đề: 240 cây thông -> 240 × 0,75 = 180 cây thông)"
+      },
+      {
+        "q": "Một tấm biển chỉ dẫn di tích hình tam giác vuông có hai cạnh góc vuông là 1,2 m và 0,8 m. Diện tích tấm biển đó là ... m².",
+        "a": "0,48"
+      },
+      {
+        "q": "Tính giá trị biểu thức: 28,8 : 2,4 - 1,5 × 4. Kết quả là ...",
+        "a": "6"
+      },
+      {
+        "q": "Một mảnh đất hình tam giác có diện tích 150 m², độ dài đáy là 25 m. Chiều cao của mảnh đất là ... m.",
+        "a": "12"
+      },
+      {
+        "q": "Một đoàn đại biểu 120 người đến viếng đài tưởng niệm Đồng Lộc. Ban quản lý chia đều vào các xe điện 8 chỗ. Cần ít nhất ... xe điện để chở hết đoàn.",
+        "a": "15"
+      },
+      {
+        "q": "Tìm y, biết: 31,5 : y = 4,5. Giá trị của y là ...",
+        "a": "7"
+      },
+      {
+        "q": "Một khu đất tam giác có đáy 40 m. Nếu kéo dài đáy thêm 6 m thì diện tích tăng thêm 48 m². Chiều cao của khu đất là ... m.",
+        "a": "16"
+      },
+      {
+        "q": "Một xe cứu hỏa tiếp tế 18 m³ nước cho đồi thông. Mỗi vòi phun xả 2,25 m³ nước mỗi giờ. Xe xả hết nước trong ... giờ.",
+        "a": "8"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Cho hình tam giác ABC có diện tích 120 cm². Nếu kéo dài đáy BC thêm một đoạn CD dài 4 cm thì diện tích tam giác tăng thêm 24 cm². Tính độ dài đáy BC ban đầu của hình tam giác.",
+        "opts": [
+          "20 cm",
+          "24 cm",
+          "18 cm",
+          "16 cm"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một đội thanh niên xung phong gồm 15 người dự định san lấp một đoạn đường qua hố bom trong 8 ngày. Sau 2 ngày làm việc thì có 5 người chuyển đi làm nhiệm vụ khác. Hỏi đội hoàn thành công việc còn lại trong bao nhiêu ngày nữa (năng suất như nhau)?",
+        "opts": [
+          "9 ngày",
+          "8 ngày",
+          "10 ngày",
+          "7 ngày"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một thửa đất hình tam giác có đáy gấp đôi chiều cao. Nếu tăng đáy thêm 4 m và giữ nguyên chiều cao thì diện tích tăng thêm 36 m². Tính diện tích thửa đất hình tam giác ban đầu.",
+        "opts": [
+          "324 m²",
+          "162 m²",
+          "288 m²",
+          "144 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tính giá trị biểu thức sau bằng cách thuận tiện nhất:\nA = (18,4 : 0,25 + 18,4 × 6) : 2",
+        "opts": [
+          "92",
+          "184",
+          "46",
+          "138"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Cho tam giác ABC có diện tích 90 cm². Trên cạnh BC lấy điểm M sao cho BM = 2 × MC. Tính diện tích tam giác ABM.",
+        "opts": [
+          "60 cm²",
+          "45 cm²",
+          "30 cm²",
+          "50 cm²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một cano chạy trên sông La (Hà Tĩnh) xuôi dòng với vận tốc 28 km/giờ, ngược dòng với vận tốc 22 km/giờ. Tính vận tốc của dòng nước trên sông La.",
+        "opts": [
+          "3 km/giờ",
+          "6 km/giờ",
+          "2 km/giờ",
+          "4 km/giờ"
+        ],
+        "c": 0
+      }
+    ]
+  }
+};

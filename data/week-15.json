@@ -1,0 +1,250 @@
+{
+  "week": 15,
+  "stationName": "Quần thể Di tích Cố đô Huế (Thừa Thiên Huế)",
+  "config": {
+    "week": 15,
+    "openTime": "2026-12-18T14:00:00",
+    "openStr": "14:00 ngày 18/12/2026"
+  },
+  "souvenirs": {
+    "cap1": "Tách trà Cung đình Đồng Hun (50đ)",
+    "cap2": "Quạt lụa Ngự Uyển Dát Bạc (90đ)",
+    "cap3": "Bảo kiếm Hoàng Gia Triều Nguyễn Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Một nửa hình tròn có bán kính r = 4 cm có diện tích là bao nhiêu?",
+        "a": "25,12 cm² (4 × 4 × 3,14 : 2 = 25,12)"
+      },
+      {
+        "q": "Hình quạt tròn 1/4 hình tròn có diện tích bằng diện tích hình tròn chia cho mấy?",
+        "a": "Chia cho 4"
+      },
+      {
+        "q": "Một mặt bàn tròn Cố đô có bán kính 0,5 m. Diện tích mặt bàn là bao nhiêu?",
+        "a": "0,785 m²"
+      },
+      {
+        "q": "Tính chu vi hình tròn có bán kính 0,5 m",
+        "a": "3,14 m"
+      },
+      {
+        "q": "Số thập phân 0,125 viết dưới dạng phân số tối giản là gì?",
+        "a": "1/8"
+      },
+      {
+        "q": "Cố đô Huế từng là kinh đô của triều đại phong kiến cuối cùng nào ở nước ta?",
+        "a": "Triều nhà Nguyễn (1802 - 1945)"
+      },
+      {
+        "q": "Cây cầu biểu tượng soi bóng dòng sông Hương thơ mộng ở xứ Huế là cầu gì?",
+        "a": "Cầu Tràng Tiền (cầu Tiền Trường)"
+      },
+      {
+        "q": "Cầu Tràng Tiền nổi tiếng trong ca dao với bao nhiêu vài và bao nhiêu nhịp?",
+        "a": "6 vài 12 nhịp"
+      },
+      {
+        "q": "Tháp Phước Duyên cổ kính tại Chùa Thiên Mụ có bao nhiêu tầng?",
+        "a": "7 tầng"
+      },
+      {
+        "q": "Tính nhẩm: 4,5 × 0,4",
+        "a": "1,8"
+      },
+      {
+        "q": "Tính diện tích hình tròn có đường kính d = 6 dm",
+        "a": "28,26 dm² (r = 3 dm)"
+      },
+      {
+        "q": "Tính chu vi hình tròn có đường kính d = 2 dm",
+        "a": "6,28 dm"
+      },
+      {
+        "q": "Muốn tính diện tích hình phẳng phức hợp ghép từ hình chữ nhật và 2 nửa hình tròn ta làm thế nào?",
+        "a": "Cộng diện tích hình chữ nhật với diện tích một hình tròn"
+      },
+      {
+        "q": "Tính giá trị biểu thức: 12,5 × 4 - 3,5 × 4",
+        "a": "36"
+      },
+      {
+        "q": "Tìm x, biết: x : 2,5 = 4",
+        "a": "x = 10"
+      },
+      {
+        "q": "Cửa ngõ chính vào Hoàng thành Huế phía trước có Kỳ Đài gọi là gì?",
+        "a": "Ngọ Môn"
+      },
+      {
+        "q": "Dòng sông thơ mộng êm đềm chảy qua trung tâm thành phố Huế là sông gì?",
+        "a": "Sông Hương"
+      },
+      {
+        "q": "Di sản phi vật thể đại diện của nhân loại được bảo tồn tại Cố đô Huế là gì?",
+        "a": "Nhã nhạc cung đình Huế"
+      },
+      {
+        "q": "Lăng tẩm của vị vua nào có kiến trúc độc đáo kết hợp Á - Âu bằng sành sứ?",
+        "a": "Lăng Khải Định"
+      },
+      {
+        "q": "Tính nhẩm: 0,75 : 0,25",
+        "a": "3"
+      },
+      {
+        "q": "Tính diện tích hình tròn có bán kính r = 3 cm",
+        "a": "28,26 cm²"
+      },
+      {
+        "q": "Chu vi hình tròn tăng lên mấy lần khi đường kính tăng lên 3 lần?",
+        "a": "Gấp 3 lần"
+      },
+      {
+        "q": "Diện tích hình tròn tăng lên mấy lần khi bán kính tăng lên 4 lần?",
+        "a": "Gấp 16 lần"
+      },
+      {
+        "q": "Tính chu vi nửa hình tròn có đường kính 4 cm (kể cả đường kính)",
+        "a": "10,28 cm (4 × 3,14 : 2 + 4 = 10,28)"
+      },
+      {
+        "q": "Số thập phân gồm 8 đơn vị và 5 phần trăm viết là gì?",
+        "a": "8,05"
+      },
+      {
+        "q": "Lăng tẩm mang phong cách hài hòa non nước thiên nhiên bậc nhất xứ Huế là lăng nào?",
+        "a": "Lăng Tự Đức (Khiêm Lăng)"
+      },
+      {
+        "q": "Món chè cung đình nổi tiếng với hương sen bọc hạt sen xứ Huế là gì?",
+        "a": "Chè hạt sen long nhãn"
+      },
+      {
+        "q": "Kỳ Đài Huế (cột cờ trước Ngọ Môn) cao bao nhiêu tầng đài xây bằng gạch vôi?",
+        "a": "3 tầng đài"
+      },
+      {
+        "q": "Tính nhanh: 3,7 × 2,5 × 4",
+        "a": "37"
+      },
+      {
+        "q": "Tìm số tự nhiên y, biết: 4,8 < y < 5,2",
+        "a": "y = 5"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Cầu Tràng Tiền (Huế) dài 402,6 m gồm 6 vài. Độ dài trung bình của mỗi vài cầu là ... m.",
+        "a": "67,1"
+      },
+      {
+        "q": "Hồ Tịnh Tâm trong Hoàng thành Huế hình chữ nhật có chiều dài 200 m, chiều rộng 150 m. Diện tích mặt nước hồ sen là ... ha.",
+        "a": "3"
+      },
+      {
+        "q": "Một chiếc nón bài thơ xứ Huế có vành đáy hình tròn đường kính 40 cm. Chu vi của vành nón là ... cm.",
+        "a": "125,6"
+      },
+      {
+        "q": "Một đoàn ca Huế trên sông Hương biểu diễn trên thuyền rồng từ 19 giờ 30 phút đến 21 giờ. Buổi biểu diễn kéo dài ... phút.",
+        "a": "90"
+      },
+      {
+        "q": "Sân Điện Thái Hòa hình chữ nhật có kích thước 60 m và 40 m. Người ta dùng 1/8 diện tích làm lối đi lễ. Diện tích lối đi là ... m².",
+        "a": "300"
+      },
+      {
+        "q": "Một chiếc gương cung đình hình tròn có diện tích 78,5 dm². Bán kính của chiếc gương đó là ... dm.",
+        "a": "5"
+      },
+      {
+        "q": "Mua 5 hộp mè xửng đặc sản Huế hết 175 000 đồng. Mua 8 hộp mè xửng như thế hết tất cả ... đồng.",
+        "a": "280000 (hoặc 280 000)"
+      },
+      {
+        "q": "Tìm x, biết: x × 3,14 = 31,4. Giá trị của x là ...",
+        "a": "10"
+      },
+      {
+        "q": "Một bồn hoa cung đình gồm một hình chữ nhật dài 6 m, rộng 4 m và hai nửa hình tròn gắn ở hai đầu chiều rộng. Diện tích bồn hoa đó là ... m² (lấy pi = 3,14).",
+        "a": "36,56 (24 + 4 × 3,14 = 36,56)"
+      },
+      {
+        "q": "Một chiếc xe xích lô chở khách du lịch quanh Đại Nội Huế có bánh xe sau đường kính 0,7 m. Khi bánh xe lăn được 500 vòng thì xích lô đã đi được ... m.",
+        "a": "1099"
+      },
+      {
+        "q": "Tính giá trị biểu thức: (45,8 - 25,8) × 3,14 : 2. Kết quả là ...",
+        "a": "31,4"
+      },
+      {
+        "q": "Một can dầu tràm Huế chứa 5 lít dầu cân nặng 4,5 kg. Mười can dầu như thế cân nặng tất cả ... kg.",
+        "a": "45"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một sân khấu biểu diễn Nhã nhạc cung đình Huế gồm một hình vuông có cạnh 10 m và 4 nửa hình tròn có đường kính là 4 cạnh hình vuông đó nằm phía ngoài. Tính tổng diện tích của cả sân khấu (lấy pi = 3,14).",
+        "opts": [
+          "257 m²",
+          "157 m²",
+          "214 m²",
+          "314 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một bồn hoa hình vuông cạnh 6 m. Ở chính giữa bồn hoa người ta xây một hồ nước hình tròn tiếp xúc với 4 cạnh của hình vuông. Tính diện tích phần đất trồng hoa còn lại xung quanh hồ nước.",
+        "opts": [
+          "7,74 m²",
+          "8,25 m²",
+          "6,84 m²",
+          "9,14 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một chiếc thuyền rồng du lịch chở khách trên sông Hương xuôi dòng từ chùa Thiên Mụ về chợ Đông Ba dài 5 km hết 15 phút, và ngược dòng từ chợ Đông Ba về chùa Thiên Mụ mất 25 phút. Tính vận tốc của dòng nước trên sông Hương.",
+        "opts": [
+          "4 km/giờ",
+          "2 km/giờ",
+          "3 km/giờ",
+          "5 km/giờ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Cho hai hình tròn đồng tâm O. Bán kính hình tròn lớn là 6 cm, bán kính hình tròn nhỏ là 4 cm. Tính diện tích phần hình vành khăn nằm giữa hai hình tròn đó (lấy pi = 3,14).",
+        "opts": [
+          "62,8 cm²",
+          "31,4 cm²",
+          "50,24 cm²",
+          "78,5 cm²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tìm hai số thập phân có tổng là 49,5 và biết rằng nếu dời dấu phẩy của số bé sang bên phải một chữ số thì được số lớn.",
+        "opts": [
+          "4,5 và 45",
+          "5,5 và 44",
+          "4,95 và 44,55",
+          "3,5 và 46"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một người nghệ nhân thêu tranh xứ Huế dự định hoàn thành một bức tranh thêu Cố đô trong 15 ngày. Do cải tiến kỹ thuật, mỗi ngày người đó thêu thêm được 20% định mức ban đầu. Hỏi người nghệ nhân hoàn thành bức tranh đó trong bao nhiêu ngày?",
+        "opts": [
+          "12,5 ngày (12 ngày rưỡi)",
+          "12 ngày",
+          "13 ngày",
+          "10 ngày"
+        ],
+        "c": 0
+      }
+    ]
+  }
+}

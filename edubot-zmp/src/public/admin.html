@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hệ Thống Quản Trị & Phê Duyệt Tài Khoản - Học toán 5 cùng Robot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        :root {
+            --p: #FF9800;
+            --p-glow: rgba(255, 152, 0, 0.4);
+            --gold: #ffd700;
+            --green: #2ecc71;
+            --red: #ff5252;
+            --cyan: #00f2ff;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --border: #334155;
+            --text-sec: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #1e293b;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--p);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-title {
+            font-family: 'Bungee', cursive;
+            font-size: 1.25rem;
+            color: var(--gold);
+            margin: 0;
+            text-decoration: none;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-action {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action:hover {
+            border-color: var(--p);
+            color: var(--p);
+        }
+
+        .btn-p {
+            background: var(--p);
+            border-color: var(--p);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .btn-p:hover {
+            background: #ffa726;
+            color: #000;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-sec);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Bungee', cursive;
+        }
+
+        /* CONTROLS & FILTERS */
+        .control-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            flex: 1;
+        }
+
+        .input-search, .select-filter {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: 'Lexend', sans-serif;
+            outline: none;
+        }
+
+        .input-search {
+            min-width: 220px;
+            flex: 1;
+        }
+
+        .input-search:focus, .select-filter:focus {
+            border-color: var(--p);
+        }
+
+        /* TABLE */
+        .table-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        th {
+            background: #0f172a;
+            padding: 12px 14px;
+            color: var(--text-sec);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #283548;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: rgba(255, 152, 0, 0.05);
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-pending {
+            background: rgba(255, 152, 0, 0.2);
+            color: var(--p);
+            border: 1px solid var(--p);
+        }
+
+        .badge-approved {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+
+        .badge-blocked {
+            background: rgba(255, 82, 82, 0.2);
+            color: var(--red);
+            border: 1px solid var(--red);
+        }
+
+        .badge-role-teacher {
+            background: rgba(0, 242, 255, 0.15);
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+        }
+
+        .badge-role-student {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+
+        .badge-role-admin {
+            background: #e11d48;
+            color: #fff;
+        }
+
+        /* BUTTONS IN TABLE */
+        .btn-table {
+            padding: 5px 9px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            margin-right: 4px;
+            margin-bottom: 3px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-table:hover {
+            opacity: 0.85;
+        }
+
+        .btn-approve { background: var(--green); color: #000; }
+        .btn-block { background: var(--red); color: #fff; }
+        .btn-toggle-role { background: #3b82f6; color: #fff; }
+        .btn-reset-pwd { background: #f59e0b; color: #000; }
+        .btn-delete { background: #64748b; color: #fff; }
+
+        /* MODAL LOGIN */
+        #login-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(8px);
+        }
+
+        .login-card {
+            background: #1e293b;
+            border: 2px solid var(--p);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: #0f172a;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 12px;
+            background: var(--p);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        footer {
+            background: #1e293b;
+            padding: 12px;
+            text-align: center;
+            color: var(--text-sec);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="brand-box">
+            <span style="font-size:1.6rem;">🛡️</span>
+            <div>
+                <a href="index.html" class="brand-title">Học toán 5 cùng Robot - Quản Trị</a>
+                <div style="font-size:0.75rem; color:var(--text-sec);">Cổng Phê Duyệt & Quản Trị Tài Khoản Toàn Hệ Thống</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <span id="admin-user-display" style="font-size:0.85rem; color:var(--gold); font-weight:600;"></span>
+            <button class="btn-action" onclick="showChangePwdModal()">🔑 Đổi mật khẩu</button>
+            <a href="index.html" class="btn-action">🗺️ Về Bản Đồ</a>
+            <button class="btn-action" onclick="handleAdminLogout()" style="color:var(--red); border-color:var(--red);">🚪 Đăng xuất</button>
+        </div>
+    </header>
+
+    <!-- MAIN DASHBOARD -->
+    <main>
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card" style="border-left: 4px solid var(--gold);">
+                <div class="stat-label">Tổng Tài Khoản</div>
+                <div class="stat-val" id="stat-total" style="color:var(--gold);">0</div>
+            </div>
+            <div class="stat-card" style="border-left: 4px solid var(--p);">
+                <div class="stat-label">⏳ Chờ Phê Duyệt</div>
+                <div class="stat-val" id="stat-pending" style="color:var(--p);">0</div>
+            </div>
+            <div class="stat-card" style="border-left: 4px solid var(--green);">
+                <div class="stat-label">✅ Đã Phê Duyệt</div>
+                <div class="stat-val" id="stat-approved" style="color:var(--green);">0</div>
+            </div>
+            <div class="stat-card" style="border-left: 4px solid var(--cyan);">
+                <div class="stat-label">🎓 Giáo Viên</div>
+                <div class="stat-val" id="stat-teachers" style="color:var(--cyan);">0</div>
+            </div>
+            <div class="stat-card" style="border-left: 4px solid var(--red);">
+                <div class="stat-label">🚫 Đã Khóa</div>
+                <div class="stat-val" id="stat-blocked" style="color:var(--red);">0</div>
+            </div>
+        </div>
+
+        <!-- CONTROLS & FILTER -->
+        <div class="control-panel">
+            <div class="filter-group">
+                <input type="text" id="filter-search" class="input-search" placeholder="🔍 Tìm theo Họ tên, Username..." oninput="renderTable()">
+                <select id="filter-status" class="select-filter" onchange="renderTable()">
+                    <option value="all">-- Tất cả Trạng thái --</option>
+                    <option value="pending" selected>⏳ Chờ phê duyệt</option>
+                    <option value="approved">✅ Đã phê duyệt</option>
+                    <option value="blocked">🚫 Bị khóa</option>
+                </select>
+                <select id="filter-role" class="select-filter" onchange="renderTable()">
+                    <option value="all">-- Tất cả Vai trò --</option>
+                    <option value="student">⭐ Học sinh</option>
+                    <option value="teacher">🎓 Giáo viên</option>
+                    <option value="admin">👑 Quản trị viên</option>
+                </select>
+                <select id="filter-class" class="select-filter" onchange="renderTable()">
+                    <option value="all">-- Tất cả Lớp --</option>
+                </select>
+            </div>
+            <div>
+                <button class="btn-action btn-p" onclick="approveAllPending()">
+                    ⚡ Duyệt tất cả đang chờ (<span id="batch-pending-count">0</span>)
+                </button>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">STT</th>
+                        <th>Tên Đăng Nhập</th>
+                        <th>Họ Và Tên</th>
+                        <th>Vai Trò</th>
+                        <th>Lớp / Trường</th>
+                        <th>Ngày Tạo</th>
+                        <th>Trạng Thái</th>
+                        <th style="text-align:center;">Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                    <tr><td colspan="8" style="text-align:center; padding:30px; color:#888;">Đang tải dữ liệu tài khoản...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- LOGIN MODAL -->
+    <div id="login-modal-overlay" style="display:none;">
+        <div class="login-card">
+            <span style="font-size:3rem; display:block; margin-bottom:10px;">🔐</span>
+            <h2 style="font-family:'Bungee'; color:var(--gold); margin:0 0 10px;">ĐĂNG NHẬP QUẢN TRỊ</h2>
+            <p style="font-size:0.8rem; color:var(--text-sec); margin-bottom:20px;">Dành riêng cho Ban Giám Hiệu & Giáo Viên Quản Trị Hệ Thống</p>
+            <input type="text" id="admin-user-input" placeholder="Tên đăng nhập (VD: admin)">
+            <input type="password" id="admin-pass-input" placeholder="Mật khẩu quản trị" onkeydown="if(event.key==='Enter') doAdminLogin()">
+            <button onclick="doAdminLogin()">XÁC NHẬN ĐĂNG NHẬP</button>
+            <div style="margin-top:15px;">
+                <a href="index.html" style="color:var(--text-sec); font-size:0.8rem; text-decoration:none;">⬅ Quay lại Bản đồ</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHANGE PASSWORD MODAL -->
+    <div id="pwd-modal-overlay" style="display:none;" class="login-card" style="position:fixed; z-index:99999;">
+        <!-- Injected via JS -->
+    </div>
+
+    <footer>
+        @Học toán 5 cùng RoBot - Phát triển bởi: <b>LÊ THÀNH LONG</b>
+    </footer>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC6zlWn8BKYU7P6A2-PYq6IIWOzaqJWFhc",
+            authDomain: "gamhoctap.firebaseapp.com",
+            databaseURL: "https://gamhoctap-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "gamhoctap",
+            storageBucket: "gamhoctap.firebasestorage.app",
+            messagingSenderId: "833329613932",
+            appId: "1:833329613932:web:0d8574827bcfe50b535c49"
+        };
+
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let allUsers = [];
+        let currentAdmin = localStorage.getItem('adminUsername');
+
+        // Seed default admin account if not existing
+        function ensureDefaultAdmin() {
+            db.ref('users/admin').once('value', (snap) => {
+                if (!snap.exists()) {
+                    db.ref('users/admin').set({
+                        username: "admin",
+                        password: "EduBot@2026",
+                        fullName: "Quản Trị Viên Hệ Thống",
+                        className: "Ban Quản Trị",
+                        schoolName: "Học toán 5 cùng Robot",
+                        role: "admin",
+                        status: "approved",
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+            });
+        }
+
+        window.onload = function() {
+            ensureDefaultAdmin();
+            checkAuth();
+        };
+
+        function checkAuth() {
+            if (!currentAdmin) {
+                document.getElementById('login-modal-overlay').style.display = 'flex';
+            } else {
+                db.ref('users/' + currentAdmin).once('value', (snap) => {
+                    const u = snap.val();
+                    if (!u || (u.role !== 'admin' && u.role !== 'teacher') || u.status !== 'approved') {
+                        alert("Tài khoản của bạn không có quyền Quản trị viên!");
+                        handleAdminLogout();
+                        return;
+                    }
+                    document.getElementById('login-modal-overlay').style.display = 'none';
+                    document.getElementById('admin-user-display').innerText = `👤 ${u.fullName} (${u.role === 'admin' ? 'Quản trị viên' : 'Giáo viên'})`;
+                    loadUsers();
+                });
+            }
+        }
+
+        function doAdminLogin() {
+            const u = document.getElementById('admin-user-input').value.trim().toLowerCase();
+            const p = document.getElementById('admin-pass-input').value.trim();
+
+            if (!u || !p) {
+                alert("Vui lòng nhập đầy đủ Tên đăng nhập và Mật khẩu!");
+                return;
+            }
+
+            db.ref('users/' + u).once('value', (snap) => {
+                const user = snap.val();
+                if (!user) {
+                    alert("Tài khoản không tồn tại!");
+                    return;
+                }
+                if (user.password !== p) {
+                    alert("Sai mật khẩu, vui lòng thử lại!");
+                    return;
+                }
+                if (user.role !== 'admin' && user.role !== 'teacher') {
+                    alert("Tài khoản này là Học sinh, không có quyền truy cập trang Quản trị!");
+                    return;
+                }
+                if (user.status !== 'approved') {
+                    alert("Tài khoản Giáo viên đang ở trạng thái Chờ duyệt. Vui lòng liên hệ Admin!");
+                    return;
+                }
+
+                currentAdmin = u;
+                localStorage.setItem('adminUsername', u);
+                localStorage.setItem('studentUsername', u);
+                localStorage.setItem('studentName', user.fullName);
+                localStorage.setItem('studentClass', user.className);
+                localStorage.setItem('userRole', user.role);
+                localStorage.setItem('userStatus', 'approved');
+
+                document.getElementById('login-modal-overlay').style.display = 'none';
+                document.getElementById('admin-user-display').innerText = `👤 ${user.fullName} (${user.role === 'admin' ? 'Quản trị viên' : 'Giáo viên'})`;
+                loadUsers();
+            });
+        }
+
+        function handleAdminLogout() {
+            localStorage.removeItem('adminUsername');
+            currentAdmin = null;
+            location.reload();
+        }
+
+        function loadUsers() {
+            db.ref('users').on('value', (snap) => {
+                const data = snap.val() || {};
+                allUsers = Object.values(data);
+                
+                // Update classes list in filter
+                const classes = new Set();
+                allUsers.forEach(u => { if (u.className) classes.add(u.className); });
+                const classSelect = document.getElementById('filter-class');
+                const curVal = classSelect.value;
+                classSelect.innerHTML = '<option value="all">-- Tất cả Lớp --</option>' + 
+                    Array.from(classes).sort().map(c => `<option value="${c}">${c}</option>`).join('');
+                classSelect.value = curVal;
+
+                updateStats();
+                renderTable();
+            });
+        }
+
+        function updateStats() {
+            const total = allUsers.length;
+            const pending = allUsers.filter(u => u.status === 'pending').length;
+            const approved = allUsers.filter(u => u.status === 'approved').length;
+            const teachers = allUsers.filter(u => u.role === 'teacher').length;
+            const blocked = allUsers.filter(u => u.status === 'blocked').length;
+
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-pending').innerText = pending;
+            document.getElementById('stat-approved').innerText = approved;
+            document.getElementById('stat-teachers').innerText = teachers;
+            document.getElementById('stat-blocked').innerText = blocked;
+            document.getElementById('batch-pending-count').innerText = pending;
+        }
+
+        function renderTable() {
+            const q = document.getElementById('filter-search').value.toLowerCase().trim();
+            const sFilter = document.getElementById('filter-status').value;
+            const rFilter = document.getElementById('filter-role').value;
+            const cFilter = document.getElementById('filter-class').value;
+
+            let filtered = allUsers.filter(u => {
+                // Search
+                if (q) {
+                    const name = (u.fullName || '').toLowerCase();
+                    const uname = (u.username || '').toLowerCase();
+                    if (!name.includes(q) && !uname.includes(q)) return false;
+                }
+                // Status
+                if (sFilter !== 'all' && (u.status || 'pending') !== sFilter) return false;
+                // Role
+                if (rFilter !== 'all' && (u.role || 'student') !== rFilter) return false;
+                // Class
+                if (cFilter !== 'all' && u.className !== cFilter) return false;
+                return true;
+            });
+
+            // Sort: pending first, then by createdAt desc
+            filtered.sort((a, b) => {
+                if (a.status === 'pending' && b.status !== 'pending') return -1;
+                if (a.status !== 'pending' && b.status === 'pending') return 1;
+                return (b.createdAt || 0) - (a.createdAt || 0);
+            });
+
+            const tbody = document.getElementById('user-table-body');
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:30px; color:#888;">Không tìm thấy tài khoản phù hợp</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((u, idx) => {
+                const status = u.status || 'pending';
+                const role = u.role || 'student';
+                const dateStr = u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : '---';
+
+                let statusBadge = '';
+                if (status === 'approved') statusBadge = '<span class="badge badge-approved">Đã Duyệt</span>';
+                else if (status === 'blocked') statusBadge = '<span class="badge badge-blocked">Bị Khóa</span>';
+                else statusBadge = '<span class="badge badge-pending">Chờ Duyệt</span>';
+
+                let roleBadge = '';
+                if (role === 'admin') roleBadge = '<span class="badge badge-role-admin">Quản Trị</span>';
+                else if (role === 'teacher') roleBadge = '<span class="badge badge-role-teacher">Giáo Viên</span>';
+                else roleBadge = '<span class="badge badge-role-student">Học Sinh</span>';
+
+                // Action buttons
+                let actions = '';
+                if (u.username !== 'admin') {
+                    if (status === 'pending') {
+                        actions += `<button class="btn-table btn-approve" onclick="approveUser('${u.username}')">✅ Duyệt</button>`;
+                        actions += `<button class="btn-table btn-block" onclick="blockUser('${u.username}')">🚫 Từ chối</button>`;
+                    } else if (status === 'approved') {
+                        actions += `<button class="btn-table btn-block" onclick="blockUser('${u.username}')">🚫 Khóa</button>`;
+                    } else if (status === 'blocked') {
+                        actions += `<button class="btn-table btn-approve" onclick="approveUser('${u.username}')">✅ Mở khóa</button>`;
+                    }
+
+                    // Toggle role
+                    const nextRole = (role === 'teacher') ? 'student' : 'teacher';
+                    const nextRoleText = (role === 'teacher') ? '🎓->⭐ Học sinh' : '⭐->🎓 Giáo viên';
+                    actions += `<button class="btn-table btn-toggle-role" onclick="changeRole('${u.username}', '${nextRole}')">${nextRoleText}</button>`;
+
+                    // Reset password
+                    actions += `<button class="btn-table btn-reset-pwd" onclick="resetPassword('${u.username}')">🔑 Đổi MK</button>`;
+
+                    // Delete
+                    actions += `<button class="btn-table btn-delete" onclick="deleteUser('${u.username}')">🗑️</button>`;
+                } else {
+                    actions = '<span style="color:var(--text-sec); font-size:0.75rem;">(Tài khoản gốc)</span>';
+                }
+
+                return `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td style="font-weight:700; color:var(--gold);">@${u.username}</td>
+                        <td style="font-weight:600;">${u.fullName}</td>
+                        <td>${roleBadge}</td>
+                        <td>
+                            <div>${u.className || '---'}</div>
+                            <div style="font-size:0.75rem; color:var(--text-sec);">${u.schoolName || '---'}</div>
+                        </td>
+                        <td>${dateStr}</td>
+                        <td>${statusBadge}</td>
+                        <td style="text-align:center; white-space:nowrap;">${actions}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ACTIONS
+        function approveUser(username) {
+            db.ref('users/' + username).update({
+                status: 'approved',
+                approvedAt: firebase.database.ServerValue.TIMESTAMP,
+                approvedBy: currentAdmin
+            });
+        }
+
+        function blockUser(username) {
+            if (confirm(`Bạn có chắc muốn Khóa/Hủy duyệt tài khoản @${username}?`)) {
+                db.ref('users/' + username).update({
+                    status: 'blocked'
+                });
+            }
+        }
+
+        function changeRole(username, newRole) {
+            const roleName = newRole === 'teacher' ? 'GIÁO VIÊN' : 'HỌC SINH';
+            if (confirm(`Chuyển tài khoản @${username} thành vai trò: ${roleName}?`)) {
+                db.ref('users/' + username).update({
+                    role: newRole
+                });
+            }
+        }
+
+        function resetPassword(username) {
+            const newPass = prompt(`Nhập mật khẩu mới cho tài khoản @${username}:`);
+            if (newPass && newPass.trim().length >= 3) {
+                db.ref('users/' + username).update({
+                    password: newPass.trim()
+                }).then(() => {
+                    alert(`Đã đổi mật khẩu cho @${username} thành công!`);
+                });
+            } else if (newPass !== null) {
+                alert("Mật khẩu phải từ 3 ký tự trở lên!");
+            }
+        }
+
+        function deleteUser(username) {
+            if (confirm(`⚠️ CẢNH BÁO: Bạn có chắc chắn muốn xóa vĩnh viễn tài khoản @${username}?`)) {
+                db.ref('users/' + username).remove().then(() => {
+                    alert(`Đã xóa tài khoản @${username}`);
+                });
+            }
+        }
+
+        function approveAllPending() {
+            const pendingList = allUsers.filter(u => u.status === 'pending');
+            if (pendingList.length === 0) {
+                alert("Không có tài khoản nào đang chờ phê duyệt!");
+                return;
+            }
+            if (confirm(`Bạn có chắc muốn phê duyệt HÀNG LOẠT cho ${pendingList.length} tài khoản đang chờ?`)) {
+                const updates = {};
+                pendingList.forEach(u => {
+                    updates[`users/${u.username}/status`] = 'approved';
+                    updates[`users/${u.username}/approvedAt`] = firebase.database.ServerValue.TIMESTAMP;
+                    updates[`users/${u.username}/approvedBy`] = currentAdmin;
+                });
+                db.ref().update(updates).then(() => {
+                    alert(`✨ Đã phê duyệt thành công ${pendingList.length} tài khoản!`);
+                });
+            }
+        }
+
+        function showChangePwdModal() {
+            const newPass = prompt("Nhập mật khẩu quản trị mới cho tài khoản của bạn:");
+            if (newPass && newPass.trim().length >= 4) {
+                db.ref('users/' + currentAdmin).update({
+                    password: newPass.trim()
+                }).then(() => {
+                    alert("Đã cập nhật mật khẩu quản trị thành công!");
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

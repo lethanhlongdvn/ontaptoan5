@@ -1,0 +1,250 @@
+window.WEEK_DATA_32 = {
+  "week": 32,
+  "stationName": "Cà Mau (Đất Mũi Cà Mau)",
+  "config": {
+    "week": 32,
+    "openTime": "2027-04-30T14:00:00",
+    "openStr": "14:00 ngày 30/04/2027"
+  },
+  "souvenirs": {
+    "cap1": "Chiếc mỏ neo Mũi Cà Mau Đồng (50đ)",
+    "cap2": "Cột mốc Tọa độ GPS 0001 Bạc (90đ)",
+    "cap3": "Con thuyền Cực Nam No Gió Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Tính kết quả phép tính: 245 + 155",
+        "a": "400"
+      },
+      {
+        "q": "Tính kết quả phép tính: 500 - 175",
+        "a": "325"
+      },
+      {
+        "q": "Tính kết quả phép tính: 25 × 16",
+        "a": "400 (25 × 4 × 4 = 400)"
+      },
+      {
+        "q": "Tính kết quả phép tính: 360 : 12",
+        "a": "30"
+      },
+      {
+        "q": "Cột mốc tọa độ Quốc gia thiêng liêng đặt tại Đất Mũi Cà Mau có số hiệu là gì?",
+        "a": "Cột mốc GPS 0001"
+      },
+      {
+        "q": "Biểu tượng kiến trúc nổi tiếng tại Công viên Văn hóa Mũi Cà Mau có hình gì?",
+        "a": "Con tàu no gió hướng ra biển lớn"
+      },
+      {
+        "q": "Vườn quốc gia Mũi Cà Mau nổi tiếng thế giới với hệ sinh thái rừng gì?",
+        "a": "Rừng ngập mặn (rừng đước)"
+      },
+      {
+        "q": "Hai loài cây tiên phong giữ đất lấn biển đặc trưng nhất của rừng Cà Mau là gì?",
+        "a": "Cây đước và cây mắm"
+      },
+      {
+        "q": "Tính kết quả: 3,5 + 4,75",
+        "a": "8,25"
+      },
+      {
+        "q": "Tính kết quả: 10 - 2,65",
+        "a": "7,35"
+      },
+      {
+        "q": "Tính kết quả: 2/3 + 3/4",
+        "a": "17/12 (hoặc 1 5/12)"
+      },
+      {
+        "q": "Tính kết quả: 5/6 - 1/3",
+        "a": "3/6 (hoặc 1/2)"
+      },
+      {
+        "q": "Tính kết quả: 4/5 × 15/16",
+        "a": "3/4"
+      },
+      {
+        "q": "Tính kết quả: 3/7 : 6/14",
+        "a": "1"
+      },
+      {
+        "q": "Tính kết quả: 2,5 × 4,4",
+        "a": "11"
+      },
+      {
+        "q": "Tính kết quả: 15,6 : 3",
+        "a": "5,2"
+      },
+      {
+        "q": "Đặc sản giáp xác thơm ngon chắc thịt nổi tiếng bậc nhất đất Cà Mau là gì?",
+        "a": "Cua Năm Căn (Cua Cà Mau)"
+      },
+      {
+        "q": "Dòng sông lớn sâu rộng bậc nhất miền Tây chảy qua Cà Mau đổ ra biển Đông và Tây là gì?",
+        "a": "Sông Cửa Lớn"
+      },
+      {
+        "q": "Hòn đảo xanh tuyệt đẹp gắn liền với huyền thoại anh hùng khởi nghĩa Hòn Khoai là gì?",
+        "a": "Đảo Hòn Khoai"
+      },
+      {
+        "q": "Nghề truyền thống gác kèo ong lấy mật tự nhiên độc đáo trong rừng tràm U Minh gọi là gì?",
+        "a": "Nghề gác kèo ong"
+      },
+      {
+        "q": "Tính nhanh: 125 × 79 × 8",
+        "a": "79 000 ((125 × 8) × 79 = 79 000)"
+      },
+      {
+        "q": "Tính nhanh: 4,8 × 6,5 + 4,8 × 3,5",
+        "a": "48 (4,8 × 10 = 48)"
+      },
+      {
+        "q": "Tính nhanh: 3/5 × 4/7 + 3/5 × 3/7",
+        "a": "3/5"
+      },
+      {
+        "q": "Tìm x, biết: x : 0,5 = 24",
+        "a": "x = 12"
+      },
+      {
+        "q": "Tìm y, biết: y × 100 = 45,6",
+        "a": "y = 0,456"
+      },
+      {
+        "q": "Cà Mau là tỉnh duy nhất trên đất liền nước ta có mấy mặt giáp biển?",
+        "a": "3 mặt giáp biển (Đông, Nam, Tây)"
+      },
+      {
+        "q": "Vườn quốc gia U Minh Hạ ở Cà Mau nổi tiếng với loài cây lâm nghiệp chủ đạo nào?",
+        "a": "Cây tràm (rừng tràm U Minh)"
+      },
+      {
+        "q": "Món ăn tôm đặc sản sấy khô đậm vị ngọt của vùng đất Năm Căn Cà Mau là gì?",
+        "a": "Tôm khô Cà Mau"
+      },
+      {
+        "q": "Tìm hai số có tổng là 90 và tỉ số là 2/3",
+        "a": "36 và 54"
+      },
+      {
+        "q": "Tìm hai số có hiệu là 25 và tỉ số là 1/2",
+        "a": "25 và 50"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một chiếc cano cao tốc chở khách từ TP Cà Mau ra Đất Mũi dài 108 km đi hết 2,4 giờ. Vận tốc của cano là ... km/giờ.",
+        "a": "45"
+      },
+      {
+        "q": "Một hợp tác xã cua Năm Căn xuất bán 450 kg cua gạch và cua thịt. Trong đó số cua thịt gấp đôi số cua gạch. Khối lượng cua thịt là ... kg.",
+        "a": "300"
+      },
+      {
+        "q": "Rừng đước Mũi Cà Mau mỗi năm bồi đắp lấn biển thêm khoảng 80 m. Sau 5 năm, dải đất bồi lấn thêm ... m.",
+        "a": "400"
+      },
+      {
+        "q": "Tính giá trị biểu thức: (15,5 + 24,5) : 0,25. Kết quả là ...",
+        "a": "160"
+      },
+      {
+        "q": "Một mẻ tôm khô Năm Căn: cứ 10 kg tôm tươi luộc và phơi thì thu được 1,2 kg tôm khô. Để thu được 24 kg tôm khô cần ... kg tôm tươi.",
+        "a": "200"
+      },
+      {
+        "q": "Một thợ rừng gác kèo ong ở U Minh Hạ thu hoạch được 45 lít mật ong đợt 1, đợt 2 thu hoạch nhiều hơn đợt 1 là 15 lít. Cả hai đợt thu được ... lít mật ong.",
+        "a": "105"
+      },
+      {
+        "q": "Biểu tượng Con tàu Mũi Cà Mau có cánh buồm cao 20,5 m. Thân tàu dài 32 m. Tỉ số giữa chiều cao buồm và chiều dài thân tàu là phân số tối giản ... (nhập 41/64).",
+        "a": "41/64"
+      },
+      {
+        "q": "Tìm x, biết: x × 3,5 - x × 1,5 = 30. Giá trị của x là ...",
+        "a": "15"
+      },
+      {
+        "q": "Một vuông tôm sinh thái dưới tán rừng đước hình chữ nhật có chu vi 240 m, chiều dài hơn chiều rộng 20 m. Diện tích vuông tôm là ... m².",
+        "a": "3500"
+      },
+      {
+        "q": "Đoàn xe du lịch chở 180 khách tham quan Đất Mũi Cà Mau. Mỗi xe chở 45 người. Cần ít nhất ... xe ô tô.",
+        "a": "4"
+      },
+      {
+        "q": "Tính nhanh giá trị biểu thức: 1,25 × 3,7 × 8. Kết quả là ...",
+        "a": "37"
+      },
+      {
+        "q": "Hải đăng Hòn Khoai nằm ở độ cao 318 m so với mực nước biển. Đổi độ cao này sang ki-lô-mét dưới dạng số thập phân là ... km.",
+        "a": "0,318"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một cano xuôi dòng từ Năm Căn ra Đất Mũi Cà Mau dài 45 km hết 1 giờ 15 phút (1,25 giờ), khi quay về ngược dòng hết 1 giờ 52 phút 30 giây (1,875 giờ). Tính vận tốc của dòng nước trên sông Cửa Lớn.",
+        "opts": [
+          "6 km/giờ",
+          "4 km/giờ",
+          "5 km/giờ",
+          "3 km/giờ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một người bán cua Cà Mau mua vào với giá 250 000 đồng/kg. Người đó bán ra với giá lãi 20% so với giá vốn. Hỏi khách mua 4 kg cua phải trả bao nhiêu tiền?",
+        "opts": [
+          "1 200 000 đồng",
+          "1 000 000 đồng",
+          "1 150 000 đồng",
+          "1 250 000 đồng"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một vuông tôm rừng ngập mặn hình chữ nhật có chu vi 300 m. Nếu tăng chiều rộng thêm 10 m và giảm chiều dài 10 m thì diện tích tăng thêm 400 m². Tính diện tích ban đầu của vuông tôm.",
+        "opts": [
+          "5 000 m²",
+          "5 400 m²",
+          "5 600 m²",
+          "6 000 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tìm một số biết rằng nếu lấy số đó nhân với 4 rồi trừ đi 15 thì bằng số đó chia cho 0,25 cộng thêm 0.",
+        "opts": [
+          "Mọi số đều thỏa mãn",
+          "Không có số nào",
+          "Số 0",
+          "Số 15"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Tổng của ba số bằng 150. Biết số thứ nhất hơn số thứ hai 15 đơn vị, số thứ hai hơn số thứ ba 15 đơn vị. Tìm số thứ nhất.",
+        "opts": [
+          "65",
+          "50",
+          "35",
+          "70"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một can đựng đầy mật ong rừng U Minh cân nặng 12,5 kg. Người ta rót ra một nửa lượng mật ong thì can mật ong còn lại cân nặng 6,5 kg. Hỏi riêng vỏ can cân nặng bao nhiêu ki-lô-gam?",
+        "opts": [
+          "0,5 kg",
+          "0,6 kg",
+          "0,8 kg",
+          "1 kg"
+        ],
+        "c": 0
+      }
+    ]
+  }
+};

@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HÀNH TRÌNH XUYÊN VIỆT - Học toán 5 cùng Robot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        :root {
+            --p: #FF9800;
+            --p-glow: rgba(255, 152, 0, 0.4);
+            --dg: #2e7d32;
+            --gold: #ffd700;
+            --bg: #0f172a;
+            --road: #ccff00;
+            --sea: #00f2ff;
+            --text-sec: #94a3b8;
+            --card-border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            user-select: none;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(90deg, #0f172a, #1e293b, #0f172a);
+            padding: 12px 15px;
+            border-bottom: 2px solid var(--p);
+            text-align: center;
+        }
+
+        .welcome-text {
+            font-family: 'Bungee', cursive;
+            font-size: clamp(1rem, 3.8vw, 1.7rem);
+            color: white;
+            text-shadow: 2px 2px 0px var(--p);
+            margin: 0;
+        }
+
+        .game-header {
+            background: #1e293b;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        .game-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            flex: 1;
+            margin-bottom: 120px;
+        }
+
+        @media (min-width: 900px) {
+            .game-content-wrapper {
+                flex-direction: row;
+            }
+        }
+
+        .map-container {
+            flex: 7;
+            position: relative;
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .map-relative-box {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 683 / 1024;
+            border-radius: 10px;
+        }
+
+        .map-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 10px;
+        }
+
+        /* ĐỊA DANH NỔI BẬT */
+                        /* ĐỊA DANH NỔI BẬT TRÊN BẢN ĐỒ */
+        .landmark {
+            position: absolute;
+            font-size: clamp(7px, 1.25vw, 11px);
+            font-weight: 700;
+            z-index: 8;
+            white-space: nowrap;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1.5px solid var(--gold);
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.45);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        #lm-lungcu    { top: 1.2%;  left: 45.0%; }
+        #lm-hanoi     { top: 17.5%; left: 47.0%; }
+        #lm-trangan   { top: 25.5%; left: 51.5%; }
+        #lm-hue       { top: 50.5%; left: 46.0%; }
+        #lm-danang    { top: 54.5%; left: 71.0%; }
+        #lm-lyson     { top: 63.0%; left: 81.0%; }
+        #lm-taynguyen { top: 65.5%; left: 48.0%; }
+        #lm-dalat     { top: 71.5%; left: 51.5%; }
+        #lm-tphcm     { top: 81.0%; left: 63.5%; }
+        #lm-camau     { top: 92.5%; left: 42.0%; }
+        #lm-phuquoc   { top: 80.0%; left: 21.0%; }
+        #lm-truongsa  { top: 79.5%; left: 77.0%; }
+        #lm-hoangsa   { top: 43.5%; left: 82.0%; }
+
+        #path-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .road-line {
+            stroke: var(--road);
+            stroke-width: 3.2;
+            stroke-dasharray: 6, 4;
+            fill: none;
+            opacity: 0.92;
+            filter: drop-shadow(0 0 4px var(--road));
+        }
+
+        .sea-line {
+            stroke: var(--sea);
+            stroke-width: 4.2;
+            stroke-dasharray: 9, 5;
+            fill: none;
+            opacity: 1;
+            filter: drop-shadow(0 0 6px var(--sea));
+        }
+
+        /* NÚT TRẠM */
+        .station {
+            position: absolute;
+            width: 5.2%;
+            aspect-ratio: 1/1;
+            background: #ffffff;
+            border: 2px solid var(--dg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 800;
+            color: var(--dg);
+            font-size: clamp(8px, 1.5vw, 14px);
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+            transform: translate(-50%, -50%);
+        }
+
+        .station:hover, .station:active {
+            transform: translate(-50%, -50%) scale(1.3);
+            background: var(--gold);
+            color: #000;
+            border-color: #000;
+            z-index: 25;
+            box-shadow: 0 0 16px var(--gold);
+        }
+
+        /* TRẠM ĐẠI THỬ THÁCH MỐC (GK1, CK1, GK2, CK2) */
+        .station.milestone {
+            border: 2.5px solid var(--gold) !important;
+            background: linear-gradient(135deg, #ffffff, #fef08a) !important;
+            color: #b45309 !important;
+            box-shadow: 0 0 16px rgba(245, 158, 11, 0.95), 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+            animation: pulseMilestone 2s infinite;
+        }
+
+        .station.milestone::before {
+            content: '★';
+            position: absolute;
+            top: -11px;
+            font-size: 11px;
+            color: var(--gold);
+            text-shadow: 0 0 5px #000;
+        }
+
+        @keyframes pulseMilestone {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 0 4px var(--gold)); }
+            50% { transform: translate(-50%, -50%) scale(1.18); filter: drop-shadow(0 0 14px var(--gold)); }
+        }
+
+        .station.locked {
+            background: #334155 !important;
+            border-color: #475569 !important;
+            color: #94a3b8 !important;
+            opacity: 0.65;
+            filter: grayscale(1);
+        }
+
+        .station.locked::after {
+            content: '🔒';
+            position: absolute;
+            font-size: 9px;
+            bottom: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .station.dimmed {
+            opacity: 0.28;
+            filter: grayscale(0.8);
+            pointer-events: none;
+        }
+
+        /* TRẠM ĐÃ HOÀN THÀNH (ĐẠT TỪ 50 ĐIỂM TRỞ LÊN) */
+        .station.passed {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            border-color: #34d399 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 14px rgba(16, 185, 129, 0.85), 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .station.passed::after {
+            content: '⭐';
+            position: absolute;
+            font-size: 10px;
+            bottom: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.8));
+        }
+
+        /* TOOLTIP HIỂN THỊ TÊN ĐẦY ĐỦ KHI RÊ CHUỘT VÀO TRẠM */
+        .station-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.98));
+            color: #fff;
+            border: 1.5px solid var(--gold);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 215, 0, 0.45);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: clamp(10px, 1.15vw, 13px);
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 99999;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            text-shadow: none;
+            line-height: 1.3;
+        }
+
+        .station-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--gold) transparent transparent transparent;
+        }
+
+        .station:hover .station-tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Trạm sát mép trên: hiển thị tooltip chúc xuống dưới */
+        #st-1 .station-tooltip, #st-2 .station-tooltip, #st-3 .station-tooltip, #st-4 .station-tooltip, #st-6 .station-tooltip {
+            bottom: auto;
+            top: 130%;
+        }
+
+        #st-1 .station-tooltip::after, #st-2 .station-tooltip::after, #st-3 .station-tooltip::after, #st-4 .station-tooltip::after, #st-6 .station-tooltip::after {
+            top: auto;
+            bottom: 100%;
+            border-color: transparent transparent var(--gold) transparent;
+        }
+
+        /* TỌA ĐỘ 35 TRẠM XUYÊN VIỆT CHUẨN XÁC THEO ĐỊA LÝ */
+        /* Miền Bắc (Tuần 1 - 9) */
+        #st-1  { top: 3.5%;  left: 38.5%; } /* Cột cờ Lũng Cú (Hà Giang) */
+        #st-2  { top: 6.5%;  left: 44.5%; } /* Hẻm Tu Sản & Sông Nho Quế */
+        #st-3  { top: 8.5%;  left: 52.5%; } /* Thác Bản Giốc (Cao Bằng) */
+        #st-4  { top: 11.5%; left: 44.5%; } /* Hồ Ba Bể (Bắc Kạn) */
+        #st-5  { top: 13.5%; left: 32.0%; } /* Mù Cang Chải (Yên Bái) */
+        #st-6  { top: 10.5%; left: 24.0%; } /* Đỉnh Fansipan (Lào Cai) */
+        #st-7  { top: 17.5%; left: 40.5%; } /* Thủ đô Hà Nội */
+        #st-8  { top: 19.5%; left: 55.0%; } /* Vịnh Hạ Long & Yên Tử (Quảng Ninh) */
+        #st-9  { top: 25.5%; left: 44.0%; } /* Tràng An & Cố đô Hoa Lư (Ninh Bình) 🌟 GK1 */
+
+        /* Miền Trung (Tuần 10 - 18) */
+        #st-10 { top: 31.0%; left: 42.0%; } /* Thành Nhà Hồ (Thanh Hóa) */
+        #st-11 { top: 35.5%; left: 44.5%; } /* Làng Sen Quê Bác (Nghệ An) */
+        #st-12 { top: 39.5%; left: 49.0%; } /* Ngã ba Đồng Lộc (Hà Tĩnh) */
+        #st-13 { top: 43.5%; left: 53.0%; } /* Phong Nha - Kẻ Bàng (Quảng Bình) */
+        #st-14 { top: 47.5%; left: 57.0%; } /* Thành cổ Quảng Trị, Cầu Hiền Lương */
+        #st-15 { top: 51.5%; left: 61.5%; } /* Cố đô Huế (Thừa Thiên Huế) */
+        #st-16 { top: 55.5%; left: 63.5%; } /* Cầu Rồng & Ngũ Hành Sơn (Đà Nẵng) */
+        #st-17 { top: 59.5%; left: 66.0%; } /* Phố cổ Hội An (Quảng Nam) */
+        #st-18 { top: 60.5%; left: 78.0%; } /* Đảo Lý Sơn (Quảng Ngãi) 🏆 CK1 */
+
+        /* Tây Nguyên & Duyên hải Nam Trung Bộ (Tuần 19 - 27) */
+        #st-19 { top: 57.0%; left: 58.0%; } /* Kon Tum (Bờ Y - Ngã ba Đông Dương) */
+        #st-20 { top: 61.5%; left: 60.5%; } /* Gia Lai (Biển Hồ Tơ Nưng) */
+        #st-21 { top: 66.0%; left: 61.5%; } /* Đắk Lắk (Buôn Đôn, Dray Nur) */
+        #st-22 { top: 70.5%; left: 59.5%; } /* Đắk Nông (Hồ Tà Đùng) */
+        #st-23 { top: 65.5%; left: 71.5%; } /* Phú Yên (Gành Đá Đĩa) */
+        #st-24 { top: 69.5%; left: 72.5%; } /* Khánh Hòa (Vịnh Nha Trang) */
+        #st-25 { top: 73.5%; left: 72.0%; } /* Ninh Thuận (Tháp Po Klong Garai) */
+        #st-26 { top: 77.5%; left: 68.5%; } /* Bình Thuận (Đồi cát Mũi Né) */
+        #st-27 { top: 72.0%; left: 65.5%; } /* Đỉnh Lang Biang (Đà Lạt - Lâm Đồng) 🌟 GK2 */
+
+        /* Đông Nam Bộ & Đồng bằng Sông Cửu Long (Tuần 28 - 32) */
+        #st-28 { top: 78.5%; left: 57.0%; } /* Củ Chi, Rừng Sác (TP.HCM) */
+        #st-29 { top: 76.5%; left: 48.0%; } /* Núi Bà Đen (Tây Ninh) */
+        #st-30 { top: 81.5%; left: 57.0%; } /* Bến Nhà Rồng, Landmark 81 (TP.HCM) */
+        #st-31 { top: 82.0%; left: 47.0%; } /* Đồng Tháp (Sa Đéc, Tháp Mười) */
+        #st-32 { top: 92.5%; left: 35.0%; } /* Đất Mũi Cà Mau (Cực Nam đất liền) */
+
+        /* 3 TRẠM BIỂN ĐẢO THIÊNG LIÊNG THEO YÊU CẦU */
+        #st-33 { top: 85.5%; left: 28.0%; } /* ĐẢO NGỌC PHÚ QUỐC (Kiên Giang) */
+        #st-34 { top: 86.0%; left: 86.0%; } /* QUẦN ĐẢO TRƯỜNG SA (Khánh Hòa) */
+        #st-35 { top: 48.5%; left: 88.5%; } /* QUẦN ĐẢO HOÀNG SA (Đà Nẵng) 🏆 CK2 */
+
+        /* BẢNG XẾP HẠNG */
+        .leaderboard-sidebar {
+            flex: 3;
+            background: #1e293b;
+            border: 2px solid var(--p);
+            border-radius: 15px;
+            padding: 15px;
+            height: fit-content;
+        }
+
+        .leaderboard-title {
+            color: var(--gold);
+            text-align: center;
+            font-family: 'Bungee', cursive;
+            font-size: 0.82rem;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+
+        th {
+            background: var(--p);
+            color: #000;
+            padding: 8px;
+        }
+
+        td {
+            padding: 8px 4px;
+            border-bottom: 1px solid #334155;
+            text-align: center;
+        }
+
+        /* FOOTER CỐ ĐỊNH */
+        .game-footer {
+            background: #0f172a;
+            padding: 10px 0;
+            border-top: 2px solid var(--p);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 10000;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .footer-buttons {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-evenly;
+            align-items: center;
+            gap: 5px;
+            max-width: 100%;
+            margin: 0 auto 6px;
+            padding: 0 5px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .btn-nav {
+            flex: 1;
+            min-width: 75px;
+            background: #1e293b;
+            border: 1.5px solid var(--p);
+            color: var(--p);
+            padding: 8px 2px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.68rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Lexend', sans-serif;
+            white-space: nowrap;
+        }
+
+        .btn-nav:hover, .btn-nav:active {
+            background: var(--p);
+            color: white;
+        }
+
+        .btn-share {
+            color: var(--sea);
+            border-color: var(--sea);
+        }
+
+        .copyright-box {
+            border-top: 1px solid #1e293b;
+            padding-top: 6px;
+            text-align: center;
+        }
+
+        .copyright-text {
+            font-size: 0.6rem;
+            color: #cbd5e1;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .copyright-text b {
+            color: var(--p);
+        }
+
+                        /* MODAL & AUTH FORM */
+        #countdown-overlay,
+        #auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 15, 30, 0.92);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 30000;
+            text-align: center;
+            padding: 12px;
+            overflow-y: auto;
+            backdrop-filter: blur(8px);
+            box-sizing: border-box;
+        }
+
+        .notice-box {
+            background: #1e293b;
+            padding: 22px;
+            border-radius: 20px;
+            border: 2.5px solid var(--p);
+            max-width: 350px;
+            width: 90%;
+            margin: auto;
+        }
+
+        .auth-card {
+            background: linear-gradient(180deg, #16223f 0%, #0c152a 100%);
+            padding: 18px 18px;
+            border-radius: 20px;
+            border: 2px solid var(--p);
+            max-width: 400px;
+            width: 95%;
+            margin: auto;
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(255, 152, 0, 0.45);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .auth-card::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .auth-card::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        .btn-close-modal {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #cbd5e1;
+            font-size: 1.2rem;
+            line-height: 1;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .btn-close-modal:hover {
+            background: rgba(255, 82, 82, 0.8);
+            color: white;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            background: #080d1a;
+            padding: 4px;
+            border-radius: 14px;
+            border: 1.5px solid #233554;
+        }
+
+        .auth-tab-btn {
+            flex: 1;
+            padding: 9px;
+            border: none;
+            background: transparent;
+            color: #94a3b8;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .auth-tab-btn.active {
+            background: linear-gradient(135deg, var(--p), #ea580c);
+            color: #ffffff;
+            box-shadow: 0 3px 10px var(--p-glow);
+        }
+
+        .auth-title {
+            font-family: 'Bungee', cursive;
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin: 0 0 5px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-sec);
+            margin: 0 0 14px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .auth-label {
+            display: block;
+            text-align: left;
+            color: #cbd5e1;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin: 10px 0 4px;
+        }
+
+        .auth-card input,
+        .auth-card select {
+            width: 100%;
+            padding: 11px 12px;
+            margin: 0 0 8px;
+            border-radius: 10px;
+            border: 1.5px solid #2a3b63;
+            background: #091122;
+            color: white;
+            box-sizing: border-box;
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.88rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .auth-card input:focus,
+        .auth-card select:focus {
+            border-color: var(--p);
+            box-shadow: 0 0 10px var(--p-glow);
+            background: #0f1d38;
+        }
+
+        .btn-auth-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--p), #ea580c);
+            color: white;
+            padding: 13px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 0 #c2410c;
+            transition: 0.2s;
+            display: block;
+        }
+
+        .btn-auth-submit:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #c2410c;
+        }
+
+        .btn-reg-submit {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 0 #047857;
+        }
+
+        .btn-reg-submit:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #047857;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 16px 0 12px;
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #233554;
+        }
+
+        .auth-divider span {
+            padding: 0 10px;
+        }
+
+        .btn-switch-action {
+            width: 100%;
+            background: rgba(255, 152, 0, 0.08);
+            border: 1.8px dashed var(--p);
+            color: var(--p);
+            padding: 11px;
+            border-radius: 12px;
+            font-family: 'Lexend', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: block;
+        }
+
+        .btn-switch-action:hover,
+        .btn-switch-action:active {
+            background: rgba(255, 152, 0, 0.2);
+            transform: scale(1.01);
+        }
+
+        .timer-box {
+            font-size: 1.8rem;
+            font-family: 'Bungee', cursive;
+            color: #00ff00;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+                <!-- MODAL ĐĂNG NHẬP & ĐĂNG KÝ HỒ SƠ THÁM HIỂM -->
+    <div id="auth-overlay">
+        <!-- 1. CỬA SỔ ĐĂNG NHẬP GỌN GÀNG (MẶC ĐỊNH) -->
+        <div class="auth-card" id="card-login" style="display: block;">
+            <button class="btn-close-modal" onclick="closeAuthModal()" title="Đóng">&times;</button>
+            <div style="font-size: 1.8rem; margin-bottom: 2px;">🚀</div>
+            <h2 class="auth-title" style="font-size: 1.2rem; margin: 0 0 2px;">ĐĂNG NHẬP</h2>
+            <p class="auth-subtitle" style="margin: 0 0 10px; font-size: 0.75rem;">Nhập tài khoản để tiếp tục thám hiểm</p>
+
+            <label class="auth-label" style="margin-top: 2px;">Tên đăng nhập:</label>
+            <input type="text" id="input-login-username" placeholder="Ví dụ: nam5a1" autocomplete="username" style="padding: 9px 10px; margin-bottom: 6px;">
+
+            <label class="auth-label" style="margin-top: 2px;">Mật khẩu:</label>
+            <div style="position: relative; width: 100%;">
+                <input type="password" id="input-login-password" placeholder="Nhập mật khẩu..." autocomplete="current-password" onkeydown="if(event.key==='Enter') handleLogin()" style="padding: 9px 38px 9px 10px; margin-bottom: 6px; width: 100%;">
+                <button type="button" onclick="togglePasswordVisibility('input-login-password', this)" style="position: absolute; right: 8px; top: 45%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; color: #94a3b8; font-size: 1.1rem; padding: 2px 4px; display: flex; align-items: center; justify-content: center; outline: none; user-select: none;" title="Hiện/Ẩn mật khẩu">👁️</button>
+            </div>
+
+            <button class="btn-auth-submit" onclick="handleLogin()" style="padding: 11px; margin-top: 8px; font-size: 0.9rem;">
+                🚀 ĐĂNG NHẬP
+            </button>
+
+            <div class="auth-divider" style="margin: 10px 0 8px;">
+                <span>CHƯA CÓ TÀI KHOẢN?</span>
+            </div>
+
+            <button class="btn-switch-action" onclick="showRegisterModal()" style="padding: 9px; font-size: 0.8rem;">
+                ✨ ĐĂNG KÝ TÀI KHOẢN MỚI
+            </button>
+        </div>
+
+        <!-- 2. CỬA SỔ ĐĂNG KÝ THIẾT KẾ GỌN GÀNG, KHÔNG TRÀN MÀN HÌNH -->
+        <div class="auth-card" id="card-register" style="display: none;">
+            <button class="btn-close-modal" onclick="closeAuthModal()" title="Đóng">&times;</button>
+            <h2 class="auth-title" style="color:var(--gold); font-size: 1.15rem; margin: 0 0 2px;">📝 ĐĂNG KÝ TÀI KHOẢN</h2>
+            <p class="auth-subtitle" style="margin: 0 0 10px; font-size: 0.75rem;">Điền thông tin để tạo hồ sơ thám hiểm mới</p>
+
+            <!-- Chọn Vai trò -->
+            <div style="background:rgba(255,255,255,0.04); border:1px solid #334155; border-radius:8px; padding:7px 10px; margin-bottom:8px;">
+                <label class="auth-label" style="margin:0 0 4px; font-size:0.75rem; color:var(--text-sec);">Chọn vai trò tham gia:</label>
+                <div style="display:flex; gap:12px;">
+                    <label style="font-size:0.8rem; color:var(--gold); display:flex; align-items:center; gap:5px; cursor:pointer; font-weight:600;">
+                        <input type="radio" name="reg-role" value="student" checked onchange="handleRegRoleChange()"> ⭐ Em là Học sinh
+                    </label>
+                    <label style="font-size:0.8rem; color:var(--cyan); display:flex; align-items:center; gap:5px; cursor:pointer; font-weight:600;">
+                        <input type="radio" name="reg-role" value="teacher" onchange="handleRegRoleChange()"> 🎓 Thầy/Cô là Giáo viên
+                    </label>
+                </div>
+            </div>
+
+            <!-- Ghi chú phê duyệt -->
+            <div style="background:rgba(255,152,0,0.12); border:1px dashed var(--p); border-radius:6px; padding:6px 10px; font-size:0.72rem; color:#ffcc80; margin-bottom:8px; line-height:1.4;">
+                ℹ️ <b>Lưu ý:</b> Tài khoản sau khi đăng ký sẽ ở trạng thái <b>Chờ duyệt</b>. Khách và tài khoản chờ duyệt được làm quen từ <b>Vòng 1 đến 8</b>. Sau khi Thầy Cô/Admin duyệt sẽ mở hết <b>35 vòng</b>.
+            </div>
+
+            <!-- Hàng 1: Tên đăng nhập & Mật khẩu -->
+            <div style="display: flex; gap: 8px; text-align: left;">
+                <div style="flex: 1;">
+                    <label class="auth-label" style="margin-top: 2px;">1. Tên đăng nhập:</label>
+                    <input type="text" id="input-reg-username" placeholder="Ví dụ: nam5a1" autocomplete="off" style="padding: 9px 10px; margin-bottom: 6px;">
+                </div>
+                <div style="flex: 1;">
+                    <label class="auth-label" style="margin-top: 2px;">2. Mật khẩu:</label>
+                    <div style="position: relative; width: 100%;">
+                        <input type="password" id="input-reg-password" placeholder="Tối thiểu 4 ký tự" style="padding: 9px 38px 9px 10px; margin-bottom: 6px; width: 100%;">
+                        <button type="button" onclick="togglePasswordVisibility('input-reg-password', this)" style="position: absolute; right: 8px; top: 45%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; color: #94a3b8; font-size: 1.1rem; padding: 2px 4px; display: flex; align-items: center; justify-content: center; outline: none; user-select: none;" title="Hiện/Ẩn mật khẩu">👁️</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hàng 2: Họ và Tên -->
+            <label class="auth-label" style="margin-top: 2px;">3. Họ và Tên của em:</label>
+            <input type="text" id="input-reg-name" placeholder="Ví dụ: Nguyễn Văn Nam" style="padding: 9px 10px; margin-bottom: 6px;">
+
+            <!-- Hàng 3: Trường & Lớp -->
+            <div style="display: flex; gap: 8px; text-align: left;">
+                <div style="flex: 1.8;">
+                    <label class="auth-label" style="margin-top: 2px;">4. Chọn Trường:</label>
+                    <select id="input-reg-school-select" onchange="toggleRegSchoolInput()" style="padding: 9px 10px; margin-bottom: 6px;">
+                        <option value="" disabled selected>-- Chọn trường --</option>
+                        <option value="Tiểu học Đỗ Văn Nại">TH Đỗ Văn Nại</option>
+                        <option value="Tiểu học Nhị Long">TH Nhị Long</option>
+                        <option value="other">Trường khác...</option>
+                    </select>
+                </div>
+                <div style="flex: 1.2;">
+                    <label class="auth-label" style="margin-top: 2px;">5. Lớp:</label>
+                    <select id="input-reg-class" style="padding: 9px 10px; margin-bottom: 6px;">
+                        <option value="" disabled selected>-- Lớp --</option>
+                        <option value="5/1">5/1</option>
+                        <option value="5/2">5/2</option>
+                        <option value="5/3">5/3</option>
+                        <option value="5/4">5/4</option>
+                        <option value="5/5">5/5</option>
+                        <option value="5/6">5/6</option>
+                        <option value="5/7">5/7</option>
+                        <option value="5/8">5/8</option>
+                    </select>
+                </div>
+            </div>
+            <input type="text" id="input-reg-school-manual" placeholder="Nhập tên trường của em..." style="display:none; margin-top:0; padding: 9px 10px; margin-bottom: 6px;">
+
+            <!-- Nút Tạo tài khoản -->
+            <button class="btn-auth-submit btn-reg-submit" onclick="handleRegister()" style="padding: 11px; margin-top: 8px; font-size: 0.9rem;">
+                ✨ HOÀN TẤT ĐĂNG KÝ
+            </button>
+
+            <div class="auth-divider" style="margin: 10px 0 8px;">
+                <span>ĐÃ CÓ TÀI KHOẢN?</span>
+            </div>
+
+            <!-- Nút Quay lại Đăng nhập -->
+            <button class="btn-switch-action" onclick="showLoginModal()" style="border-color:#38bdf8; color:#38bdf8; background:rgba(56,189,248,0.08); padding: 9px; font-size: 0.8rem;">
+                ⬅ QUAY LẠI ĐĂNG NHẬP
+            </button>
+        </div>
+    </div>
+
+    <!-- CỬA SỔ THÔNG BÁO VÒNG DÀNH CHO TÀI KHOẢN DUYỆT -->
+    <div id="locked-station-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.95); z-index:9999; justify-content:center; align-items:center; backdrop-filter:blur(8px); padding:20px;">
+        <div class="notice-box" style="background:#1e293b; border:2px solid var(--p); border-radius:16px; padding:24px; max-width:420px; width:90%; text-align:center;">
+            <span style="font-size:2.6rem; display:block; margin-bottom:8px;">🔒</span>
+            <h2 id="locked-modal-title" style="font-family:'Bungee'; color:var(--gold); font-size:1.15rem; margin:0 0 10px;">YÊU CẦU PHÊ DUYỆT</h2>
+            <div id="locked-modal-msg" style="font-size:0.85rem; color:#e2e8f0; line-height:1.5; margin-bottom:18px; text-align:left; background:#0f172a; padding:12px; border-radius:8px; border:1px solid #334155;"></div>
+            <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                <button class="btn-nav" id="locked-btn-auth" onclick="handleLockedModalAuth()" style="flex:1; background:var(--p); color:#000; font-weight:700; border:none; padding:10px 14px;">ĐĂNG NHẬP / ĐĂNG KÝ</button>
+                <button class="btn-nav" onclick="closeLockedModal()" style="flex:1; border-color:#94a3b8; color:#fff; padding:10px 14px;">ĐÃ HIỂU</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ĐỒNG HỒ ĐẾM NGƯỢC CHẶNG CHƯA MỞ -->
+    <div id="countdown-overlay">
+        <div class="notice-box">
+            <h2 id="notice-title" style="font-family:'Bungee'; color:var(--gold);">CHẶNG CHƯA MỞ</h2>
+            <div class="timer-box" id="timer-display">00:00:00</div>
+            <button class="btn-nav" onclick="closeNotice()" style="width:100%; border-color: #94a3b8; color: #fff;">ĐÃ HIỂU</button>
+        </div>
+    </div>
+
+    <!-- BANNER CHÀO MỪNG -->
+    <div class="welcome-banner">
+        <h1 class="welcome-text" id="banner-title">HÀNH TRÌNH XUYÊN VIỆT CÙNG ROBOT (TRỌN BỘ 35 TRẠM)</h1>
+    </div>
+
+<!-- THÔNG TIN NGƯỜI DÙNG & ĐIỂM KỶ LỤC -->
+    <header class="game-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, var(--gold), #f59e0b); display:flex; align-items:center; justify-content:center; color:#000; font-weight:800;">
+                R
+            </div>
+            <div id="user-info-box" style="display:flex; flex-direction:column; justify-content:center; line-height:1.3;">
+                <span style="font-size:0.95rem; font-weight:bold; color:var(--gold);">Khách</span>
+                <span style="font-size:0.75rem; color:var(--text-sec);">Cần đăng ký</span>
+            </div>
+        </div>
+        <div style="text-align:right;">
+            <div id="user-my-score-box" style="font-size:0.75rem; color:var(--gold); font-weight:bold; margin-bottom:2px;">
+                ⭐ ĐIỂM CỦA BẠN: <span id="my-score-val" style="color:#fff;">0đ</span>
+            </div>
+            <div style="font-size:0.65rem; color:var(--text-sec);">
+                <span id="lb-week-badge">KỶ LỤC TRẠM 1:</span> <span id="high-score" style="font-size:0.95rem; color:var(--p); font-weight:bold;">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- KHÔNG GIAN BẢN ĐỒ & BẢNG XẾP HẠNG -->
+    <main class="game-content-wrapper">
+        <div class="map-container">
+            <div class="map-relative-box" id="map-box">
+                <img src="Bandogame.jpg" alt="Bản đồ" class="map-image" id="map-img">
+
+                                                <!-- ĐỊA DANH NỔI BẬT TRÊN BẢN ĐỒ -->
+                <div class="landmark" id="lm-lungcu">Lũng Cú (T.1)</div>
+                <div class="landmark" id="lm-hanoi">Hà Nội (T.7)</div>
+                <div class="landmark" id="lm-trangan">Tràng An 🌟 (T.9 GK1)</div>
+                <div class="landmark" id="lm-hue">Cố đô Huế (T.15)</div>
+                <div class="landmark" id="lm-danang">Đà Nẵng (T.16)</div>
+                <div class="landmark" id="lm-lyson">Lý Sơn 🏆 (T.18 CK1)</div>
+                <div class="landmark" id="lm-taynguyen">Tây Nguyên (T.21)</div>
+                <div class="landmark" id="lm-dalat">Đà Lạt 🌟 (T.27 GK2)</div>
+                <div class="landmark" id="lm-tphcm">TP.HCM (T.30)</div>
+                <div class="landmark" id="lm-camau">Đất Mũi Cà Mau (T.32)</div>
+                <div class="landmark" id="lm-phuquoc">Phú Quốc (T.33)</div>
+                <div class="landmark" id="lm-truongsa">Trường Sa (T.34)</div>
+                <div class="landmark" id="lm-hoangsa">Hoàng Sa 🏆 (T.35 CK2)</div>
+
+<!-- ĐƯỜNG NỐI SVG -->
+                <svg id="path-svg"></svg>
+
+                <!-- KHU VỰC CHỨA CÁC NÚT TRẠM -->
+                <div id="stations-holder"></div>
+            </div>
+        </div>
+
+        <!-- BẢNG VÀNG TOP 10 -->
+        <section class="leaderboard-sidebar">
+            <h3 id="lb-title" class="leaderboard-title">🏆 TOP 10 CAO THỦ</h3>
+            <div style="display: flex; gap: 8px; margin-bottom: 8px; justify-content: center; align-items: center;">
+                <label for="lb-week-select" style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">Xem:</label>
+                <select id="lb-week-select" onchange="loadLeaderboard(parseInt(this.value))" style="background: #0f172a; color: #fff; border: 1px solid var(--p); border-radius: 8px; padding: 4px 8px; font-size: 0.75rem; font-family: inherit; cursor: pointer;"></select>
+            </div>
+            <div style="display: flex; gap: 6px; margin-bottom: 8px; justify-content: center;">
+                <button id="btn-lb-official" onclick="setLbFilterMode('official')" style="flex: 1; padding: 5px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #94a3b8; cursor: pointer; transition: 0.2s;">⏱ Đua Top</button>
+                <button id="btn-lb-all" onclick="setLbFilterMode('all')" style="flex: 1; padding: 5px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 8px; border: 1px solid var(--p); background: var(--p); color: #000; cursor: pointer; transition: 0.2s;">🌟 Tất cả</button>
+            </div>
+            <div id="lb-window-info" style="font-size: 0.65rem; color: #38bdf8; text-align: center; margin-bottom: 10px; line-height: 1.3;"></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th style="text-align:left">Thí sinh</th>
+                        <th>Điểm</th>
+                        <th>Thời gian</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-list-ui"></tbody>
+            </table>
+        </section>
+    </main>
+
+            <!-- FOOTER ĐIỀU HƯỚNG -->
+    <footer class="game-footer">
+        <div class="footer-buttons">
+            <a href="tuido.html" class="btn-nav">🎒 TÚI ĐỒ</a>
+            <a href="bang-vang.html" class="btn-nav" style="color:var(--gold); border-color:var(--gold);">🏆 BẢNG VÀNG</a>
+            <button class="btn-nav btn-share" onclick="shareGame()">📤 CHIA SẺ</button>
+            <button id="btn-auth-action" class="btn-nav" onclick="handleAuthAction()"></button>
+            <button id="btn-footer-register" class="btn-nav" onclick="showRegisterModal()" style="border-color:#10b981; color:#10b981; font-weight:700;">✨ ĐĂNG KÝ</button>
+        </div>
+        <div class="copyright-box">
+            <p class="copyright-text">@Học toán 5 cùng RoBot - Phát triển bởi: <b>LÊ THÀNH LONG</b></p>
+        </div>
+    </footer>
+
+    <script>
+        const firebaseConfig = { databaseURL: "https://gamhoctap-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+                // LỊCH MỞ 35 CHẶNG THÁM HIỂM (2026 - 2027)
+        const SCHEDULE = {
+            "1": {
+                        "week": 1,
+                        "monday": "2026-09-07",
+                        "open": "2026-09-11T14:00:00",
+                        "close": "2026-09-18T13:59:59",
+                        "open_str": "14:00 ngày 11/09/2026",
+                        "close_str": "13:59:59 ngày 18/09/2026",
+                        "is_cap_for_guest": false
+            },
+            "2": {
+                        "week": 2,
+                        "monday": "2026-09-14",
+                        "open": "2026-09-18T14:00:00",
+                        "close": "2026-09-25T13:59:59",
+                        "open_str": "14:00 ngày 18/09/2026",
+                        "close_str": "13:59:59 ngày 25/09/2026",
+                        "is_cap_for_guest": false
+            },
+            "3": {
+                        "week": 3,
+                        "monday": "2026-09-21",
+                        "open": "2026-09-25T14:00:00",
+                        "close": "2026-10-02T13:59:59",
+                        "open_str": "14:00 ngày 25/09/2026",
+                        "close_str": "13:59:59 ngày 02/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "4": {
+                        "week": 4,
+                        "monday": "2026-09-28",
+                        "open": "2026-10-02T14:00:00",
+                        "close": "2026-10-09T13:59:59",
+                        "open_str": "14:00 ngày 02/10/2026",
+                        "close_str": "13:59:59 ngày 09/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "5": {
+                        "week": 5,
+                        "monday": "2026-10-05",
+                        "open": "2026-10-09T14:00:00",
+                        "close": "2026-10-16T13:59:59",
+                        "open_str": "14:00 ngày 09/10/2026",
+                        "close_str": "13:59:59 ngày 16/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "6": {
+                        "week": 6,
+                        "monday": "2026-10-12",
+                        "open": "2026-10-16T14:00:00",
+                        "close": "2026-10-23T13:59:59",
+                        "open_str": "14:00 ngày 16/10/2026",
+                        "close_str": "13:59:59 ngày 23/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "7": {
+                        "week": 7,
+                        "monday": "2026-10-19",
+                        "open": "2026-10-23T14:00:00",
+                        "close": "2026-10-30T13:59:59",
+                        "open_str": "14:00 ngày 23/10/2026",
+                        "close_str": "13:59:59 ngày 30/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "8": {
+                        "week": 8,
+                        "monday": "2026-10-26",
+                        "open": "2026-10-30T14:00:00",
+                        "close": "2026-11-06T13:59:59",
+                        "open_str": "14:00 ngày 30/10/2026",
+                        "close_str": "13:59:59 ngày 06/11/2026",
+                        "is_cap_for_guest": true
+            },
+            "9": {
+                        "week": 9,
+                        "monday": "2026-11-02",
+                        "open": "2026-11-06T14:00:00",
+                        "close": "2026-11-13T13:59:59",
+                        "open_str": "14:00 ngày 06/11/2026",
+                        "close_str": "13:59:59 ngày 13/11/2026",
+                        "is_cap_for_guest": false
+            },
+            "10": {
+                        "week": 10,
+                        "monday": "2026-11-09",
+                        "open": "2026-11-13T14:00:00",
+                        "close": "2026-11-20T13:59:59",
+                        "open_str": "14:00 ngày 13/11/2026",
+                        "close_str": "13:59:59 ngày 20/11/2026",
+                        "is_cap_for_guest": false
+            },
+            "11": {
+                        "week": 11,
+                        "monday": "2026-11-16",
+                        "open": "2026-11-20T14:00:00",
+                        "close": "2026-11-27T13:59:59",
+                        "open_str": "14:00 ngày 20/11/2026",
+                        "close_str": "13:59:59 ngày 27/11/2026",
+                        "is_cap_for_guest": false
+            },
+            "12": {
+                        "week": 12,
+                        "monday": "2026-11-23",
+                        "open": "2026-11-27T14:00:00",
+                        "close": "2026-12-04T13:59:59",
+                        "open_str": "14:00 ngày 27/11/2026",
+                        "close_str": "13:59:59 ngày 04/12/2026",
+                        "is_cap_for_guest": false
+            },
+            "13": {
+                        "week": 13,
+                        "monday": "2026-11-30",
+                        "open": "2026-12-04T14:00:00",
+                        "close": "2026-12-11T13:59:59",
+                        "open_str": "14:00 ngày 04/12/2026",
+                        "close_str": "13:59:59 ngày 11/12/2026",
+                        "is_cap_for_guest": false
+            },
+            "14": {
+                        "week": 14,
+                        "monday": "2026-12-07",
+                        "open": "2026-12-11T14:00:00",
+                        "close": "2026-12-18T13:59:59",
+                        "open_str": "14:00 ngày 11/12/2026",
+                        "close_str": "13:59:59 ngày 18/12/2026",
+                        "is_cap_for_guest": false
+            },
+            "15": {
+                        "week": 15,
+                        "monday": "2026-12-14",
+                        "open": "2026-12-18T14:00:00",
+                        "close": "2026-12-25T13:59:59",
+                        "open_str": "14:00 ngày 18/12/2026",
+                        "close_str": "13:59:59 ngày 25/12/2026",
+                        "is_cap_for_guest": false
+            },
+            "16": {
+                        "week": 16,
+                        "monday": "2026-12-21",
+                        "open": "2026-12-25T14:00:00",
+                        "close": "2027-01-01T13:59:59",
+                        "open_str": "14:00 ngày 25/12/2026",
+                        "close_str": "13:59:59 ngày 01/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "17": {
+                        "week": 17,
+                        "monday": "2026-12-28",
+                        "open": "2027-01-01T14:00:00",
+                        "close": "2027-01-08T13:59:59",
+                        "open_str": "14:00 ngày 01/01/2027",
+                        "close_str": "13:59:59 ngày 08/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "18": {
+                        "week": 18,
+                        "monday": "2027-01-04",
+                        "open": "2027-01-08T14:00:00",
+                        "close": "2027-01-15T13:59:59",
+                        "open_str": "14:00 ngày 08/01/2027",
+                        "close_str": "13:59:59 ngày 15/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "19": {
+                        "week": 19,
+                        "monday": "2027-01-11",
+                        "open": "2027-01-15T14:00:00",
+                        "close": "2027-01-22T13:59:59",
+                        "open_str": "14:00 ngày 15/01/2027",
+                        "close_str": "13:59:59 ngày 22/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "20": {
+                        "week": 20,
+                        "monday": "2027-01-18",
+                        "open": "2027-01-22T14:00:00",
+                        "close": "2027-01-29T13:59:59",
+                        "open_str": "14:00 ngày 22/01/2027",
+                        "close_str": "13:59:59 ngày 29/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "21": {
+                        "week": 21,
+                        "monday": "2027-01-25",
+                        "open": "2027-01-29T14:00:00",
+                        "close": "2027-02-19T13:59:59",
+                        "open_str": "14:00 ngày 29/01/2027",
+                        "close_str": "13:59:59 ngày 19/02/2027",
+                        "is_cap_for_guest": false
+            },
+            "22": {
+                        "week": 22,
+                        "monday": "2027-02-15",
+                        "open": "2027-02-19T14:00:00",
+                        "close": "2027-02-26T13:59:59",
+                        "open_str": "14:00 ngày 19/02/2027",
+                        "close_str": "13:59:59 ngày 26/02/2027",
+                        "is_cap_for_guest": false
+            },
+            "23": {
+                        "week": 23,
+                        "monday": "2027-02-22",
+                        "open": "2027-02-26T14:00:00",
+                        "close": "2027-03-05T13:59:59",
+                        "open_str": "14:00 ngày 26/02/2027",
+                        "close_str": "13:59:59 ngày 05/03/2027",
+                        "is_cap_for_guest": false
+            },
+            "24": {
+                        "week": 24,
+                        "monday": "2027-03-01",
+                        "open": "2027-03-05T14:00:00",
+                        "close": "2027-03-12T13:59:59",
+                        "open_str": "14:00 ngày 05/03/2027",
+                        "close_str": "13:59:59 ngày 12/03/2027",
+                        "is_cap_for_guest": false
+            },
+            "25": {
+                        "week": 25,
+                        "monday": "2027-03-08",
+                        "open": "2027-03-12T14:00:00",
+                        "close": "2027-03-19T13:59:59",
+                        "open_str": "14:00 ngày 12/03/2027",
+                        "close_str": "13:59:59 ngày 19/03/2027",
+                        "is_cap_for_guest": false
+            },
+            "26": {
+                        "week": 26,
+                        "monday": "2027-03-15",
+                        "open": "2027-03-19T14:00:00",
+                        "close": "2027-03-26T13:59:59",
+                        "open_str": "14:00 ngày 19/03/2027",
+                        "close_str": "13:59:59 ngày 26/03/2027",
+                        "is_cap_for_guest": false
+            },
+            "27": {
+                        "week": 27,
+                        "monday": "2027-03-22",
+                        "open": "2027-03-26T14:00:00",
+                        "close": "2027-04-02T13:59:59",
+                        "open_str": "14:00 ngày 26/03/2027",
+                        "close_str": "13:59:59 ngày 02/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "28": {
+                        "week": 28,
+                        "monday": "2027-03-29",
+                        "open": "2027-04-02T14:00:00",
+                        "close": "2027-04-09T13:59:59",
+                        "open_str": "14:00 ngày 02/04/2027",
+                        "close_str": "13:59:59 ngày 09/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "29": {
+                        "week": 29,
+                        "monday": "2027-04-05",
+                        "open": "2027-04-09T14:00:00",
+                        "close": "2027-04-16T13:59:59",
+                        "open_str": "14:00 ngày 09/04/2027",
+                        "close_str": "13:59:59 ngày 16/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "30": {
+                        "week": 30,
+                        "monday": "2027-04-12",
+                        "open": "2027-04-16T14:00:00",
+                        "close": "2027-04-23T13:59:59",
+                        "open_str": "14:00 ngày 16/04/2027",
+                        "close_str": "13:59:59 ngày 23/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "31": {
+                        "week": 31,
+                        "monday": "2027-04-19",
+                        "open": "2027-04-23T14:00:00",
+                        "close": "2027-04-30T13:59:59",
+                        "open_str": "14:00 ngày 23/04/2027",
+                        "close_str": "13:59:59 ngày 30/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "32": {
+                        "week": 32,
+                        "monday": "2027-04-26",
+                        "open": "2027-04-30T14:00:00",
+                        "close": "2027-05-07T13:59:59",
+                        "open_str": "14:00 ngày 30/04/2027",
+                        "close_str": "13:59:59 ngày 07/05/2027",
+                        "is_cap_for_guest": false
+            },
+            "33": {
+                        "week": 33,
+                        "monday": "2027-05-03",
+                        "open": "2027-05-07T14:00:00",
+                        "close": "2027-05-14T13:59:59",
+                        "open_str": "14:00 ngày 07/05/2027",
+                        "close_str": "13:59:59 ngày 14/05/2027",
+                        "is_cap_for_guest": false
+            },
+            "34": {
+                        "week": 34,
+                        "monday": "2027-05-10",
+                        "open": "2027-05-14T14:00:00",
+                        "close": "2027-05-21T13:59:59",
+                        "open_str": "14:00 ngày 14/05/2027",
+                        "close_str": "13:59:59 ngày 21/05/2027",
+                        "is_cap_for_guest": false
+            },
+            "35": {
+                        "week": 35,
+                        "monday": "2027-05-17",
+                        "open": "2027-05-21T14:00:00",
+                        "close": "2027-05-28T13:59:59",
+                        "open_str": "14:00 ngày 21/05/2027",
+                        "close_str": "13:59:59 ngày 28/05/2027",
+                        "is_cap_for_guest": false
+            }
+};
+
+        function getCurrentSchoolWeek() {
+            const now = Date.now();
+            // 1. Tìm tuần đang trong khung giờ mở / đua top
+            for (let w = 1; w <= 35; w++) {
+                const sched = SCHEDULE[w];
+                if (sched) {
+                    const openTime = new Date(sched.open).getTime();
+                    const closeTime = new Date(sched.close).getTime();
+                    if (now >= openTime && now <= closeTime) {
+                        return w;
+                    }
+                }
+            }
+            // 2. Nếu trước thời điểm mở Tuần 1 -> Tuần 1
+            const w1 = SCHEDULE[1];
+            if (w1 && now < new Date(w1.open).getTime()) {
+                return 1;
+            }
+            // 3. Nếu sau thời điểm đóng Tuần 35 -> Tuần 35
+            const w35 = SCHEDULE[35];
+            if (w35 && now > new Date(w35.close).getTime()) {
+                return 35;
+            }
+            // 4. Nếu rơi vào khoảng giữa các tuần (hoặc nghỉ lễ), lấy tuần đã mở mới nhất
+            let latest = 1;
+            for (let w = 1; w <= 35; w++) {
+                const sched = SCHEDULE[w];
+                if (sched && now >= new Date(sched.open).getTime()) {
+                    latest = w;
+                }
+            }
+            return latest;
+        }
+
+        let currentUsername = localStorage.getItem('studentUsername');
+        let currentName = localStorage.getItem('studentName');
+        let currentClass = localStorage.getItem('studentClass');
+        let currentSchool = localStorage.getItem('studentSchool');
+        let currentUserRole = localStorage.getItem('userRole') || 'guest';
+        let currentUserStatus = localStorage.getItem('userStatus') || 'pending';
+        let currentSelectedWeek = getCurrentSchoolWeek();
+        let currentLbFilterMode = 'all'; // 'all' (Tất cả lượt thi tự luyện) | 'official' (Khung giờ đua Top)
+        let noticeInterval;
+
+        window.onload = function () {
+            // 0. Đảm bảo tài khoản Quản trị viên mặc định luôn tồn tại
+            ensureDefaultAdmin();
+
+            // Tự động nhận diện tuần theo lịch thực tế năm học
+            currentSelectedWeek = getCurrentSchoolWeek();
+
+            // 1. Khởi tạo danh sách chọn tuần trên BXH
+            initWeekSelectOptions();
+
+            // 2. Tự động đồng bộ tài khoản từ Firebase
+            if (currentUsername) {
+                db.ref('users/' + currentUsername).once('value', (snap) => {
+                    const u = snap.val();
+                    if (!snap.exists()) {
+                        // Tài khoản không tồn tại trên máy chủ
+                        localStorage.removeItem('studentUsername');
+                        localStorage.removeItem('studentName');
+                        localStorage.removeItem('studentClass');
+                        localStorage.removeItem('studentSchool');
+                        localStorage.removeItem('userRole');
+                        localStorage.removeItem('userStatus');
+                        localStorage.removeItem('adminUsername');
+                        currentUsername = null;
+                        currentName = null;
+                        currentUserRole = 'guest';
+                        currentUserStatus = 'pending';
+                        updateUI();
+                        renderStations();
+                        loadLeaderboard(currentSelectedWeek);
+                        showLoginModal();
+                    } else {
+                        // Cập nhật thông tin mới nhất
+                        currentUserRole = u.role || 'student';
+                        currentUserStatus = u.status || 'pending';
+                        localStorage.setItem('userRole', currentUserRole);
+                        localStorage.setItem('userStatus', currentUserStatus);
+                        if (u.role === 'admin') {
+                            localStorage.setItem('adminUsername', u.username);
+                        }
+                        updateUI();
+                        renderStations();
+                        loadLeaderboard(currentSelectedWeek);
+                    }
+                });
+            } else {
+                currentUserRole = 'guest';
+                currentUserStatus = 'pending';
+                updateUI();
+                renderStations();
+                loadLeaderboard(currentSelectedWeek);
+            }
+
+            const mapImg = document.getElementById('map-img');
+            if (mapImg.complete) { drawPaths(); } else { mapImg.onload = drawPaths; }
+        };
+
+        function initWeekSelectOptions() {
+            const sel = document.getElementById('lb-week-select');
+            if (!sel) return;
+            sel.innerHTML = Array.from({ length: 35 }, (_, i) => 1 + i).map(w => 
+                `<option value="${w}">Tuần ${w}</option>`
+            ).join('');
+            sel.value = currentSelectedWeek;
+        }
+
+        function handleRegRoleChange() {
+            const isTeacher = document.querySelector('input[name="reg-role"]:checked').value === 'teacher';
+            const classSelect = document.getElementById('input-reg-class');
+            const classLabel = classSelect.previousElementSibling;
+            if (isTeacher) {
+                classLabel.innerText = "5. Phụ trách Lớp:";
+            } else {
+                classLabel.innerText = "5. Lớp của em:";
+            }
+        }
+
+        const STATION_NAMES = {
+            1: "Cột cờ Lũng Cú (Hà Giang)",
+            2: "Hẻm Tu Sản & Sông Nho Quế (Hà Giang)",
+            3: "Thác Bản Giốc (Cao Bằng)",
+            4: "Hồ Ba Bể (Bắc Kạn)",
+            5: "Ruộng bậc thang Mù Cang Chải (Yên Bái)",
+            6: "Đỉnh Fansipan (Lào Cai)",
+            7: "Thủ đô Hà Nội",
+            8: "Vịnh Hạ Long & Yên Tử (Quảng Ninh)",
+            9: "Tràng An & Cố đô Hoa Lư (Ninh Bình) 🌟 GK1",
+            10: "Thành Nhà Hồ (Thanh Hóa)",
+            11: "Làng Sen Quê Bác (Nghệ An)",
+            12: "Ngã ba Đồng Lộc (Hà Tĩnh)",
+            13: "VQG Phong Nha - Kẻ Bàng (Quảng Bình)",
+            14: "Thành cổ Quảng Trị, Cầu Hiền Lương & Sông Bến Hải",
+            15: "Quần thể Di tích Cố đô Huế (Thừa Thiên Huế)",
+            16: "Cầu Rồng & Ngũ Hành Sơn (Đà Nẵng)",
+            17: "Phố cổ Hội An (Quảng Nam)",
+            18: "Đảo Lý Sơn (Quảng Ngãi) 🏆 CK1",
+            19: "Kon Tum (Bờ Y - Ngã ba Đông Dương)",
+            20: "Gia Lai (Biển Hồ Tơ Nưng)",
+            21: "Đắk Lắk (Buôn Đôn, Thác Dray Nur)",
+            22: "Đắk Nông (Hồ Tà Đùng)",
+            23: "Phú Yên (Gành Đá Đĩa & Mũi Điện)",
+            24: "Khánh Hòa (Vịnh Nha Trang, Tháp Trầm Hương)",
+            25: "Ninh Thuận (Tháp Po Klong Garai)",
+            26: "Bình Thuận (Đồi cát Mũi Né, Bàu Trắng)",
+            27: "Lâm Đồng (Đỉnh Lang Biang, Đà Lạt) 🌟 GK2",
+            28: "TP. Hồ Chí Minh (Địa đạo Củ Chi, Rừng Sác)",
+            29: "Tây Ninh (Núi Bà Đen)",
+            30: "TP. Hồ Chí Minh (Bến Nhà Rồng, Landmark 81)",
+            31: "Đồng Tháp (Sa Đéc, Tràm Chim, Sen Tháp Mười)",
+            32: "Cà Mau (Đất Mũi Cà Mau)",
+            33: "Kiên Giang (Đảo Ngọc Phú Quốc)",
+            34: "Khánh Hòa (Quần đảo Trường Sa thiêng liêng)",
+            35: "Đà Nẵng (Quần đảo Hoàng Sa thiêng liêng) 🏆 CK2"
+        };
+
+        // RENDER ĐẦY ĐỦ 35 TRẠM TRÊN BẢN ĐỒ
+        function renderStations() {
+            const holder = document.getElementById('stations-holder');
+            holder.innerHTML = '';
+            const now = new Date();
+            const isApprovedTeacherOrAdmin = (currentUserRole === 'teacher' || currentUserRole === 'admin') && (currentUserStatus === 'approved');
+
+            for (let i = 1; i <= 35; i++) {
+                const sched = SCHEDULE[i];
+                const stName = STATION_NAMES[i] || `Trạm ${i}`;
+                const openTime = sched ? new Date(sched.open) : new Date(0);
+                const isTimeLocked = now < openTime;
+                const isGuestLocked = (i > 8) && (!currentUsername || currentUserStatus !== 'approved');
+
+                let isLocked = false;
+                let statusNotice = "";
+                if (isApprovedTeacherOrAdmin) {
+                    isLocked = false;
+                } else if (isGuestLocked) {
+                    isLocked = true;
+                    statusNotice = `<div style="font-size:0.75rem; color:#f59e0b; font-weight:normal; margin-top:2px;">🔒 Dành cho tài khoản đã duyệt</div>`;
+                } else if (isTimeLocked) {
+                    isLocked = true;
+                    statusNotice = `<div style="font-size:0.75rem; color:#94a3b8; font-weight:normal; margin-top:2px;">⏳ Mở: ${sched ? sched.open_str : '14:00 Thứ Sáu'}</div>`;
+                }
+
+                const isMilestone = (i === 9 || i === 18 || i === 27 || i === 35);
+                const milestoneClass = isMilestone ? ' milestone' : '';
+                const lockedClass = isLocked ? ' locked' : '';
+
+                holder.innerHTML += `
+                    <div class="station${milestoneClass}${lockedClass}" id="st-${i}" onclick="handleStageClick(${i})">
+                        ${i}
+                        <span class="station-tooltip">
+                            <div>Trạm ${i}: ${stName}</div>
+                            ${statusNotice}
+                        </span>
+                    </div>
+                `;
+            }
+            setTimeout(drawPaths, 150);
+            listenUserProgress();
+        }
+
+        // ĐÁNH DẤU TRẠM ĐÃ VƯỢT QUA VÀ ĐỒNG BỘ TIẾN ĐỘ THỜI GIAN THỰC
+        function markStationPassed(w, score) {
+            const el = document.getElementById(`st-${w}`);
+            if (el) {
+                el.classList.add('passed');
+                const tipDiv = el.querySelector('.station-tooltip');
+                if (tipDiv) {
+                    let scoreDiv = tipDiv.querySelector('.tip-score');
+                    if (scoreDiv) {
+                        scoreDiv.innerText = `⭐ Điểm cao nhất: ${score}đ`;
+                    } else {
+                        tipDiv.innerHTML += `<div class="tip-score" style="font-size:0.75rem; color:#34d399; font-weight:bold; margin-top:3px;">⭐ Điểm cao nhất: ${score}đ</div>`;
+                    }
+                }
+            }
+        }
+
+        // GỠ HUY HIỆU VÀ ĐIỂM SỐ KHI BỊ XÓA
+        function unmarkStationPassed(w) {
+            const el = document.getElementById(`st-${w}`);
+            if (el) {
+                el.classList.remove('passed');
+                const tipDiv = el.querySelector('.station-tooltip');
+                if (tipDiv) {
+                    let scoreDiv = tipDiv.querySelector('.tip-score');
+                    if (scoreDiv) scoreDiv.remove();
+                }
+            }
+        }
+
+        let isScoresListenerAttached = false;
+        function listenUserProgress() {
+            // 1. Phản hồi tức thì từ bộ nhớ đệm nội bộ (0ms)
+            for (let w = 1; w <= 35; w++) {
+                const localBest = localStorage.getItem('bestScore_Tuan_' + w);
+                if (localBest && parseInt(localBest, 10) >= 50) {
+                    markStationPassed(w, parseInt(localBest, 10));
+                }
+            }
+
+            // 2. Lắng nghe cập nhật thời gian thực từ máy chủ Firebase
+            if (!isScoresListenerAttached) {
+                isScoresListenerAttached = true;
+                db.ref('scores').on('value', (snap) => {
+                    const allScores = snap.val() || {};
+                    for (let w = 1; w <= 35; w++) {
+                        const weekData = allScores[`Tuan_${w}`] || allScores[`tuan${w}`];
+                        let maxSc = 0;
+                        if (weekData) {
+                            for (let k in weekData) {
+                                const item = weekData[k];
+                                const isMatch = (currentUsername && item.username === currentUsername) ||
+                                               (currentName && item.fullName && item.fullName.trim().toLowerCase() === currentName.trim().toLowerCase());
+                                if (isMatch && (item.score || 0) > maxSc) {
+                                    maxSc = item.score;
+                                }
+                            }
+                        }
+                        if (maxSc >= 50) {
+                            markStationPassed(w, maxSc);
+                            localStorage.setItem('bestScore_Tuan_' + w, maxSc);
+                        } else {
+                            unmarkStationPassed(w);
+                            localStorage.removeItem('bestScore_Tuan_' + w);
+                        }
+                        if (w === currentSelectedWeek) {
+                            const myScoreEl = document.getElementById('my-score-val');
+                            if (myScoreEl) {
+                                myScoreEl.innerText = maxSc > 0 ? `${maxSc}đ` : '0đ';
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // VẼ ĐƯỜNG NỐI SVG
+        function drawPaths() {
+            const svg = document.getElementById('path-svg');
+            if (!svg) return;
+            svg.innerHTML = '';
+            const now = new Date();
+            const isApprovedTeacherOrAdmin = (currentUserRole === 'teacher' || currentUserRole === 'admin') && (currentUserStatus === 'approved');
+
+            for (let i = 1; i < 35; i++) {
+                const startEl = document.getElementById(`st-${i}`);
+                const endEl = document.getElementById(`st-${i + 1}`);
+                if (!startEl || !endEl) continue;
+
+                const schedNext = SCHEDULE[i + 1];
+                const openTimeNext = schedNext ? new Date(schedNext.open) : new Date(0);
+                const canDraw = isApprovedTeacherOrAdmin || (now >= openTimeNext && (i + 1 <= 8 || (currentUsername && currentUserStatus === 'approved')));
+
+                if (canDraw) {
+                    const x1 = startEl.offsetLeft;
+                    const y1 = startEl.offsetTop;
+                    const x2 = endEl.offsetLeft;
+                    const y2 = endEl.offsetTop;
+
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", x1); line.setAttribute("y1", y1);
+                    line.setAttribute("x2", x2); line.setAttribute("y2", y2);
+
+                    const isSea = (i === 17 || i === 18 || i === 32 || i === 33 || i === 34);
+                    line.setAttribute("class", isSea ? "sea-line" : "road-line");
+                    svg.appendChild(line);
+                }
+            }
+        }
+        window.onresize = drawPaths;
+
+        // XỬ LÝ CLICK TRẠM
+        function handleStageClick(no) {
+            const isApprovedTeacherOrAdmin = (currentUserRole === 'teacher' || currentUserRole === 'admin') && (currentUserStatus === 'approved');
+
+            // 1. Kiểm tra giới hạn khách / chờ duyệt (tối đa vòng 8)
+            if (no > 8) {
+                if (!currentUsername) {
+                    return showLockedStationNotice(
+                        no,
+                        "🔒 YÊU CẦU ĐĂNG KÝ TÀI KHOẢN",
+                        `Trạm <b>${no}</b> thuộc hệ thống thử thách nâng cao dành riêng cho tài khoản chính thức.<br><br>` +
+                        `• Khách được làm quen tự do từ <b>Trạm 1 đến Trạm 8</b>.<br>` +
+                        `• Để tiếp tục từ <b>Trạm 9 đến 35</b>, em hãy nhấn Đăng ký hoặc Đăng nhập nhé!`
+                    );
+                }
+                if (currentUserStatus !== 'approved') {
+                    return showLockedStationNotice(
+                        no,
+                        "⏳ TÀI KHOẢN ĐANG CHỜ PHÊ DUYỆT",
+                        `Tài khoản <b>@${currentUsername}</b> của ${currentUserRole === 'teacher' ? 'Thầy/Cô' : 'em'} hiện đang ở trạng thái <b>Chờ Ban Quản Trị phê duyệt</b>.<br><br>` +
+                        `• Trong thời gian chờ duyệt, ${currentUserRole === 'teacher' ? 'Thầy/Cô' : 'em'} có thể trải nghiệm trước từ <b>Trạm 1 đến 8</b>.<br>` +
+                        `• Vui lòng liên hệ Thầy/Cô Quản trị viên để được phê duyệt nhanh chóng!`
+                    );
+                }
+            }
+
+            // 2. Giáo viên & Admin đã duyệt: Vào thẳng bất kỳ trạm nào
+            if (isApprovedTeacherOrAdmin) {
+                window.location.href = `play.html?week=${no}`;
+                return;
+            }
+
+            // 3. Học sinh đã duyệt: Kiểm tra thời gian mở theo lịch tự động (14:00 Thứ Sáu)
+            const now = new Date();
+            const sched = SCHEDULE[no];
+            const openTime = sched ? new Date(sched.open) : new Date(0);
+            if (now < openTime) {
+                return showNoticeCountdown(openTime, no, sched ? sched.open_str : null);
+            }
+
+            // Đủ điều kiện: vào game
+            window.location.href = `play.html?week=${no}`;
+        }
+
+        function showLockedStationNotice(no, title, msg) {
+            document.getElementById('locked-modal-title').innerHTML = title;
+            document.getElementById('locked-modal-msg').innerHTML = msg;
+            const authBtn = document.getElementById('locked-btn-auth');
+            if (!currentUsername) {
+                authBtn.innerText = "🚀 ĐĂNG NHẬP / ĐĂNG KÝ";
+                authBtn.style.display = "inline-block";
+            } else {
+                authBtn.style.display = "none";
+            }
+            document.getElementById('locked-station-overlay').style.display = 'flex';
+        }
+
+        function closeLockedModal() {
+            document.getElementById('locked-station-overlay').style.display = 'none';
+        }
+
+        function handleLockedModalAuth() {
+            closeLockedModal();
+            showLoginModal();
+        }
+
+        function showNoticeCountdown(endTime, weekNum, openStr) {
+            document.getElementById('countdown-overlay').style.display = 'flex';
+            document.getElementById('notice-title').innerText = `CHẶNG ${weekNum} CHƯA MỞ`;
+            clearInterval(noticeInterval);
+            noticeInterval = setInterval(() => {
+                const dist = endTime - new Date();
+                if (dist < 0) return location.reload();
+                const d = Math.floor(dist / 86400000);
+                const h = Math.floor((dist % 86400000) / 3600000);
+                const m = Math.floor((dist % 3600000) / 60000);
+                const s = Math.floor((dist % 60000) / 1000);
+                document.getElementById('timer-display').innerText = `${d}n ${h}:${m}:${s}`;
+            }, 1000);
+        }
+
+        function closeNotice() {
+            document.getElementById('countdown-overlay').style.display = 'none';
+            clearInterval(noticeInterval);
+        }
+
+        // ==========================================
+        // QUẢN LÝ CỬA SỔ ĐĂNG NHẬP & ĐĂNG KÝ
+        // ==========================================
+        function showLoginModal() {
+            document.getElementById('auth-overlay').style.display = 'flex';
+            document.getElementById('card-login').style.display = 'block';
+            document.getElementById('card-register').style.display = 'none';
+        }
+
+        function showRegisterModal() {
+            document.getElementById('auth-overlay').style.display = 'flex';
+            document.getElementById('card-login').style.display = 'none';
+            document.getElementById('card-register').style.display = 'block';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-overlay').style.display = 'none';
+        }
+
+        function toggleRegSchoolInput() {
+            const val = document.getElementById('input-reg-school-select').value;
+            const manual = document.getElementById('input-reg-school-manual');
+            manual.style.display = (val === 'other') ? 'block' : 'none';
+        }
+
+        // BẬT / TẮT HIỂN THỊ MẬT KHẨU
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerText = '🙈';
+                btn.setAttribute('title', 'Ẩn mật khẩu');
+            } else {
+                input.type = 'password';
+                btn.innerText = '👁️';
+                btn.setAttribute('title', 'Hiện mật khẩu');
+            }
+        }
+
+        // ⚠️ CẢNH BÁO BẢO MẬT: Mật khẩu admin được hardcode trong source code.
+        // TODO: Chuyển sang Firebase Authentication hoặc hash mật khẩu phía server.
+        // ĐẢM BẢO TÀI KHOẢN ADMIN LUÔN TỒN TẠI
+        function ensureDefaultAdmin() {
+            db.ref('users/admin').once('value', (snap) => {
+                if (!snap.exists()) {
+                    db.ref('users/admin').set({
+                        username: "admin",
+                        password: "EduBot@2026",
+                        fullName: "Quản Trị Viên Hệ Thống",
+                        className: "Ban Quản Trị",
+                        schoolName: "Học toán 5 cùng Robot",
+                        role: "admin",
+                        status: "approved",
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+            });
+        }
+
+        // 1. XỬ LÝ ĐĂNG NHẬP
+        function handleLogin() {
+            const uInput = document.getElementById('input-login-username').value.trim().toLowerCase();
+            const pInput = document.getElementById('input-login-password').value.trim();
+
+            if (!uInput || uInput.length < 2) {
+                alert("Vui lòng nhập Tên đăng nhập của em!");
+                document.getElementById('input-login-username').focus();
+                return;
+            }
+            if (!pInput) {
+                alert("Vui lòng nhập Mật khẩu!");
+                document.getElementById('input-login-password').focus();
+                return;
+            }
+
+            db.ref('users/' + uInput).once('value', (snap) => {
+                let user = snap.val();
+
+                // Tự động khôi phục tài khoản Admin mặc định nếu chưa tồn tại
+                if (!user && uInput === 'admin') {
+                    user = {
+                        username: "admin",
+                        password: "EduBot@2026",
+                        fullName: "Quản Trị Viên Hệ Thống",
+                        className: "Ban Quản Trị",
+                        schoolName: "Học toán 5 cùng Robot",
+                        role: "admin",
+                        status: "approved",
+                        createdAt: firebase.database.ServerValue.TIMESTAMP
+                    };
+                    db.ref('users/admin').set(user);
+                }
+
+                if (user) {
+                    if (user.password && user.password !== pInput) {
+                        alert("Mật khẩu không chính xác, vui lòng thử lại!");
+                        return;
+                    }
+                    if (user.status === 'blocked') {
+                        alert("⚠️ Tài khoản của bạn đã bị khóa! Vui lòng liên hệ Thầy/Cô quản trị viên.");
+                        return;
+                    }
+
+                    localStorage.setItem('studentUsername', user.username || uInput);
+                    localStorage.setItem('studentName', user.fullName);
+                    localStorage.setItem('studentClass', user.className || '');
+                    localStorage.setItem('studentSchool', user.schoolName || '');
+                    localStorage.setItem('userRole', user.role || 'student');
+                    localStorage.setItem('userStatus', user.status || 'pending');
+                    if (user.role === 'admin') {
+                        localStorage.setItem('adminUsername', user.username || uInput);
+                    }
+
+                    alert(`🎉 Chào mừng ${user.fullName} đã quay trở lại!`);
+                    location.reload();
+                } else {
+                    alert("Tài khoản chưa tồn tại! Em hãy nhấn 'Đăng ký tài khoản mới' nhé.");
+                }
+            });
+        }
+
+        // 2. XỬ LÝ ĐĂNG KÝ
+        function handleRegister() {
+            const u = document.getElementById('input-reg-username').value.trim().toLowerCase();
+            const p = document.getElementById('input-reg-password').value.trim();
+            const n = document.getElementById('input-reg-name').value.trim();
+            const sSelect = document.getElementById('input-reg-school-select').value;
+            const c = document.getElementById('input-reg-class').value;
+            const roleEl = document.querySelector('input[name="reg-role"]:checked');
+            const selectedRole = roleEl ? roleEl.value : 'student';
+
+            let s = sSelect;
+            if (sSelect === 'other') {
+                s = document.getElementById('input-reg-school-manual').value.trim();
+            }
+
+            if (!u || u.length < 3) {
+                alert("1. Tên đăng nhập phải từ 3 ký tự trở lên (viết liền không dấu)!");
+                return;
+            }
+            if (/[\s\W]/.test(u)) {
+                alert("1. Tên đăng nhập chỉ gồm chữ cái và số (ví dụ: nam5a1 hoặc lan_5b)!");
+                return;
+            }
+            if (!p || p.length < 4) {
+                alert("2. Mật khẩu phải có ít nhất 4 ký tự!");
+                return;
+            }
+            const draftKeywords = ['test', 'abc', 'nhap', 'nháp', '123', 'demo', 'đemo', 'xxx', 'utc', 'bts'];
+            const nameLower = n.toLowerCase();
+            const words = n.split(/\s+/).filter(w => w.length > 0);
+            if (draftKeywords.some(k => nameLower.includes(k)) || words.length < 2) {
+                alert("3. Vui lòng nhập đầy đủ Họ và Tên thật (ít nhất 2 từ)!");
+                return;
+            }
+            if (!s) {
+                alert("4. Vui lòng chọn hoặc nhập tên Trường của em!");
+                return;
+            }
+            if (!c) {
+                alert("5. Vui lòng chọn Lớp!");
+                return;
+            }
+
+            db.ref('users/' + u).once('value', (snap) => {
+                if (snap.exists()) {
+                    alert(`⚠️ Tên đăng nhập "${u}" đã có người sử dụng rồi! Em hãy chọn tên khác nhé.`);
+                    return;
+                }
+
+                const userData = {
+                    username: u,
+                    password: p,
+                    fullName: n,
+                    className: c,
+                    schoolName: s,
+                    role: selectedRole,
+                    status: (u === 'admin') ? 'approved' : 'pending',
+                    createdAt: firebase.database.ServerValue.TIMESTAMP
+                };
+
+                db.ref('users/' + u).set(userData, (err) => {
+                    if (err) {
+                        alert("Lỗi khi kết nối máy chủ, vui lòng thử lại!");
+                        return;
+                    }
+                    localStorage.setItem('studentUsername', u);
+                    localStorage.setItem('studentName', n);
+                    localStorage.setItem('studentClass', c);
+                    localStorage.setItem('studentSchool', s);
+                    localStorage.setItem('userRole', selectedRole);
+                    localStorage.setItem('userStatus', userData.status);
+
+                    alert(`✨ Đăng ký thành công!
+
+Tài khoản của ${selectedRole === 'teacher' ? 'Thầy/Cô' : 'em'} đang ở trạng thái CHỜ PHÊ DUYỆT.
+${selectedRole === 'teacher' ? 'Thầy/Cô' : 'Em'} có thể trải nghiệm trước từ Vòng 1 đến 8!`);
+                    location.reload();
+                });
+            });
+        }
+
+        function updateUI() {
+            const authBtn = document.getElementById('btn-auth-action');
+            const regBtn = document.getElementById('btn-footer-register');
+            const infoBox = document.getElementById('user-info-box');
+
+            if (currentName) {
+                let roleBadge = '';
+                if (currentUserRole === 'admin') {
+                    roleBadge = '<span style="background:#e11d48; color:#fff; padding:1px 6px; border-radius:10px; font-size:0.65rem; font-weight:bold; margin-left:4px;">👑 QUẢN TRỊ</span>';
+                } else if (currentUserRole === 'teacher') {
+                    const stColor = currentUserStatus === 'approved' ? '#00f2ff' : '#ff9800';
+                    const stText = currentUserStatus === 'approved' ? '🎓 GIÁO VIÊN' : '🎓 GV (Chờ duyệt)';
+                    roleBadge = `<span style="background:rgba(0,242,255,0.15); color:${stColor}; border:1px solid ${stColor}; padding:1px 6px; border-radius:10px; font-size:0.65rem; font-weight:bold; margin-left:4px;">${stText}</span>`;
+                } else {
+                    const stColor = currentUserStatus === 'approved' ? '#2ecc71' : '#ff9800';
+                    const stText = currentUserStatus === 'approved' ? '⭐ ĐÃ DUYỆT' : '⏳ CHỜ DUYỆT';
+                    roleBadge = `<span style="background:rgba(46,204,113,0.15); color:${stColor}; border:1px solid ${stColor}; padding:1px 6px; border-radius:10px; font-size:0.65rem; font-weight:bold; margin-left:4px;">${stText}</span>`;
+                }
+
+                infoBox.innerHTML = `
+                    <div style="display:flex; align-items:center; flex-wrap:wrap;">
+                        <span style="font-size:0.95rem; font-weight:bold; color:var(--gold);">${currentName}</span>
+                        ${roleBadge}
+                    </div>
+                    <span style="font-size:0.75rem; color:var(--text-sec);">${currentClass} • @${currentUsername || ''}</span>
+                    <span style="font-size:0.65rem; color:#94a3b8;">${currentSchool || ''}</span>
+                `;
+                authBtn.innerHTML = "⚙️ ĐĂNG XUẤT";
+                authBtn.style.color = "#ff5252";
+                authBtn.style.borderColor = "#ff5252";
+                if (regBtn) regBtn.style.display = "none";
+
+                // If Admin or Teacher, inject Admin Portal button in footer if not existing
+                if ((currentUserRole === 'admin' || currentUserRole === 'teacher') && currentUserStatus === 'approved') {
+                    if (!document.getElementById('btn-admin-portal-nav')) {
+                        const footerBtns = document.querySelector('.footer-buttons');
+                        if (footerBtns) {
+                            const aAdmin = document.createElement('a');
+                            aAdmin.id = 'btn-admin-portal-nav';
+                            aAdmin.href = 'admin.html';
+                            aAdmin.className = 'btn-nav';
+                            aAdmin.style.cssText = 'color:#fff; background:#e11d48; border-color:#e11d48; font-weight:bold;';
+                            aAdmin.innerHTML = '🛡️ PHÊ DUYỆT';
+                            footerBtns.insertBefore(aAdmin, authBtn);
+                        }
+                    }
+                }
+            } else {
+                infoBox.innerHTML = `
+                    <span style="font-size:0.95rem; font-weight:bold; color:var(--gold);">Khách</span>
+                    <span style="font-size:0.75rem; color:var(--text-sec);">Trải nghiệm Vòng 1-8</span>
+                `;
+                authBtn.innerHTML = "🚀 ĐĂNG NHẬP";
+                authBtn.style.color = "var(--p)";
+                authBtn.style.borderColor = "var(--p)";
+                if (regBtn) regBtn.style.display = "inline-flex";
+            }
+        }
+
+        function handleAuthAction() {
+            if (currentName) {
+                if (confirm(`Đăng xuất tài khoản @${currentUsername || currentName}?`)) {
+                    localStorage.removeItem('studentUsername');
+                    localStorage.removeItem('studentName');
+                    localStorage.removeItem('studentClass');
+                    localStorage.removeItem('studentSchool');
+                    localStorage.removeItem('userRole');
+                    localStorage.removeItem('userStatus');
+                    localStorage.removeItem('adminUsername');
+                    location.reload();
+                }
+            } else {
+                showLoginModal();
+            }
+        }
+
+        function formatTime(sec) {
+            if (!sec) return "00:00";
+            const m = Math.floor(sec / 60), s = sec % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function setLbFilterMode(mode) {
+            currentLbFilterMode = mode;
+            const btnOff = document.getElementById('btn-lb-official');
+            const btnAll = document.getElementById('btn-lb-all');
+            if (btnOff && btnAll) {
+                if (mode === 'official') {
+                    btnOff.style.background = 'var(--p)';
+                    btnOff.style.color = '#000';
+                    btnOff.style.borderColor = 'var(--p)';
+                    btnAll.style.background = '#0f172a';
+                    btnAll.style.color = '#94a3b8';
+                    btnAll.style.borderColor = '#334155';
+                } else {
+                    btnAll.style.background = 'var(--p)';
+                    btnAll.style.color = '#000';
+                    btnAll.style.borderColor = 'var(--p)';
+                    btnOff.style.background = '#0f172a';
+                    btnOff.style.color = '#94a3b8';
+                    btnOff.style.borderColor = '#334155';
+                }
+            }
+            loadLeaderboard(currentSelectedWeek);
+        }
+
+        let currentLbRef = null;
+        function loadLeaderboard(weekNum) {
+            currentSelectedWeek = weekNum;
+            const sel = document.getElementById('lb-week-select');
+            if (sel) sel.value = weekNum;
+
+            const sched = SCHEDULE[weekNum];
+            document.getElementById('lb-title').innerText = `🏆 TOP 10 - TUẦN ${weekNum}`;
+
+            const winInfo = document.getElementById('lb-window-info');
+            if (winInfo && sched) {
+                winInfo.innerText = currentLbFilterMode === 'official' 
+                    ? `⏱ Khung giờ Đua Top: ${sched.open_str} -> ${sched.close_str}`
+                    : `🌟 Chế độ xem: Toàn bộ lượt thi tự luyện của học sinh`;
+            }
+
+            const badgeWeek = document.getElementById('lb-week-badge');
+            if (badgeWeek) badgeWeek.innerText = `KỶ LỤC TRẠM ${weekNum}:`;
+
+            // Cập nhật ngay điểm của bạn từ bộ nhớ đệm (0ms)
+            const localMyBest = localStorage.getItem('bestScore_Tuan_' + weekNum);
+            const myScoreEl = document.getElementById('my-score-val');
+            if (myScoreEl) {
+                myScoreEl.innerText = (localMyBest && parseInt(localMyBest, 10) > 0) ? `${localMyBest}đ` : '0đ';
+            }
+
+            if (currentLbRef) {
+                currentLbRef.off();
+            }
+            currentLbRef = db.ref(`scores/Tuan_${weekNum}`);
+            currentLbRef.on('value', (snap) => {
+                const data = snap.val();
+                const listUI = document.getElementById('leaderboard-list-ui');
+                if (!data) {
+                    listUI.innerHTML = '<tr><td colspan="4" style="color:#94a3b8; padding:12px;">Chưa có dữ liệu tuần này</td></tr>';
+                    document.getElementById('high-score').innerText = '0';
+                    return;
+                }
+                let all = [];
+                for (let id in data) {
+                    let item = data[id];
+                    item._pushId = id;
+                    all.push(item);
+                }
+
+                // Tìm điểm cao nhất của người dùng hiện tại trong tuần được chọn
+                let userMaxScore = (localMyBest && parseInt(localMyBest, 10) > 0) ? parseInt(localMyBest, 10) : 0;
+                for (let s of all) {
+                    const isMatch = (currentUsername && s.username === currentUsername) ||
+                                   (currentName && s.fullName && s.fullName.trim().toLowerCase() === currentName.trim().toLowerCase());
+                    if (isMatch && (s.score || 0) > userMaxScore) {
+                        userMaxScore = s.score;
+                    }
+                }
+                if (myScoreEl && userMaxScore > 0) {
+                    myScoreEl.innerText = `${userMaxScore}đ`;
+                    localStorage.setItem('bestScore_Tuan_' + weekNum, userMaxScore);
+                }
+
+                // Lọc loại bỏ dữ liệu rác / spam thử nghiệm
+                const draftKeywords = ['test', 'abc', 'nhap', 'nháp', '123', 'demo', 'đemo', 'xxx', '...', '---'];
+                all = all.filter(s => {
+                    let nameValue = (s.fullName || s.name || s.username || "").trim();
+                    let nameLower = nameValue.toLowerCase();
+                    if (draftKeywords.some(k => nameLower === k || nameLower.startsWith(k + ' ') || nameLower.endsWith(' ' + k))) return false;
+                    if (/^\d+$/.test(nameLower)) return false;
+                    if (nameValue.length < 2) return false;
+                    return true;
+                });
+
+                // Lọc theo khung giờ chính thức (14:00 Thứ Sáu -> 13:59:59 Thứ Sáu sau) nếu chọn chế độ 'official'
+                if (currentLbFilterMode === 'official' && sched) {
+                    const openMs = new Date(sched.open).getTime();
+                    const closeMs = new Date(sched.close).getTime();
+                    all = all.filter(s => {
+                        if (s.timestamp) {
+                            return s.timestamp >= openMs && s.timestamp <= closeMs;
+                        }
+                        return true;
+                    });
+                }
+
+                all.sort((a, b) => (b.score !== a.score) ? b.score - a.score : (a.duration || 999) - (b.duration || 999));
+                const top10 = []; const seen = new Set();
+                for (let s of all) {
+                    let key = ((s.fullName || s.name || s.username) + '|' + (s.className || s.class || '')).toLowerCase();
+                    if (!seen.has(key)) { top10.push(s); seen.add(key); }
+                    if (top10.length >= 10) break;
+                }
+
+                if (top10.length === 0) {
+                    listUI.innerHTML = '<tr><td colspan="4" style="color:#94a3b8; padding:12px;">Chưa có bài nộp hợp lệ trong chế độ này</td></tr>';
+                    document.getElementById('high-score').innerText = '0';
+                    return;
+                }
+
+                const isAdmin = (currentUserRole === 'admin' || currentUsername === 'admin');
+                listUI.innerHTML = top10.map((s, i) => {
+                    const delBtn = isAdmin ? `<button onclick="deleteLbScore(${weekNum}, '${s._pushId}', '${(s.fullName || s.name || s.username || '').replace(/'/g, "\\'")}', '${(s.username || '').replace(/'/g, "\\'")}')" style="background:transparent; border:none; color:#ef4444; cursor:pointer; font-size:0.82rem; padding:0 3px; margin-left:3px; line-height:1;" title="Xóa triệt để lượt thi này (Quản trị)">🗑️</button>` : '';
+                    return `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td style="text-align:left;">
+                            <span style="display:block; font-weight:bold; color:#fff;">${s.fullName || s.name || s.username}</span>
+                            <span style="display:block; font-size:0.75rem; color:#94a3b8; margin-top:2px;">${s.className || s.class || '---'}</span>
+                            <span style="display:block; font-size:0.65rem; color:#64748b; margin-top:2px;">${s.schoolName || '---'}</span>
+                        </td>
+                        <td style="color:var(--p); font-weight:bold; white-space:nowrap;">
+                            ${s.score}
+                            ${delBtn}
+                        </td>
+                        <td style="color:#2ecc71;">${formatTime(s.duration)}</td>
+                    </tr>
+                `;
+                }).join('');
+                if (top10.length > 0) document.getElementById('high-score').innerText = top10[0].score;
+            });
+        }
+
+        // QUẢN TRỊ VIÊN XÓA ĐIỂM TRIỆT ĐỂ TRỰC TIẾP TRÊN BXH TOP 10
+        function deleteLbScore(weekNum, pushId, name, username) {
+            if (!confirm(`Quản trị viên: Xác nhận XÓA TRIỆT ĐỂ tất cả các lượt thi của thí sinh "${name}" khỏi Tuần ${weekNum}?`)) {
+                return;
+            }
+
+            db.ref(`scores/Tuan_${weekNum}`).once('value', (snap) => {
+                const weekData = snap.val() || {};
+                const updates = {};
+                let count = 0;
+                for (let k in weekData) {
+                    const item = weekData[k];
+                    const isMatch = k === pushId ||
+                                   (username && item.username && item.username.toLowerCase() === username.toLowerCase()) ||
+                                   (name && item.fullName && item.fullName.trim().toLowerCase() === name.trim().toLowerCase());
+                    if (isMatch) {
+                        updates[k] = null;
+                        count++;
+                    }
+                }
+
+                if (count === 0 && pushId) {
+                    updates[pushId] = null;
+                    count = 1;
+                }
+
+                db.ref(`scores/Tuan_${weekNum}`).update(updates).then(() => {
+                    // Dọn dẹp sạch localStorage nếu thí sinh bị xóa trùng với tài khoản hiện tại
+                    if (currentUsername === username || (currentName && currentName.trim().toLowerCase() === name.trim().toLowerCase())) {
+                        localStorage.removeItem(`bestScore_Tuan_${weekNum}`);
+                        localStorage.removeItem('lastCompletedWeek');
+                        localStorage.removeItem('lastCompletedScore');
+                        unmarkStationPassed(weekNum);
+                        const myScoreEl = document.getElementById('my-score-val');
+                        if (myScoreEl) myScoreEl.innerText = '0đ';
+                    }
+                    alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở Tuần ${weekNum}!`);
+                }).catch((err) => {
+                    alert(`⚠️ Lỗi khi xóa: ${err.message}`);
+                });
+            });
+        }
+
+        function shareGame() {
+            const data = { title: 'Thám hiểm Việt Nam cùng Robot', text: 'Thách đấu bạn giải toán thám hiểm!', url: window.location.href };
+            if (navigator.share) navigator.share(data); else { navigator.clipboard.writeText(window.location.href); alert('Đã sao chép link!'); }
+        }
+    </script>
+</body>
+
+</html>

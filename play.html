@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đang tải chặng thám hiểm... - Học toán 5 cùng Robot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/game.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+
+<body>
+
+    <!-- TOP STATUS BAR -->
+    <header class="top-navbar">
+        <div class="user-profile">
+            <div class="avatar-robot">🤖</div>
+            <div>
+                <div id="u-name" style="font-weight:bold; color:var(--secondary); font-size:0.9rem;">Thí sinh</div>
+                <div id="u-class" style="font-size:0.75rem; color:var(--text-muted);">Lớp ...</div>
+            </div>
+        </div>
+        <div class="score-board">
+            <div class="score-box">ĐIỂM: <span id="current-score">0</span>/100</div>
+            <div class="lives-box" id="lives-display">❤️❤️❤️</div>
+        </div>
+    </header>
+
+    <!-- MASCOT ROBOT GUIDE & DIALOGUE -->
+    <div class="mascot-bar" id="mascot-container">
+        <div class="mascot-avatar" id="mascot-robot">🤖</div>
+        <div class="mascot-dialogue">
+            <span id="mascot-speech">Chào bạn! Tớ là RoBot. Hãy cùng nhau chinh phục chặng thám hiểm này nhé!</span>
+        </div>
+        <div id="combo-badge" class="combo-pill hidden">🔥 COMBO x2!</div>
+    </div>
+
+    <!-- START SCREEN MODAL -->
+    <div id="start-overlay" class="fullscreen-overlay">
+        <div class="modal-card">
+            <h1 id="station-title" style="font-family:'Bungee'; color:var(--primary); font-size:1.35rem; margin:0 0 6px;">ĐANG TẢI...</h1>
+            <h3 id="station-subtitle" style="color:var(--secondary); font-size:1rem; margin:0 0 12px; font-weight:600;">Chặng thám hiểm</h3>
+
+            <div style="margin:12px 0 16px; font-size:0.82rem; color:#cbd5e1; background:rgba(15,23,42,0.75); padding:14px; border-radius:14px; border:1px solid #334155; text-align:left; line-height:1.6;">
+                <div style="color:var(--gold); font-weight:bold; margin-bottom:6px; font-family:'Bungee'; font-size:0.85rem;">🎒 VẬT PHẨM LƯU NIỆM CHẶNG NÀY:</div>
+                <div id="souv-cap1" style="margin-bottom:4px;">🥉 <b>Cấp 1 (50đ):</b> Đang tải...</div>
+                <div id="souv-cap2" style="margin-bottom:4px;">🥈 <b>Cấp 2 (90đ):</b> Đang tải...</div>
+                <div id="souv-cap3">🥇 <b>Cấp 3 (100đ):</b> Đang tải...</div>
+            </div>
+
+            <div id="attempt-info" style="font-size:0.82rem; color:var(--gold); margin:8px 0 16px; font-weight:600;">Đang xác định lượt thi...</div>
+            <button class="btn-next-step" onclick="handleStartGame()" style="width:100%;">BẮT ĐẦU VƯỢT ẢI 🚀</button>
+            <button onclick="window.location.href='index.html'" style="width:100%; margin-top:10px; background:none; border:1px solid #475569; color:#94a3b8; padding:10px; border-radius:10px; cursor:pointer; font-family:inherit; font-size:0.85rem; transition:0.2s;">⬅ Trở về Bản đồ</button>
+        </div>
+    </div>
+
+    <!-- MAIN GAME AREA -->
+    <main class="main-container hidden" id="game-playground">
+        <!-- STAGE PROGRESS BANNER -->
+        <div class="stage-banner">
+            <div class="stage-header-row">
+                <h2 class="stage-title" id="stage-badge-title">VÒNG 1: NỐI CỘT NEON</h2>
+                <div class="stage-progress-badge" id="stage-progress-text">0/10 cặp</div>
+            </div>
+            <div class="stage-progress-track">
+                <div class="stage-progress-fill" id="stage-progress-fill" style="width: 0%;"></div>
+            </div>
+            <p class="stage-desc" id="stage-desc-text">Ghép 10 cặp số và phép tính tương ứng (Mỗi cặp đúng: +5 điểm)</p>
+        </div>
+
+        <!-- STAGE 1: ĐẤU TRÍ THẦN TỐC (FLASH CARD BATTLE) -->
+        <div id="stage-1-area" class="v1-flash-container">
+            <div class="v1-card" id="v1-card">
+                <div class="v1-card-top">
+                    <span class="v1-card-badge" id="v1-card-badge">⚡ THỬ THÁCH 1/10</span>
+                    <span class="v1-card-point">+5 ĐIỂM</span>
+                </div>
+                <div class="v1-card-content" id="v1-question-text">
+                    <!-- Nội dung câu hỏi lớn, rõ ràng -->
+                </div>
+            </div>
+            <div class="v1-options-title">👉 CHỌN ĐÁP ÁN ĐÚNG ĐỂ TIẾP SỨC ROBOT:</div>
+            <div class="v1-options-grid" id="v1-options-grid">
+                <!-- 4 nút ngọc năng lượng được sinh tự động -->
+            </div>
+        </div>
+
+        <!-- STAGE 2: HÀNH TRÌNH CHINH PHỤC ĐỈNH CAO (LANDMARK STEPPER QUEST) -->
+        <div id="stage-2-area" class="v2-quest-container hidden">
+            <!-- Stepper leo núi 4 chặng -->
+            <div class="v2-landmark-stepper" id="v2-stepper">
+                <div class="stepper-track">
+                    <div class="stepper-track-fill" id="stepper-fill"></div>
+                </div>
+                <div class="stepper-nodes" id="stepper-nodes">
+                    <!-- 4 mốc chặng địa danh được sinh tự động -->
+                </div>
+            </div>
+
+            <!-- Thẻ nhiệm vụ thám hiểm chặng hiện tại -->
+            <div class="v2-mission-card" id="v2-mission-card">
+                <div class="v2-mission-header">
+                    <span class="v2-mission-badge" id="v2-mission-badge">🚩 CHẶNG 1: XUẤT PHÁT</span>
+                    <span class="v2-mission-reward">💎 +10 ĐIỂM</span>
+                </div>
+                <div class="v2-mission-text" id="v2-mission-text">
+                    <!-- Đề bài toán thám hiểm -->
+                </div>
+                <div class="v2-slot-container">
+                    <div class="v2-slot-label">KẾT QUẢ ĐÃ CHỌN:</div>
+                    <div class="v2-slot-target" id="v2-slot-target">❓ CHẠM CHIP ĐÁP ÁN BÊN DƯỚI</div>
+                </div>
+            </div>
+
+            <!-- 4 lựa chọn chip số ngay dưới câu hỏi -->
+            <div class="v2-choices-wrapper">
+                <div class="v2-choices-hint">CHẠM ĐÁP ÁN CHÍNH XÁC ĐỂ LEO BẬC TIẾP THEO:</div>
+                <div class="v2-chip-choices" id="v2-chip-choices">
+                    <!-- 4 chip lựa chọn -->
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE 3: ĐẠI CHIẾN BOSS -->
+        <div id="stage-3-area" class="boss-arena hidden">
+            <div class="boss-avatar" id="boss-avatar">👾</div>
+            <h3 class="boss-title" id="boss-name">THỦ LĨNH THỬ THÁCH MỨC 3</h3>
+            <div class="boss-hp-container">
+                <div class="boss-hp-bar" id="boss-hp"></div>
+                <div class="boss-hp-text" id="boss-hp-text">100 / 100 HP</div>
+            </div>
+            <div id="boss-q-box" class="boss-q-card">
+                <p id="boss-q-text" class="boss-q-text"></p>
+                <div class="mcq-options-grid" id="boss-options"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-overlay" class="fullscreen-overlay hidden">
+        <div class="modal-card">
+            <h2 style="font-family:'Bungee'; color:var(--primary); margin:0 0 8px;" id="result-title">XUẤT SẮC HOÀN THÀNH!</h2>
+            <div style="font-size:3.4rem; font-family:'Bungee'; color:var(--gold); margin:6px 0;" id="final-score">0</div>
+            
+            <div id="souvenir-box" style="margin: 12px 0 14px; padding: 12px; background: rgba(15,23,42,0.85); border: 1.5px solid var(--gold); border-radius: 14px;">
+                <div style="font-size: 0.76rem; color: #94a3b8; text-transform: uppercase; font-weight:700;">🎁 VẬT PHẨM LƯU NIỆM ĐẠT ĐƯỢC:</div>
+                <div id="souvenir-badge" style="font-weight: bold; color: var(--gold); font-size: 0.95rem; margin-top: 6px;">...</div>
+            </div>
+
+            <p id="save-status-msg" style="color:var(--success); font-weight:bold; font-size:0.9rem; margin: 8px 0;">Đang lưu kết quả...</p>
+
+            <div class="result-btn-group" style="display:flex; flex-direction:column; gap:10px; margin-top:14px;">
+                <button id="btn-show-review" class="btn-review hidden" onclick="openReviewModal()">🔍 XEM LỜI GIẢI CHI TIẾT (<span id="wrong-count-badge">0</span> CÂU CẦN LƯU Ý)</button>
+                <button class="btn-next-step" onclick="location.reload()" style="background:linear-gradient(135deg, #10b981, #059669);">🔄 THỬ THÁCH LẠI</button>
+                <button onclick="window.location.href='index.html'" style="background:none; border:1px solid #475569; color:#cbd5e1; padding:11px; border-radius:12px; cursor:pointer; font-family:inherit; font-weight:600; font-size:0.9rem; transition:0.2s;">🗺️ VỀ BẢN ĐỒ 35 TRẠM</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VICTORY LOOT BOX OVERLAY -->
+    <div id="loot-overlay" class="fullscreen-overlay hidden">
+        <div class="modal-card loot-modal-card">
+            <div class="loot-glow-ring"></div>
+            <div class="loot-chest-container">
+                <div class="loot-chest-icon" id="loot-chest-icon">🎁</div>
+            </div>
+            <h2 class="loot-title" id="loot-title">RƯƠNG BÁU THÁM HIỂM!</h2>
+            <p class="loot-desc" id="loot-desc">Chúc mừng bạn đã xuất sắc vượt qua các chặng thám hiểm! Hãy chạm mở rương để nhận phần thưởng danh dự.</p>
+            <div id="loot-reward-content" class="loot-reward-content hidden">
+                <div class="reward-sparkles">✨ ⭐ ✨</div>
+                <div class="reward-tag">🏆 DANH HIỆU THÁM HIỂM ĐẠT ĐƯỢC:</div>
+                <div class="reward-title" id="reward-title">...</div>
+                <div class="reward-souvenir-box">
+                    <span style="color:#94a3b8; font-size:0.75rem;">VẬT PHẨM LƯU NIỆM:</span>
+                    <span id="reward-souvenir" style="color:var(--gold); font-weight:bold;">...</span>
+                </div>
+            </div>
+            <button id="loot-open-btn" class="btn-next-step loot-btn" onclick="handleOpenLootChest()">MỞ RƯƠNG CHIẾN TÍCH 🚀</button>
+            <button id="loot-continue-btn" class="btn-next-step loot-btn hidden" onclick="handleLootContinue()">TIẾP TỤC ➔</button>
+        </div>
+    </div>
+
+    <!-- DETAILED REVIEW MODAL -->
+    <div id="review-overlay" class="fullscreen-overlay hidden">
+        <div class="modal-card review-modal-card">
+            <div class="review-modal-header">
+                <div class="review-modal-title">🔍 ÔN TẬP & LỜI GIẢI CHI TIẾT</div>
+                <button class="review-close-btn" onclick="closeReviewModal()">✖</button>
+            </div>
+            <p class="review-subtitle">Xem lại từng bước giải toán chuẩn mực của Bộ GD&ĐT để vững vàng kiến thức hơn nhé!</p>
+            <div id="review-list" class="review-items-list">
+                <!-- Danh sách câu hỏi, phương pháp giải, đáp án đúng/sai sinh tự động -->
+            </div>
+            <button class="btn-next-step" onclick="closeReviewModal()" style="margin-top:14px; width:100%;">TỚ ĐÃ HIỂU BÀI RỒI 🚀</button>
+        </div>
+    </div>
+
+    <!-- FLOATING SCRATCHPAD FAB BUTTON -->
+    <button id="scratchpad-fab" class="scratchpad-fab hidden" onclick="toggleScratchpad()" title="Bảng nháp vẽ tay">
+        <span class="fab-icon">📝</span>
+        <span class="fab-label">NHÁP</span>
+    </button>
+
+    <!-- VIRTUAL SCRATCHPAD OVERLAY -->
+    <div id="scratchpad-overlay" class="scratchpad-overlay hidden">
+        <div class="scratchpad-panel">
+            <div class="scratchpad-header">
+                <div class="scratchpad-title">
+                    <span class="scratchpad-icon">📝</span>
+                    <span>BẢNG NHÁP ĐẶT TÍNH</span>
+                </div>
+                <div class="scratchpad-actions">
+                    <button id="tool-pen" class="tool-btn active" onclick="setScratchTool('pen')" title="Bút vẽ">✏️ Bút</button>
+                    <button id="tool-eraser" class="tool-btn" onclick="setScratchTool('eraser')" title="Tẩy">🧹 Tẩy</button>
+                    <button class="tool-btn danger" onclick="clearScratchpad()" title="Xóa sạch bảng nháp">🗑️ Xóa hết</button>
+                    <button class="tool-btn close" onclick="toggleScratchpad()" title="Thu nhỏ nháp">✖ Thu nhỏ</button>
+                </div>
+            </div>
+            <div class="scratchpad-canvas-wrapper" id="scratchpad-canvas-wrap">
+                <canvas id="scratchpad-canvas"></canvas>
+            </div>
+            <div class="scratchpad-footer">
+                <span>💡 Dùng ngón tay hoặc chuột vẽ tự do để đặt tính các phép tính khó</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING SCORE LAYER -->
+    <div id="floating-scores-layer"></div>
+
+    <!-- FIREWORKS CANVAS -->
+    <canvas id="fireworks-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:99999; display:none;"></canvas>
+
+    <footer>@Học toán 5 cùng RoBot - Phát triển bởi: <b>LÊ THÀNH LONG</b></footer>
+
+    <script src="js/fireworks.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/game-engine.js"></script>
+</body>
+
+</html>

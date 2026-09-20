@@ -1,0 +1,250 @@
+window.WEEK_DATA_11 = {
+  "week": 11,
+  "stationName": "Làng Sen Quê Bác (Nghệ An)",
+  "config": {
+    "week": 11,
+    "openTime": "2026-11-20T14:00:00",
+    "openStr": "14:00 ngày 20/11/2026"
+  },
+  "souvenirs": {
+    "cap1": "Huy hiệu Hoa Sen Đất Việt Đồng (50đ)",
+    "cap2": "Đèn dầu soi sáng Trí Tuệ Bạc (90đ)",
+    "cap3": "Búp Sen Hoàng Kim Đại Trí Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Muốn nhân một số thập phân với 10; 100; 1000 ta dời dấu phẩy sang bên nào?",
+        "a": "Sang bên phải 1, 2, 3... chữ số"
+      },
+      {
+        "q": "Nhân một số với 0,1 cũng chính là chia số đó cho số nào?",
+        "a": "Chia cho 10"
+      },
+      {
+        "q": "Nhân một số với 0,5 cũng chính là chia số đó cho số nào?",
+        "a": "Chia cho 2"
+      },
+      {
+        "q": "Tính nhẩm: 4,75 × 10",
+        "a": "47,5"
+      },
+      {
+        "q": "Tính nhẩm: 25,6 : 10",
+        "a": "2,56"
+      },
+      {
+        "q": "Quê nội của Chủ tịch Hồ Chí Minh là làng nào thuộc huyện Nam Đàn, Nghệ An?",
+        "a": "Làng Sen (Kim Liên)"
+      },
+      {
+        "q": "Quê ngoại của Bác Hồ là làng nào gần Làng Sen?",
+        "a": "Làng Hoàng Trù (Chùa)"
+      },
+      {
+        "q": "Chủ tịch Hồ Chí Minh sinh năm bao nhiêu?",
+        "a": "Năm 1890"
+      },
+      {
+        "q": "Tính nhẩm: 18 × 0,1",
+        "a": "1,8"
+      },
+      {
+        "q": "Tính nhẩm: 3,2 : 0,1",
+        "a": "32"
+      },
+      {
+        "q": "Tính nhẩm: 0,85 × 100",
+        "a": "85"
+      },
+      {
+        "q": "Tính nhẩm: 345,6 : 100",
+        "a": "3,456"
+      },
+      {
+        "q": "Chia một số cho 0,25 cũng chính là nhân số đó với số nào?",
+        "a": "Nhân với 4"
+      },
+      {
+        "q": "Tính kết quả phép chia: 45 : 1,5",
+        "a": "30"
+      },
+      {
+        "q": "Tính kết quả phép chia: 24 : 0,8",
+        "a": "30"
+      },
+      {
+        "q": "Dãy núi che chở phía sau Làng Sen nơi Bác Hồ thời niên thiếu thường thả diều là núi gì?",
+        "a": "Núi Chung"
+      },
+      {
+        "q": "Loài cây hoa biểu tượng thường được trồng làm hàng rào xanh trước cổng nhà Bác là cây gì?",
+        "a": "Cây râm bụt (dâm bụt)"
+      },
+      {
+        "q": "Bãi biển nghỉ dưỡng nổi tiếng của tỉnh Nghệ An là bãi biển nào?",
+        "a": "Bãi biển Cửa Lò"
+      },
+      {
+        "q": "Tính nhẩm: 42 × 0,5",
+        "a": "21"
+      },
+      {
+        "q": "Tính nhanh: 14,8 × 0,1 + 15,2 × 0,1",
+        "a": "3 ((14,8 + 15,2) × 0,1 = 3)"
+      },
+      {
+        "q": "Tính nhẩm: 0,004 × 1000",
+        "a": "4"
+      },
+      {
+        "q": "Tính nhẩm: 12,5 : 0,5",
+        "a": "25 (12,5 × 2 = 25)"
+      },
+      {
+        "q": "Tính kết quả phép chia: 72 : 4,5",
+        "a": "16"
+      },
+      {
+        "q": "Tính kết quả phép chia: 9 : 0,125",
+        "a": "72 (9 × 8 = 72)"
+      },
+      {
+        "q": "Tìm x, biết: x : 0,1 = 45",
+        "a": "x = 4,5"
+      },
+      {
+        "q": "Ngôi nhà Bác Hồ ở Làng Sen là ngôi nhà lá mấy gian?",
+        "a": "Nhà tranh 5 gian"
+      },
+      {
+        "q": "Thành phố trung tâm chính trị văn hóa lớn của tỉnh Nghệ An là thành phố nào?",
+        "a": "Thành phố Vinh"
+      },
+      {
+        "q": "Năm Bác Hồ ra đi tìm đường cứu nước tại Bến Nhà Rồng là năm nào?",
+        "a": "Năm 1911"
+      },
+      {
+        "q": "Tính nhanh: 2,5 × 9,8 × 4",
+        "a": "98 ((2,5 × 4) × 9,8 = 98)"
+      },
+      {
+        "q": "Tính nhẩm: 56 : 0,01",
+        "a": "5 600"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Khuôn viên ao sen trước nhà Bác hình chữ nhật có chu vi 120 m, chiều dài gấp đôi chiều rộng. Chiều rộng ao sen là ... m.",
+        "a": "20"
+      },
+      {
+        "q": "Một đoàn học sinh 45 người thuê xe đi từ TP Vinh về thăm Làng Sen dài 15 km hết 0,5 giờ. Vận tốc của xe là ... km/giờ.",
+        "a": "30"
+      },
+      {
+        "q": "Tính nhanh: 48 × 0,5 + 24 × 0,25. Kết quả là ...",
+        "a": "30 (24 + 6 = 30)"
+      },
+      {
+        "q": "Tìm x, biết: x × 1,5 = 45. Giá trị của x là ...",
+        "a": "30"
+      },
+      {
+        "q": "Người ta trồng một hàng râm bụt dài 36 m dẫn vào nhà Bác, cứ cách 1,2 m trồng một cây (hai đầu đều trồng). Số cây râm bụt cần trồng là ... cây.",
+        "a": "31"
+      },
+      {
+        "q": "Bác thợ mộc cưa một cây tre dài 6 m thành các đoạn dài 1,5 m để làm hàng rào. Bác cần cưa ... lần.",
+        "a": "3"
+      },
+      {
+        "q": "Tính giá trị biểu thức: 75 : 2,5 - 12 × 1,5. Kết quả là ...",
+        "a": "12"
+      },
+      {
+        "q": "Một can dầu thơm hoa sen chứa 4,5 lít cân nặng 3,6 kg. Một thùng chứa 15 lít dầu như thế cân nặng ... kg.",
+        "a": "12"
+      },
+      {
+        "q": "Một thửa ruộng hình tam giác trồng hoa sen có đáy 30 m, chiều cao 18 m. Diện tích thửa ruộng hoa sen đó là ... m².",
+        "a": "270"
+      },
+      {
+        "q": "Đoàn xe 8 chiếc chở 360 du khách về viếng mộ cụ Phó bảng Nguyễn Sinh Sắc và thăm Quê Bác. Trung bình mỗi xe chở ... người.",
+        "a": "45"
+      },
+      {
+        "q": "Tìm y, biết: y : 0,25 = 16. Giá trị của y là ...",
+        "a": "4"
+      },
+      {
+        "q": "Một sợi dây dù dài 18 m được cắt thành các đoạn dây dài 2,25 m. Cắt được tất cả ... đoạn dây.",
+        "a": "8"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một số nhân với 0,25 rồi trừ đi 1,5 thì bằng chính số đó chia cho 5 cộng thêm 0,5. Tìm số đó.",
+        "opts": [
+          "40",
+          "50",
+          "35",
+          "45"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Quãng đường từ trường học về Quê Bác dài 48 km. Cùng một lúc, một ô tô xuất phát từ trường và một xe máy xuất phát từ Quê Bác đi ngược chiều nhau. Vận tốc ô tô là 50 km/giờ, xe máy là 30 km/giờ. Hỏi sau bao lâu hai xe gặp nhau?",
+        "opts": [
+          "36 phút (0,6 giờ)",
+          "40 phút",
+          "45 phút",
+          "30 phút"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tính giá trị biểu thức sau bằng cách thuận tiện nhất:\nA = (12,4 × 4,5 - 6,2 × 9) × (1 + 2 + 3 + ... + 100)",
+        "opts": [
+          "0",
+          "100",
+          "5 050",
+          "1 240"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một khu vườn hoa sen hình chữ nhật có chu vi 180 m. Nếu tăng chiều rộng thêm 8 m và giảm chiều dài đi 8 m thì khu vườn trở thành hình vuông. Tính diện tích khu vườn hoa sen đó.",
+        "opts": [
+          "1 961 m²",
+          "2 025 m²",
+          "1 800 m²",
+          "2 100 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một trường tiểu học cử đoàn cán bộ giáo viên đi viếng Quê Bác. Nếu mỗi xe chở 16 người thì còn thừa 6 người. Nếu mỗi xe chở 18 người thì có 1 xe chỉ chở 10 người. Hỏi đoàn có bao nhiêu người?",
+        "opts": [
+          "118 người",
+          "112 người",
+          "124 người",
+          "108 người"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một cửa hàng quà lưu niệm Làng Sen ngày thứ nhất bán được 25 chiếc khăn thổ cẩm, ngày thứ hai bán được 32 chiếc khăn cùng loại. Số tiền thu được ngày thứ hai nhiều hơn ngày thứ nhất 280 000 đồng. Hỏi cả hai ngày cửa hàng thu được bao nhiêu tiền?",
+        "opts": [
+          "2 280 000 đồng",
+          "2 000 000 đồng",
+          "2 560 000 đồng",
+          "1 980 000 đồng"
+        ],
+        "c": 0
+      }
+    ]
+  }
+};

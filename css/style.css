@@ -1,0 +1,99 @@
+:root {
+    --bg-main: #e0f7fa; /* Màu xanh nước biển nhạt cực sáng */
+    --path-color: #ffd54f; /* Màu vàng cát cho con đường */
+    --primary: #ff5722; /* Màu cam năng động */
+    --success: #4caf50; /* Màu xanh lá hoàn thành */
+    --locked: #b0bec5; /* Màu xám khi chưa mở */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-main);
+    /* Tạo hiệu ứng mây trắng trên nền xanh */
+    background-image: radial-gradient(#ffffff 20%, transparent 20%);
+    background-size: 100px 100px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.game-header {
+    background: linear-gradient(to bottom, #0288d1, #03a9f4);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-bottom: 5px solid #01579b;
+}
+
+/* Con đường dẫn lối uốn lượn */
+.map-area {
+    padding: 50px 0;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.map-path {
+    position: relative;
+    width: 300px;
+    display: flex;
+    flex-direction: column-reverse; /* Để tuần 19 ở dưới, tuần 34 ở trên */
+    gap: 60px;
+}
+
+/* Vẽ đường kẻ nối các trạm */
+.map-path::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 100%;
+    background: var(--path-color);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 0;
+    border-radius: 5px;
+}
+
+.station {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    z-index: 1;
+    position: relative;
+    border: 4px solid white;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* Tạo hiệu ứng uốn lượn zigzag trái phải */
+.station:nth-child(odd) { transform: translateX(-60px); }
+.station:nth-child(even) { transform: translateX(60px); }
+
+/* Màu sắc từng trạng thái */
+.station.locked { background: var(--locked); cursor: not-allowed; }
+.station.active { 
+    background: var(--primary); 
+    cursor: pointer; 
+    animation: bounce 1.5s infinite; 
+}
+.station.completed { background: var(--success); cursor: pointer; }
+
+/* Hiệu ứng Robot đang nhảy ở trạm hiện tại */
+@keyframes bounce {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.1) translateY(-10px); }
+}
+
+/* Hình ảnh Robot trang trí */
+.robot-decorator {
+    width: 100px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}

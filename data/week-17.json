@@ -1,0 +1,250 @@
+{
+  "week": 17,
+  "stationName": "Phố cổ Hội An (Quảng Nam)",
+  "config": {
+    "week": 17,
+    "openTime": "2027-01-01T14:00:00",
+    "openStr": "14:00 ngày 01/01/2027"
+  },
+  "souvenirs": {
+    "cap1": "Đèn lồng đất nung Hội An Đồng (50đ)",
+    "cap2": "Phù điêu Apsara Chăm-pa Bạc (90đ)",
+    "cap3": "Thần Đăng Cổ Kính Phố Hội Hoàng Kim Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Hình nào có 4 cạnh bằng nhau và 4 góc vuông?",
+        "a": "Hình vuông"
+      },
+      {
+        "q": "Hình nào có 2 cặp cạnh đối diện song song và bằng nhau, 4 góc vuông?",
+        "a": "Hình chữ nhật"
+      },
+      {
+        "q": "Hình nào có 2 cặp cạnh đối diện song song và bằng nhau nhưng không bắt buộc góc vuông?",
+        "a": "Hình bình hành"
+      },
+      {
+        "q": "Hình nào có 4 cạnh bằng nhau và hai đường chéo vuông góc với nhau?",
+        "a": "Hình thoi"
+      },
+      {
+        "q": "Công thức tính diện tích hình thoi có hai đường chéo d1 và d2 là gì?",
+        "a": "S = (d1 × d2) : 2"
+      },
+      {
+        "q": "Công trình kiến trúc biểu tượng trên tờ tiền 20.000 đồng tại Phố cổ Hội An là gì?",
+        "a": "Chùa Cầu (Cầu Nhật Bản)"
+      },
+      {
+        "q": "Dòng sông êm đềm chảy qua trung tâm phố cổ Hội An nơi du khách thả hoa đăng là sông gì?",
+        "a": "Sông Hoài (nhánh sông Thu Bồn)"
+      },
+      {
+        "q": "Vật phẩm trang trí lung linh rực rỡ đặc trưng khắp các con phố Hội An về đêm là gì?",
+        "a": "Đèn lồng Hội An"
+      },
+      {
+        "q": "Làng nghề rau truyền thống xanh tươi nổi tiếng ven phố cổ Hội An là làng gì?",
+        "a": "Làng rau Trà Quế"
+      },
+      {
+        "q": "Tính diện tích hình thoi có độ dài hai đường chéo là 8 cm và 10 cm",
+        "a": "40 cm²"
+      },
+      {
+        "q": "Hình nào có đúng một cặp cạnh đối diện song song?",
+        "a": "Hình thang"
+      },
+      {
+        "q": "Hình tròn có đường kính 10 cm thì chu vi là bao nhiêu cm?",
+        "a": "31,4 cm"
+      },
+      {
+        "q": "Tính diện tích hình bình hành có đáy 12 cm và chiều cao tương ứng 6 cm",
+        "a": "72 cm²"
+      },
+      {
+        "q": "Tính chu vi hình thoi có cạnh dài 7 cm",
+        "a": "28 cm"
+      },
+      {
+        "q": "Tổng ba góc trong một hình tam giác luôn bằng bao nhiêu độ?",
+        "a": "180 độ"
+      },
+      {
+        "q": "Làng nghề làm đồ gốm thủ công đất nung hơn 500 năm tuổi ở Hội An là làng gì?",
+        "a": "Làng gốm Thanh Hà"
+      },
+      {
+        "q": "Món ăn đặc sản sợi mì vàng óng ăn kèm thịt xá xíu đặc trưng nhất Hội An là gì?",
+        "a": "Mì Quảng (hoặc Cao lầu Hội An)"
+      },
+      {
+        "q": "Chùa Cầu Hội An được xây dựng vào khoảng thế kỷ thứ mấy?",
+        "a": "Thế kỷ 17"
+      },
+      {
+        "q": "Tính diện tích tam giác vuông có hai cạnh góc vuông là 6 cm và 8 cm",
+        "a": "24 cm²"
+      },
+      {
+        "q": "Hình thoi có chu vi 40 cm thì độ dài mỗi cạnh là bao nhiêu?",
+        "a": "10 cm"
+      },
+      {
+        "q": "Muốn tính diện tích hình thang ta lấy tổng hai đáy nhân chiều cao rồi làm gì?",
+        "a": "Chia cho 2"
+      },
+      {
+        "q": "Hình chữ nhật có chiều dài gấp đôi chiều rộng, nửa chu vi 30 cm. Diện tích là bao nhiêu?",
+        "a": "200 cm² (rộng 10, dài 20)"
+      },
+      {
+        "q": "Một hình tròn có diện tích 12,56 cm² thì bán kính là bao nhiêu cm?",
+        "a": "2 cm"
+      },
+      {
+        "q": "Tính chu vi hình bình hành có hai cạnh liên tiếp là 8 cm và 5 cm",
+        "a": "26 cm"
+      },
+      {
+        "q": "Lễ hội đêm rằm lung linh tắt đèn điện thắp sáng hoa đăng diễn ra vào ngày nào âm lịch?",
+        "a": "Ngày 14 âm lịch hàng tháng"
+      },
+      {
+        "q": "Làng nghề mộc truyền thống tinh xảo nằm đối diện phố cổ bên kia sông Thu Bồn là làng gì?",
+        "a": "Làng mộc Kim Bồng"
+      },
+      {
+        "q": "Phố cổ Hội An được UNESCO công nhận là Di sản Văn hóa Thế giới năm nào?",
+        "a": "Năm 1999"
+      },
+      {
+        "q": "Tính diện tích hình vuông có chu vi bằng 28 cm",
+        "a": "49 cm² (cạnh 7 cm)"
+      },
+      {
+        "q": "So sánh diện tích hình chữ nhật 6 cm × 4 cm và hình vuông cạnh 5 cm",
+        "a": "Hình vuông lớn hơn (25 cm² > 24 cm²)"
+      },
+      {
+        "q": "Đổi 0,45 km² sang héc-ta",
+        "a": "45 ha"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một chiếc đèn lồng Hội An có khung mặt bên hình thoi với hai đường chéo dài 25 cm và 18 cm. Diện tích mặt khung hình thoi đó là ... cm².",
+        "a": "225"
+      },
+      {
+        "q": "Một luống trồng rau thơm tại Làng rau Trà Quế hình thang có đáy lớn 15 m, đáy bé 10 m và chiều cao 4 m. Diện tích luống rau là ... m².",
+        "a": "50"
+      },
+      {
+        "q": "Một chiếc thuyền nan chở khách ngắm sông Hoài đi được 3,6 km trong 45 phút. Vận tốc của thuyền nan là ... km/giờ.",
+        "a": "4,8"
+      },
+      {
+        "q": "Một viên gạch gốm Thanh Hà hình vuông có cạnh dài 30 cm. Diện tích viên gạch đó là ... cm².",
+        "a": "900"
+      },
+      {
+        "q": "Một ngôi nhà cổ ở Hội An có khoảng sân gạch hình chữ nhật rộng 6 m, dài 8,5 m. Người ta dùng gạch vuông cạnh 50 cm để lát sân. Cần ít nhất ... viên gạch.",
+        "a": "204"
+      },
+      {
+        "q": "Đội làm đèn lồng 4 người trong 5 ngày làm được 120 chiếc đèn. Để làm được 240 chiếc đèn cùng loại trong 5 ngày cần ... người (năng suất như nhau).",
+        "a": "8"
+      },
+      {
+        "q": "Một bồn hoa hình tròn ở công viên Hội An có chu vi 15,7 m. Bán kính bồn hoa đó là ... m.",
+        "a": "2,5"
+      },
+      {
+        "q": "Tìm x, biết: x × 6,5 - x × 1,5 = 45. Giá trị của x là ...",
+        "a": "9"
+      },
+      {
+        "q": "Một tấm lụa tơ tằm Hội An hình chữ nhật có chiều dài 2,4 m và chiều rộng 0,75 m. Diện tích tấm lụa là ... m².",
+        "a": "1,8"
+      },
+      {
+        "q": "Mua 6 bát Cao lầu Hội An hết 210 000 đồng. Mua 10 bát như thế hết tất cả ... đồng.",
+        "a": "350000 (hoặc 350 000)"
+      },
+      {
+        "q": "Một mảnh vườn hình bình hành có đáy 20 m và chiều cao 14,5 m. Diện tích mảnh vườn là ... m².",
+        "a": "290"
+      },
+      {
+        "q": "Tính giá trị biểu thức: (35,4 + 14,6) : 2,5 - 8,5. Kết quả là ...",
+        "a": "11,5"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một mảnh đất hình chữ nhật tại Hội An có chu vi gấp 6 lần chiều rộng. Biết chiều dài hơn chiều rộng 15 m. Tính diện tích mảnh đất đó.",
+        "opts": [
+          "450 m²",
+          "500 m²",
+          "400 m²",
+          "600 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một nghệ nhân gốm Thanh Hà làm một đĩa gốm trang trí hình tròn có đường kính 30 cm. Chính giữa đĩa là một bông hoa hình vuông có đường chéo bằng đường kính hình tròn. Tính diện tích phần gốm tráng men nằm ngoài hình vuông hoa (lấy pi = 3,14).",
+        "opts": [
+          "256,5 cm²",
+          "280 cm²",
+          "314 cm²",
+          "225 cm²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Hai người thợ làm lồng đèn Hội An: người thứ nhất làm được 5 chiếc đèn mất 2,5 giờ; người thứ hai làm được 4 chiếc đèn mất 1,6 giờ. Hỏi ai làm nhanh hơn và nhanh hơn bao nhiêu phút cho mỗi chiếc đèn?",
+        "opts": [
+          "Người thứ hai nhanh hơn 6 phút",
+          "Người thứ nhất nhanh hơn 6 phút",
+          "Người thứ hai nhanh hơn 10 phút",
+          "Hai người bằng nhau"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một thửa ruộng hình thang có đáy lớn 36 m, đáy bé bằng 2/3 đáy lớn. Chiều cao kém đáy bé 4 m. Người ta trồng lúa trên thửa ruộng đó, trung bình cứ 100 m² thu được 65 kg thóc. Hỏi cả thửa ruộng thu hoạch được bao nhiêu tạ thóc?",
+        "opts": [
+          "3,9 tạ",
+          "4,5 tạ",
+          "39 tạ",
+          "45 tạ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một thuyền thả hoa đăng trên sông Hoài đi từ bến A đến bến B hết 30 phút và quay về từ B đến A hết 45 phút. Biết khúc sông AB dài 3 km. Tính vận tốc của dòng nước chảy trên sông Hoài.",
+        "opts": [
+          "1 km/giờ",
+          "2 km/giờ",
+          "1,5 km/giờ",
+          "0,5 km/giờ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một khu đất hình vuông được mở rộng về một phía thêm 6 m để trở thành khu đất hình chữ nhật có chu vi 68 m. Tính diện tích khu đất ban đầu khi chưa mở rộng.",
+        "opts": [
+          "196 m²",
+          "225 m²",
+          "144 m²",
+          "256 m²"
+        ],
+        "c": 0
+      }
+    ]
+  }
+}

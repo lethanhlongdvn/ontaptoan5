@@ -1,0 +1,250 @@
+{
+  "week": 21,
+  "stationName": "Đắk Lắk (Buôn Đôn, Thác Dray Nur)",
+  "config": {
+    "week": 21,
+    "openTime": "2027-01-29T14:00:00",
+    "openStr": "14:00 ngày 29/01/2027"
+  },
+  "souvenirs": {
+    "cap1": "Vòng ngà voi Bản Đôn Đồng (50đ)",
+    "cap2": "Cồng chiêng Đại ngàn Bạc (90đ)",
+    "cap3": "Hạt cà phê Vàng Buôn Ma Thuột (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Tìm 20% của số 150",
+        "a": "30 (150 × 20 : 100 = 30)"
+      },
+      {
+        "q": "Tìm 10% của số 450",
+        "a": "45"
+      },
+      {
+        "q": "Muốn tìm giá trị phần trăm của một số, ta lấy số đó nhân với số phần trăm rồi làm gì?",
+        "a": "Chia cho 100"
+      },
+      {
+        "q": "Tìm một số biết 25% của nó bằng 50",
+        "a": "200 (50 : 25 × 100 = 200)"
+      },
+      {
+        "q": "Địa danh Buôn Đôn ở Đắk Lắk nổi tiếng khắp cả nước với nghề truyền thống gì?",
+        "a": "Săn bắt và thuần dưỡng voi rừng"
+      },
+      {
+        "q": "Thành phố được mệnh danh là Thủ phủ Cà phê của Việt Nam là thành phố nào?",
+        "a": "Thành phố Buôn Ma Thuột"
+      },
+      {
+        "q": "Cặp thác nước đôi hùng vĩ và thơ mộng bậc nhất trên sông Sêrêpôk là gì?",
+        "a": "Thác Dray Nur và Thác Dray Sáp"
+      },
+      {
+        "q": "Không gian văn hóa nào của đồng bào Tây Nguyên được UNESCO công nhận là Kiệt tác di sản thế giới?",
+        "a": "Không gian văn hóa Cồng chiêng Tây Nguyên"
+      },
+      {
+        "q": "Tính nhẩm: 50% của 240",
+        "a": "120"
+      },
+      {
+        "q": "Tính nhẩm: 75% của 80",
+        "a": "60"
+      },
+      {
+        "q": "Tìm 35% của số 200",
+        "a": "70"
+      },
+      {
+        "q": "Tìm 12% của số 500",
+        "a": "60"
+      },
+      {
+        "q": "Tìm một số biết 40% của nó bằng 80",
+        "a": "200"
+      },
+      {
+        "q": "Dòng sông chảy ngược kỳ vĩ mang dòng nước đỏ qua Đắk Lắk là sông gì?",
+        "a": "Sông Sêrêpôk"
+      },
+      {
+        "q": "Hồ nước ngọt tự nhiên lớn thứ hai Việt Nam (sau Hồ Ba Bể) nằm tại Đắk Lắk là hồ gì?",
+        "a": "Hồ Lắk"
+      },
+      {
+        "q": "Cây cầu treo bằng tre nứa dài nhất vắt qua rặng si cổ thụ ở Buôn Đôn là gì?",
+        "a": "Cầu treo Buôn Đôn"
+      },
+      {
+        "q": "Vua voi huyền thoại của Buôn Đôn từng bắt và thuần dưỡng gần 300 con voi là ai?",
+        "a": "Vua voi Khun Yu Nốp"
+      },
+      {
+        "q": "Tính: 15% của 300 kg",
+        "a": "45 kg"
+      },
+      {
+        "q": "Lãi suất tiết kiệm 0,5% một tháng. Gửi 1 000 000 đồng sau 1 tháng được lãi bao nhiêu?",
+        "a": "5 000 đồng"
+      },
+      {
+        "q": "Nút bấm nào trên máy tính cầm tay dùng để xóa toàn bộ phép tính?",
+        "a": "Nút AC (hoặc ON/C)"
+      },
+      {
+        "q": "Tìm 2,5% của số 400",
+        "a": "10"
+      },
+      {
+        "q": "Tìm 120% của số 50",
+        "a": "60"
+      },
+      {
+        "q": "Một lớp có 40 học sinh, 60% là nữ. Số học sinh nam là bao nhiêu?",
+        "a": "16 học sinh (40% của 40 = 16)"
+      },
+      {
+        "q": "Đàn voi thuần dưỡng ở Buôn Đôn hiện nay được bảo tồn theo mô hình du lịch gì?",
+        "a": "Du lịch thân thiện với voi (không cưỡi voi)"
+      },
+      {
+        "q": "Lễ hội văn hóa lớn định kỳ 2 năm một lần tổ chức tại Buôn Ma Thuột là gì?",
+        "a": "Lễ hội Cà phê Buôn Ma Thuột"
+      },
+      {
+        "q": "Bảo tàng thế giới chuyên đề cà phê độc đáo hàng đầu thế giới nằm tại TP nào?",
+        "a": "Buôn Ma Thuột (Đắk Lắk)"
+      },
+      {
+        "q": "Nhà dài truyền thống của người Ê Đê ở Đắk Lắk dài tới hàng chục mét theo chế độ gì?",
+        "a": "Chế độ mẫu hệ"
+      },
+      {
+        "q": "Tìm một số biết 10% của nó bằng 25",
+        "a": "250"
+      },
+      {
+        "q": "Tính nhanh: 30% của 120",
+        "a": "36"
+      },
+      {
+        "q": "Nút % trên máy tính cầm tay có chức năng gì?",
+        "a": "Tính tỉ số phần trăm"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một vườn cà phê ở Buôn Ma Thuột vụ này thu hoạch được 8 tấn cà phê quả tươi. Sau khi phơi và sơ chế thì lượng nhân thu được chiếm 22% khối lượng quả tươi. Khối lượng cà phê nhân thu được là ... kg.",
+        "a": "1760"
+      },
+      {
+        "q": "Một chú voi ở Buôn Đôn mỗi ngày ăn hết khoảng 150 kg thức ăn xanh. Trong đó cỏ và lá cây chiếm 60%. Khối lượng cỏ và lá cây chú voi ăn mỗi ngày là ... kg.",
+        "a": "90"
+      },
+      {
+        "q": "Giá vé tham quan Thác Dray Nur là 50 000 đồng. Nhân dịp lễ hội được giảm giá 15%. Giá vé sau khi giảm là ... đồng.",
+        "a": "42500 (hoặc 42 500)"
+      },
+      {
+        "q": "Tìm một số biết 30% của số đó là 75. Số đó là ...",
+        "a": "250"
+      },
+      {
+        "q": "Rừng quốc gia Yok Đôn có đàn voi rừng sinh sống. Năm ngoái kiểm đếm có 80 con voi, năm nay số lượng voi tăng thêm 5%. Số voi rừng năm nay là ... con.",
+        "a": "84"
+      },
+      {
+        "q": "Một cửa hàng đặc sản Đắk Lắk bán cà phê bột giá 200 000 đồng/kg. Khách mua từ 5 kg trở lên được chiết khấu 10%. Mua 6 kg cà phê đó phải trả ... đồng.",
+        "a": "1080000 (hoặc 1 080 000)"
+      },
+      {
+        "q": "Bác nông dân gửi tiết kiệm 50 000 000 đồng với lãi suất 0,6% một tháng. Sau một tháng cả tiền gửi và tiền lãi là ... đồng.",
+        "a": "50300000"
+      },
+      {
+        "q": "Một trường học ở TP Buôn Ma Thuột có 800 học sinh. Số học sinh tham gia câu lạc bộ Cồng chiêng chiếm 15%. Có ... học sinh tham gia câu lạc bộ.",
+        "a": "120"
+      },
+      {
+        "q": "Thác Dray Nur có chiều dài mặt nước đổ xuống khoảng 250 m. Chiều cao thác bằng 12% chiều dài. Chiều cao của thác là ... m.",
+        "a": "30"
+      },
+      {
+        "q": "Một hồ nuôi cá ở Hồ Lắk dự định thu hoạch 5 tấn cá. Thực tế đã thu hoạch được 110% kế hoạch. Thực tế đã thu hoạch được ... tấn cá.",
+        "a": "5,5"
+      },
+      {
+        "q": "Tìm x, biết: 45% của x bằng 180. Giá trị của x là ...",
+        "a": "400"
+      },
+      {
+        "q": "Một gói hạt macca Đắk Lắk nặng 500 g chứa 70% chất béo và khoáng chất có lợi. Khối lượng chất có lợi trong gói hạt là ... g.",
+        "a": "350"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một hợp tác xã cà phê Buôn Ma Thuột xuất khẩu 120 tấn cà phê sang châu Âu. Tháng đầu xuất được 35% tổng số cà phê, tháng thứ hai xuất được 40% số còn lại. Hỏi sau hai tháng còn lại bao nhiêu tấn cà phê chưa xuất khẩu?",
+        "opts": [
+          "46,8 tấn",
+          "48 tấn",
+          "42 tấn",
+          "50 tấn"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một người bán một bao tiêu Đắk Lắk với giá 3 600 000 đồng thì được lãi 20% theo giá bán. Hỏi người đó lãi bao nhiêu phần trăm so với giá vốn?",
+        "opts": [
+          "25%",
+          "20%",
+          "15%",
+          "30%"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một đàn voi ở Buôn Đôn gồm cả voi trưởng thành và voi con có tất cả 25 con. Trong một đợt kiểm tra sức khỏe, số voi trưởng thành chiếm 68% cả đàn. Hỏi có bao nhiêu con voi con?",
+        "opts": [
+          "8 con",
+          "7 con",
+          "6 con",
+          "9 con"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Giá một chiếc khăn thổ cẩm dệt thủ công ở Buôn Đôn là 250 000 đồng. Cửa hàng giảm giá 10%, sau đó một tuần lại tăng giá thêm 10%. Hỏi giá chiếc khăn lúc này là bao nhiêu?",
+        "opts": [
+          "247 500 đồng",
+          "250 000 đồng",
+          "245 000 đồng",
+          "252 500 đồng"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một thửa ruộng hình chữ nhật có chiều dài 50 m, chiều rộng 30 m. Người ta tăng chiều dài thêm 20% và giảm chiều rộng đi 20%. Hỏi diện tích thửa ruộng thay đổi như thế nào?",
+        "opts": [
+          "Giảm 4%",
+          "Tăng 4%",
+          "Không đổi",
+          "Giảm 2%"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Lượng nước trong hạt cà phê tươi là 20%, trong hạt cà phê phơi khô là 10%. Hỏi phơi 450 kg hạt cà phê tươi thì thu được bao nhiêu ki-lô-gam hạt cà phê khô?",
+        "opts": [
+          "400 kg",
+          "380 kg",
+          "405 kg",
+          "420 kg"
+        ],
+        "c": 0
+      }
+    ]
+  }
+}

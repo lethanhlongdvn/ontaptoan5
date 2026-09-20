@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TUẦN 21: ĐẮK LẮK (BUÔN ĐÔN, THÁC DRAY NUR) - EduRobot.id.vn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="js/fireworks.js"></script>
+    <style>
+        :root {
+            --primary: #FF9800;
+            --primary-glow: rgba(255, 152, 0, 0.4);
+            --secondary: #00E5FF;
+            --bg: #0b1329;
+            --card-bg: #16223f;
+            --card-border: #2a3b63;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gold: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* HEADER & STATUS BAR */
+        .top-navbar {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .avatar-robot {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .score-board {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .score-box {
+            font-family: 'Bungee', cursive;
+            color: var(--gold);
+            font-size: 1.1rem;
+            text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+        }
+
+        .lives-box {
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        /* MAIN CONTAINER */
+        .main-container {
+            width: 95%;
+            max-width: 800px;
+            flex: 1;
+            padding: 15px 0 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stage-banner {
+            width: 100%;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1.5px solid var(--primary);
+            border-radius: 12px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .stage-title {
+            font-family: 'Bungee', cursive;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin: 0;
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+        }
+
+        .stage-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 4px 0 0;
+        }
+
+        /* VÒNG 1: NỐI CỘT NEON */
+        .connect-game-board {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            position: relative;
+        }
+
+        .col-cards {
+            width: 48%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card-item {
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            word-break: break-word;
+        }
+
+        .card-item:hover {
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .card-item.selected {
+            border-color: var(--primary);
+            background: #1e293b;
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .card-item.matched {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            pointer-events: none;
+            opacity: 0.6;
+            transform: scale(0.98);
+        }
+
+        .card-item.shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        /* VÒNG 2: CHẠM ĐỂ THẢ */
+        .v2-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .v2-question-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .v2-text {
+            font-size: 0.88rem;
+            line-height: 1.45;
+        }
+
+        .drop-target-box {
+            background: #0f172a;
+            border: 2px dashed #475569;
+            border-radius: 8px;
+            padding: 8px 14px;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .drop-target-box.active-wait {
+            border-color: var(--secondary);
+            background: rgba(0, 229, 255, 0.08);
+            animation: pulse-border 1.5s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: var(--secondary); }
+            50% { border-color: transparent; }
+        }
+
+        .drop-target-box.filled {
+            border-style: solid;
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            color: #fff;
+        }
+
+        .ans-pool-dock {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        .chip-ans {
+            background: #1e293b;
+            border: 1.5px solid var(--secondary);
+            color: var(--secondary);
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 229, 255, 0.2);
+        }
+
+        .chip-ans.picked {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #000;
+            box-shadow: 0 0 12px var(--primary-glow);
+            transform: scale(1.05);
+        }
+
+        .chip-ans.used {
+            display: none;
+        }
+
+        /* VÒNG 3: ĐẤU BOSS MỨC 3 */
+        .boss-arena {
+            width: 100%;
+            background: linear-gradient(180deg, #1e1b4b, #0f172a);
+            border: 2px solid #6366f1;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(129, 140, 248, 0.3);
+        }
+
+        .boss-hp-container {
+            width: 85%;
+            margin: 10px auto 15px;
+            background: #334155;
+            border-radius: 10px;
+            height: 18px;
+            overflow: hidden;
+            border: 1.5px solid #64748b;
+            position: relative;
+        }
+
+        .boss-hp-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #f59e0b);
+            transition: width 0.6s ease;
+        }
+
+        .boss-avatar {
+            font-size: 3.5rem;
+            margin: 5px 0;
+            filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.7));
+            animation: float 2.5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .mcq-options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media (min-width: 600px) {
+            .mcq-options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .btn-mcq-opt {
+            background: #1e293b;
+            border: 1.5px solid #475569;
+            color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-mcq-opt:hover, .btn-mcq-opt:active {
+            border-color: var(--secondary);
+            background: #334155;
+        }
+
+        .btn-next-step {
+            background: linear-gradient(135deg, var(--primary), #ea580c);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-family: 'Bungee', cursive;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.5);
+            transition: 0.2s;
+        }
+
+        .btn-next-step:active {
+            transform: scale(0.96);
+        }
+
+        /* OVERLAYS & MODALS */
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 19, 41, 0.97);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .modal-card {
+            background: #1e293b;
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 440px;
+            width: 92%;
+            box-shadow: 0 0 25px rgba(255, 152, 0, 0.3);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 8px 0;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-align: center;
+            border-top: 1px solid #334155;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP STATUS BAR -->
+    <header class="top-navbar">
+        <div class="user-profile">
+            <div class="avatar-robot">🤖</div>
+            <div>
+                <div id="u-name" style="font-weight:bold; color:var(--secondary); font-size:0.85rem;">Thí sinh</div>
+                <div id="u-class" style="font-size:0.7rem; color:var(--text-muted);">Lớp ...</div>
+            </div>
+        </div>
+        <div class="score-board">
+            <div class="score-box">ĐIỂM: <span id="current-score">0</span>/100</div>
+            <div class="lives-box" id="lives-display">❤️❤️❤️</div>
+        </div>
+    </header>
+
+    <!-- START SCREEN MODAL -->
+    <div id="start-overlay" class="fullscreen-overlay">
+        <div class="modal-card">
+            <h1 style="font-family:'Bungee'; color:var(--primary); font-size:1.3rem; margin:0 0 8px;">TUẦN 21: TRẠM 21</h1>
+            <h3 style="color:var(--secondary); font-size:0.95rem; margin:0 0 10px;">Đắk Lắk (Buôn Đôn, Thác Dray Nur)</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.45; margin: 0 0 12px;">
+                <b>Trọng tâm:</b> Tìm giá trị phần trăm của một số, giải toán về tỉ số phần trăm, máy tính cầm tay
+            </p>
+
+            <div style="margin:10px 0 15px; font-size:0.75rem; color:#94a3b8; background:rgba(15,23,42,0.65); padding:10px; border-radius:10px; border:1px solid #334155; text-align:left;">
+                <div style="color:var(--gold); font-weight:bold; margin-bottom:5px;">🎒 VẬT PHẨM LƯU NIỆM CHẶNG NÀY:</div>
+                <div style="margin-bottom:3px;">🥉 <b>Cấp 1 (50đ):</b> Vòng ngà voi Bản Đôn Đồng (50đ)</div>
+                <div style="margin-bottom:3px;">🥈 <b>Cấp 2 (90đ):</b> Cồng chiêng Đại ngàn Bạc (90đ)</div>
+                <div>🥇 <b>Cấp 3 (100đ):</b> Hạt cà phê Vàng Buôn Ma Thuột (100đ)</div>
+            </div>
+
+            <div id="attempt-info" style="font-size:0.75rem; color:var(--gold); margin:8px 0 15px;">Đang xác định lượt thi...</div>
+            <button class="btn-next-step" onclick="handleStartGame()" style="width:100%;">BẮT ĐẦU VƯỢT ẢI</button>
+        </div>
+    </div>
+
+    <!-- MAIN GAME AREA -->
+    <main class="main-container hidden" id="game-playground">
+        <div class="stage-banner">
+            <h2 class="stage-title" id="stage-badge-title">VÒNG 1: NỐI CỘT NEON</h2>
+            <p class="stage-desc" id="stage-desc-text">Ghép 10 cặp số và phép tính tương ứng (Mỗi cặp đúng: +5 điểm)</p>
+        </div>
+
+        <!-- STAGE 1 CONTAINER -->
+        <div id="stage-1-area" class="connect-game-board">
+            <div class="col-cards" id="col-left"></div>
+            <div class="col-cards" id="col-right"></div>
+        </div>
+
+        <!-- STAGE 2 CONTAINER -->
+        <div id="stage-2-area" class="v2-wrapper hidden">
+            <div id="v2-questions-container"></div>
+            <div class="ans-pool-dock" id="v2-pool-dock"></div>
+            <div style="text-align:center;">
+                <button class="btn-next-step" onclick="submitStage2()">HOÀN THÀNH VÒNG 2</button>
+            </div>
+        </div>
+
+        <!-- STAGE 3 CONTAINER -->
+        <div id="stage-3-area" class="boss-arena hidden">
+            <div class="boss-avatar">👾</div>
+            <h3 style="font-family:'Bungee'; color:#ef4444; margin:0;">THỦ LĨNH THỬ THÁCH MỨC 3</h3>
+            <div class="boss-hp-container">
+                <div class="boss-hp-bar" id="boss-hp"></div>
+            </div>
+            <div id="boss-q-box" style="text-align:left; background:rgba(15,23,42,0.8); padding:14px; border-radius:10px; border:1px solid #4338ca;">
+                <p id="boss-q-text" style="font-size:0.9rem; margin:0; line-height:1.5; font-weight:600;"></p>
+                <div class="mcq-options-grid" id="boss-options"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-overlay" class="fullscreen-overlay hidden">
+        <div class="modal-card">
+            <h2 style="font-family:'Bungee'; color:var(--primary); margin:0 0 8px;" id="result-title">XUẤT SẮC HOÀN THÀNH!</h2>
+            <div style="font-size:3.2rem; font-family:'Bungee'; color:var(--gold); margin:4px 0;" id="final-score">0</div>
+            
+            <div id="souvenir-box" style="margin: 10px 0 12px; padding: 10px; background: rgba(15,23,42,0.85); border: 1.5px solid var(--gold); border-radius: 12px;">
+                <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase;">🎁 VẬT PHẨM LƯU NIỆM ĐẠT ĐƯỢC:</div>
+                <div id="souvenir-badge" style="font-weight: bold; color: var(--gold); font-size: 0.88rem; margin-top: 5px;">...</div>
+            </div>
+
+            <p id="save-status-msg" style="color:var(--success); font-weight:bold; font-size:0.85rem; margin: 6px 0;">Đang lưu kết quả...</p>
+            <p id="countdown-redirect" style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">Về bản đồ sau 5s...</p>
+        </div>
+    </div>
+
+    <footer>@Học toán 5 cùng RoBot - Phát triển bởi: <b>LÊ THÀNH LONG</b></footer>
+
+    <script>
+        // ==========================================
+        // 1. CẤU HÌNH FIREBASE & THÔNG TIN HỌC SINH
+        // ==========================================
+        const firebaseConfig = { databaseURL: "https://gamhoctap-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const savedUsername = localStorage.getItem('studentUsername') || '';
+        let savedName = localStorage.getItem('studentName') || '';
+        let savedClass = localStorage.getItem('studentClass') || '5';
+        let savedSchool = localStorage.getItem('studentSchool') || '';
+        const savedRole = localStorage.getItem('userRole') || 'guest';
+        const savedStatus = localStorage.getItem('userStatus') || (savedUsername ? 'pending' : 'guest');
+
+        let isPlaying = false, score = 0, startTime = 0, lives = 3, studentAttempt = 1;
+
+        // VẬT PHẨM LƯU NIỆM
+        const SOUVENIRS = {
+        "cap1": "Vòng ngà voi Bản Đôn Đồng (50đ)",
+        "cap2": "Cồng chiêng Đại ngàn Bạc (90đ)",
+        "cap3": "Hạt cà phê Vàng Buôn Ma Thuột (100đ)"
+};
+
+        // THÔNG TIN LỊCH MỞ
+        const STATION_CONFIG = {
+            week: 21,
+            openTime: "2027-01-29T14:00:00",
+            openStr: "14:00 ngày 29/01/2027"
+        };
+
+        // ==========================================
+        // 2. NGÂN HÀNG ĐỀ 48 CÂU (XOAY TUA 3 LƯỢT)
+        // ==========================================
+        const BANK_TUAN_21 = {
+            "V1": [
+                        {
+                                    "q": "Tìm 20% của số 150",
+                                    "a": "30 (150 × 20 : 100 = 30)"
+                        },
+                        {
+                                    "q": "Tìm 10% của số 450",
+                                    "a": "45"
+                        },
+                        {
+                                    "q": "Muốn tìm giá trị phần trăm của một số, ta lấy số đó nhân với số phần trăm rồi làm gì?",
+                                    "a": "Chia cho 100"
+                        },
+                        {
+                                    "q": "Tìm một số biết 25% của nó bằng 50",
+                                    "a": "200 (50 : 25 × 100 = 200)"
+                        },
+                        {
+                                    "q": "Địa danh Buôn Đôn ở Đắk Lắk nổi tiếng khắp cả nước với nghề truyền thống gì?",
+                                    "a": "Săn bắt và thuần dưỡng voi rừng"
+                        },
+                        {
+                                    "q": "Thành phố được mệnh danh là Thủ phủ Cà phê của Việt Nam là thành phố nào?",
+                                    "a": "Thành phố Buôn Ma Thuột"
+                        },
+                        {
+                                    "q": "Cặp thác nước đôi hùng vĩ và thơ mộng bậc nhất trên sông Sêrêpôk là gì?",
+                                    "a": "Thác Dray Nur và Thác Dray Sáp"
+                        },
+                        {
+                                    "q": "Không gian văn hóa nào của đồng bào Tây Nguyên được UNESCO công nhận là Kiệt tác di sản thế giới?",
+                                    "a": "Không gian văn hóa Cồng chiêng Tây Nguyên"
+                        },
+                        {
+                                    "q": "Tính nhẩm: 50% của 240",
+                                    "a": "120"
+                        },
+                        {
+                                    "q": "Tính nhẩm: 75% của 80",
+                                    "a": "60"
+                        },
+                        {
+                                    "q": "Tìm 35% của số 200",
+                                    "a": "70"
+                        },
+                        {
+                                    "q": "Tìm 12% của số 500",
+                                    "a": "60"
+                        },
+                        {
+                                    "q": "Tìm một số biết 40% của nó bằng 80",
+                                    "a": "200"
+                        },
+                        {
+                                    "q": "Dòng sông chảy ngược kỳ vĩ mang dòng nước đỏ qua Đắk Lắk là sông gì?",
+                                    "a": "Sông Sêrêpôk"
+                        },
+                        {
+                                    "q": "Hồ nước ngọt tự nhiên lớn thứ hai Việt Nam (sau Hồ Ba Bể) nằm tại Đắk Lắk là hồ gì?",
+                                    "a": "Hồ Lắk"
+                        },
+                        {
+                                    "q": "Cây cầu treo bằng tre nứa dài nhất vắt qua rặng si cổ thụ ở Buôn Đôn là gì?",
+                                    "a": "Cầu treo Buôn Đôn"
+                        },
+                        {
+                                    "q": "Vua voi huyền thoại của Buôn Đôn từng bắt và thuần dưỡng gần 300 con voi là ai?",
+                                    "a": "Vua voi Khun Yu Nốp"
+                        },
+                        {
+                                    "q": "Tính: 15% của 300 kg",
+                                    "a": "45 kg"
+                        },
+                        {
+                                    "q": "Lãi suất tiết kiệm 0,5% một tháng. Gửi 1 000 000 đồng sau 1 tháng được lãi bao nhiêu?",
+                                    "a": "5 000 đồng"
+                        },
+                        {
+                                    "q": "Nút bấm nào trên máy tính cầm tay dùng để xóa toàn bộ phép tính?",
+                                    "a": "Nút AC (hoặc ON/C)"
+                        },
+                        {
+                                    "q": "Tìm 2,5% của số 400",
+                                    "a": "10"
+                        },
+                        {
+                                    "q": "Tìm 120% của số 50",
+                                    "a": "60"
+                        },
+                        {
+                                    "q": "Một lớp có 40 học sinh, 60% là nữ. Số học sinh nam là bao nhiêu?",
+                                    "a": "16 học sinh (40% của 40 = 16)"
+                        },
+                        {
+                                    "q": "Đàn voi thuần dưỡng ở Buôn Đôn hiện nay được bảo tồn theo mô hình du lịch gì?",
+                                    "a": "Du lịch thân thiện với voi (không cưỡi voi)"
+                        },
+                        {
+                                    "q": "Lễ hội văn hóa lớn định kỳ 2 năm một lần tổ chức tại Buôn Ma Thuột là gì?",
+                                    "a": "Lễ hội Cà phê Buôn Ma Thuột"
+                        },
+                        {
+                                    "q": "Bảo tàng thế giới chuyên đề cà phê độc đáo hàng đầu thế giới nằm tại TP nào?",
+                                    "a": "Buôn Ma Thuột (Đắk Lắk)"
+                        },
+                        {
+                                    "q": "Nhà dài truyền thống của người Ê Đê ở Đắk Lắk dài tới hàng chục mét theo chế độ gì?",
+                                    "a": "Chế độ mẫu hệ"
+                        },
+                        {
+                                    "q": "Tìm một số biết 10% của nó bằng 25",
+                                    "a": "250"
+                        },
+                        {
+                                    "q": "Tính nhanh: 30% của 120",
+                                    "a": "36"
+                        },
+                        {
+                                    "q": "Nút % trên máy tính cầm tay có chức năng gì?",
+                                    "a": "Tính tỉ số phần trăm"
+                        }
+            ],
+            "V2": [
+                        {
+                                    "q": "Một vườn cà phê ở Buôn Ma Thuột vụ này thu hoạch được 8 tấn cà phê quả tươi. Sau khi phơi và sơ chế thì lượng nhân thu được chiếm 22% khối lượng quả tươi. Khối lượng cà phê nhân thu được là ... kg.",
+                                    "a": "1760"
+                        },
+                        {
+                                    "q": "Một chú voi ở Buôn Đôn mỗi ngày ăn hết khoảng 150 kg thức ăn xanh. Trong đó cỏ và lá cây chiếm 60%. Khối lượng cỏ và lá cây chú voi ăn mỗi ngày là ... kg.",
+                                    "a": "90"
+                        },
+                        {
+                                    "q": "Giá vé tham quan Thác Dray Nur là 50 000 đồng. Nhân dịp lễ hội được giảm giá 15%. Giá vé sau khi giảm là ... đồng.",
+                                    "a": "42500 (hoặc 42 500)"
+                        },
+                        {
+                                    "q": "Tìm một số biết 30% của số đó là 75. Số đó là ...",
+                                    "a": "250"
+                        },
+                        {
+                                    "q": "Rừng quốc gia Yok Đôn có đàn voi rừng sinh sống. Năm ngoái kiểm đếm có 80 con voi, năm nay số lượng voi tăng thêm 5%. Số voi rừng năm nay là ... con.",
+                                    "a": "84"
+                        },
+                        {
+                                    "q": "Một cửa hàng đặc sản Đắk Lắk bán cà phê bột giá 200 000 đồng/kg. Khách mua từ 5 kg trở lên được chiết khấu 10%. Mua 6 kg cà phê đó phải trả ... đồng.",
+                                    "a": "1080000 (hoặc 1 080 000)"
+                        },
+                        {
+                                    "q": "Bác nông dân gửi tiết kiệm 50 000 000 đồng với lãi suất 0,6% một tháng. Sau một tháng cả tiền gửi và tiền lãi là ... đồng.",
+                                    "a": "50300000"
+                        },
+                        {
+                                    "q": "Một trường học ở TP Buôn Ma Thuột có 800 học sinh. Số học sinh tham gia câu lạc bộ Cồng chiêng chiếm 15%. Có ... học sinh tham gia câu lạc bộ.",
+                                    "a": "120"
+                        },
+                        {
+                                    "q": "Thác Dray Nur có chiều dài mặt nước đổ xuống khoảng 250 m. Chiều cao thác bằng 12% chiều dài. Chiều cao của thác là ... m.",
+                                    "a": "30"
+                        },
+                        {
+                                    "q": "Một hồ nuôi cá ở Hồ Lắk dự định thu hoạch 5 tấn cá. Thực tế đã thu hoạch được 110% kế hoạch. Thực tế đã thu hoạch được ... tấn cá.",
+                                    "a": "5,5"
+                        },
+                        {
+                                    "q": "Tìm x, biết: 45% của x bằng 180. Giá trị của x là ...",
+                                    "a": "400"
+                        },
+                        {
+                                    "q": "Một gói hạt macca Đắk Lắk nặng 500 g chứa 70% chất béo và khoáng chất có lợi. Khối lượng chất có lợi trong gói hạt là ... g.",
+                                    "a": "350"
+                        }
+            ],
+            "V3": [
+                        {
+                                    "q": "Một hợp tác xã cà phê Buôn Ma Thuột xuất khẩu 120 tấn cà phê sang châu Âu. Tháng đầu xuất được 35% tổng số cà phê, tháng thứ hai xuất được 40% số còn lại. Hỏi sau hai tháng còn lại bao nhiêu tấn cà phê chưa xuất khẩu?",
+                                    "opts": [
+                                                "46,8 tấn",
+                                                "48 tấn",
+                                                "42 tấn",
+                                                "50 tấn"
+                                    ],
+                                    "c": 0
+                        },
+                        {
+                                    "q": "Một người bán một bao tiêu Đắk Lắk với giá 3 600 000 đồng thì được lãi 20% theo giá bán. Hỏi người đó lãi bao nhiêu phần trăm so với giá vốn?",
+                                    "opts": [
+                                                "25%",
+                                                "20%",
+                                                "15%",
+                                                "30%"
+                                    ],
+                                    "c": 0
+                        },
+                        {
+                                    "q": "Một đàn voi ở Buôn Đôn gồm cả voi trưởng thành và voi con có tất cả 25 con. Trong một đợt kiểm tra sức khỏe, số voi trưởng thành chiếm 68% cả đàn. Hỏi có bao nhiêu con voi con?",
+                                    "opts": [
+                                                "8 con",
+                                                "7 con",
+                                                "6 con",
+                                                "9 con"
+                                    ],
+                                    "c": 0
+                        },
+                        {
+                                    "q": "Giá một chiếc khăn thổ cẩm dệt thủ công ở Buôn Đôn là 250 000 đồng. Cửa hàng giảm giá 10%, sau đó một tuần lại tăng giá thêm 10%. Hỏi giá chiếc khăn lúc này là bao nhiêu?",
+                                    "opts": [
+                                                "247 500 đồng",
+                                                "250 000 đồng",
+                                                "245 000 đồng",
+                                                "252 500 đồng"
+                                    ],
+                                    "c": 0
+                        },
+                        {
+                                    "q": "Một thửa ruộng hình chữ nhật có chiều dài 50 m, chiều rộng 30 m. Người ta tăng chiều dài thêm 20% và giảm chiều rộng đi 20%. Hỏi diện tích thửa ruộng thay đổi như thế nào?",
+                                    "opts": [
+                                                "Giảm 4%",
+                                                "Tăng 4%",
+                                                "Không đổi",
+                                                "Giảm 2%"
+                                    ],
+                                    "c": 0
+                        },
+                        {
+                                    "q": "Lượng nước trong hạt cà phê tươi là 20%, trong hạt cà phê phơi khô là 10%. Hỏi phơi 450 kg hạt cà phê tươi thì thu được bao nhiêu ki-lô-gam hạt cà phê khô?",
+                                    "opts": [
+                                                "400 kg",
+                                                "380 kg",
+                                                "405 kg",
+                                                "420 kg"
+                                    ],
+                                    "c": 0
+                        }
+            ]
+};
+
+        // ==========================================
+        // 3. KHỞI TẠO & KIỂM TRA QUYỀN TRUY CẬP
+        // ==========================================
+        window.onload = () => {
+            // 1. Kiểm tra giới hạn quyền đối với Trạm > 8 (Khách & Chờ duyệt chỉ làm 1-8)
+            const isApprovedTeacherOrAdmin = (savedRole === 'teacher' || savedRole === 'admin') && (savedStatus === 'approved');
+
+            if (21 > 8) {
+                if (!savedUsername) {
+                    alert("🔒 Trạm 21 thuộc hệ thống nâng cao dành riêng cho tài khoản chính thức!\n\nKhách được tự do luyện tập từ Trạm 1 đến 8.\nVui lòng Đăng nhập hoặc Đăng ký tài khoản để tiếp tục.");
+                    window.location.href = "index.html";
+                    return;
+                }
+                if (savedStatus !== 'approved') {
+                    alert("⏳ Trạm 21 yêu cầu tài khoản đã được phê duyệt!\n\nTài khoản @" + savedUsername + " hiện đang ở trạng thái Chờ phê duyệt.\nVui lòng liên hệ Thầy/Cô quản trị viên để được duyệt.");
+                    window.location.href = "index.html";
+                    return;
+                }
+            }
+
+            // 2. Kiểm tra thời gian mở trạm theo lịch (Giáo viên/Admin duyệt được vào trước)
+            if (!isApprovedTeacherOrAdmin) {
+                const now = new Date();
+                const openDate = new Date(STATION_CONFIG.openTime);
+                if (now < openDate) {
+                    alert("⏳ Trạm 21 (Đắk Lắk (Buôn Đôn, Thác Dray Nur)) chưa tới giờ mở!\n\nThời gian mở chính thức: " + STATION_CONFIG.openStr + ".\nVui lòng quay lại sau!");
+                    window.location.href = "index.html";
+                    return;
+                }
+            }
+
+            // 3. Thiết lập thông tin người chơi
+            if (!savedName) {
+                savedName = "Học sinh Khách";
+            }
+            document.getElementById('u-name').innerText = savedName;
+            document.getElementById('u-class').innerText = `Lớp ${savedClass || '5'}`;
+
+            // Kiểm tra attempt từ Firebase
+            const ref = db.ref('scores/Tuan_21');
+            ref.once('value', (snap) => {
+                const data = snap.val();
+                if (data) {
+                    for (let id in data) {
+                        const rec = data[id];
+                        const matchUser = savedUsername && rec.username && (rec.username === savedUsername);
+                        const matchName = (rec.fullName || "").toLowerCase() === savedName.toLowerCase() && rec.className === savedClass;
+                        if (matchUser || matchName) {
+                            studentAttempt++;
+                        }
+                    }
+                }
+                const cycle = (studentAttempt - 1) % 3 + 1;
+                document.getElementById('attempt-info').innerText = `Lượt thám hiểm số: ${studentAttempt} (Bộ đề vòng ${cycle})`;
+            });
+        };
+
+        function handleStartGame() {
+            isPlaying = true;
+            startTime = Date.now();
+            document.getElementById('start-overlay').classList.add('hidden');
+            document.getElementById('game-playground').classList.remove('hidden');
+            initStage1();
+        }
+
+        // ==========================================
+        // 4. BỘ TỔNG HỢP ÂM THANH (WEB AUDIO API)
+        // ==========================================
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playAudioTone(isSuccess) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (isSuccess) {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(110, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {}
+        }
+
+        // ==========================================
+        // 5. VÒNG 1: NỐI CỘT NEON (10 CẶP X 5Đ = 50Đ)
+        // ==========================================
+        let selectedLeft = null;
+        let matchedCountV1 = 0;
+
+        function initStage1() {
+            document.getElementById('stage-badge-title').innerText = "VÒNG 1: NỐI CỘT NEON";
+            document.getElementById('stage-desc-text').innerText = "Ghép 10 cặp số và phép tính tương ứng (Mỗi cặp đúng: +5 điểm)";
+
+            const cycle = (studentAttempt - 1) % 3;
+            const currentPool = BANK_TUAN_21.V1.slice(cycle * 10, cycle * 10 + 10);
+
+            let leftItems = currentPool.map((item, idx) => ({ text: item.q, pairId: idx }));
+            let rightItems = currentPool.map((item, idx) => ({ text: item.a, pairId: idx }));
+
+            leftItems = leftItems.sort(() => Math.random() - 0.5);
+            rightItems = rightItems.sort(() => Math.random() - 0.5);
+
+            const colL = document.getElementById('col-left');
+            const colR = document.getElementById('col-right');
+            colL.innerHTML = '';
+            colR.innerHTML = '';
+
+            leftItems.forEach(i => {
+                colL.innerHTML += `<div class="card-item" id="L-${i.pairId}" onclick="handleSelectLeft(${i.pairId})">${i.text}</div>`;
+            });
+            rightItems.forEach(i => {
+                colR.innerHTML += `<div class="card-item" id="R-${i.pairId}" onclick="handleSelectRight(${i.pairId})">${i.text}</div>`;
+            });
+        }
+
+        function handleSelectLeft(pairId) {
+            document.querySelectorAll('#col-left .card-item').forEach(el => el.classList.remove('selected'));
+            const el = document.getElementById(`L-${pairId}`);
+            if (el.classList.contains('matched')) return;
+            el.classList.add('selected');
+            selectedLeft = pairId;
+        }
+
+        function handleSelectRight(pairId) {
+            if (selectedLeft === null) return;
+            const targetLeft = document.getElementById(`L-${selectedLeft}`);
+            const targetRight = document.getElementById(`R-${pairId}`);
+
+            if (selectedLeft === pairId) {
+                // ĐÚNG
+                playAudioTone(true);
+                targetLeft.classList.remove('selected');
+                targetLeft.classList.add('matched');
+                targetRight.classList.add('matched');
+                score += 5;
+                updateScoreUI();
+                matchedCountV1++;
+                selectedLeft = null;
+
+                if (matchedCountV1 === 10) {
+                    setTimeout(initStage2, 500);
+                }
+            } else {
+                // SAI
+                playAudioTone(false);
+                targetLeft.classList.add('shake');
+                targetRight.classList.add('shake');
+                lives--;
+                updateLivesUI();
+
+                setTimeout(() => {
+                    targetLeft.classList.remove('shake', 'selected');
+                    targetRight.classList.remove('shake');
+                    selectedLeft = null;
+                    if (lives <= 0) {
+                        alert("⚠️ Em đã hết 3 mạng! Chuyển thẳng sang Vòng 2.");
+                        initStage2();
+                    }
+                }, 450);
+            }
+        }
+
+        // ==========================================
+        // 6. VÒNG 2: CHẠM ĐỂ THẢ (4 BÀI X 10Đ = 40Đ)
+        // ==========================================
+        let activeSelectionChip = null;
+        let currentV2Questions = [];
+
+        function initStage2() {
+            document.getElementById('stage-1-area').classList.add('hidden');
+            document.getElementById('stage-2-area').classList.remove('hidden');
+            document.getElementById('stage-badge-title').innerText = "VÒNG 2: BẢNG SỐ LIỆU THÁM HIỂM";
+            document.getElementById('stage-desc-text').innerText = "Chọn đáp án ở dưới rồi chạm vào ô điền khuyết (Mỗi câu đúng: +10 điểm)";
+
+            const cycle = (studentAttempt - 1) % 3;
+            currentV2Questions = BANK_TUAN_21.V2.slice(cycle * 4, cycle * 4 + 4);
+
+            const qBox = document.getElementById('v2-questions-container');
+            qBox.innerHTML = '';
+            currentV2Questions.forEach((item, idx) => {
+                qBox.innerHTML += `
+                    <div class="v2-question-card">
+                        <div class="v2-text"><b>Bài ${idx + 1}:</b> ${item.q}</div>
+                        <div class="drop-target-box" id="drop-box-${idx}" onclick="handleTargetBoxClick(${idx})">Chạm vào đây để điền đáp án</div>
+                    </div>
+                `;
+            });
+
+            const poolDock = document.getElementById('v2-pool-dock');
+            let poolAnswers = currentV2Questions.map((q, idx) => ({ ans: q.a, id: idx })).sort(() => Math.random() - 0.5);
+            poolDock.innerHTML = '';
+            poolAnswers.forEach(p => {
+                poolDock.innerHTML += `<div class="chip-ans" id="chip-${p.id}" onclick="handleSelectChip(${p.id}, '${p.ans}')">${p.ans}</div>`;
+            });
+        }
+
+        function handleSelectChip(id, val) {
+            document.querySelectorAll('.chip-ans').forEach(c => c.classList.remove('picked'));
+            const el = document.getElementById(`chip-${id}`);
+            el.classList.add('picked');
+            activeSelectionChip = { id: id, val: val, el: el };
+            document.querySelectorAll('.drop-target-box:not(.filled)').forEach(b => b.classList.add('active-wait'));
+        }
+
+        function handleTargetBoxClick(boxIdx) {
+            if (!activeSelectionChip) return;
+            const targetBox = document.getElementById(`drop-box-${boxIdx}`);
+            targetBox.innerText = activeSelectionChip.val;
+            targetBox.classList.add('filled');
+            targetBox.classList.remove('active-wait');
+            targetBox.dataset.filledVal = activeSelectionChip.val;
+
+            activeSelectionChip.el.classList.add('used');
+            activeSelectionChip = null;
+            document.querySelectorAll('.drop-target-box').forEach(b => b.classList.remove('active-wait'));
+        }
+
+        function submitStage2() {
+            let correctCount = 0;
+            currentV2Questions.forEach((q, idx) => {
+                const filled = document.getElementById(`drop-box-${idx}`).dataset.filledVal;
+                if (filled && filled.trim().toLowerCase() === q.a.trim().toLowerCase()) {
+                    correctCount++;
+                }
+            });
+            score += correctCount * 10;
+            updateScoreUI();
+            playAudioTone(correctCount > 0);
+            initStage3();
+        }
+
+        // ==========================================
+        // 7. VÒNG 3: ĐẤU BOSS PHÂN LOẠI (2 CÂU X 5Đ = 10Đ)
+        // ==========================================
+        let bossQList = [];
+        let bossIdx = 0;
+
+        function initStage3() {
+            document.getElementById('stage-2-area').classList.add('hidden');
+            document.getElementById('stage-3-area').classList.remove('hidden');
+            document.getElementById('stage-badge-title').innerText = "VÒNG 3: THỬ THÁCH MỨC 3 (ĐẤU BOSS)";
+            document.getElementById('stage-desc-text').innerText = "Vận dụng tư duy logic để hạ gục Boss (Mỗi câu đúng: +5 điểm)";
+
+            const cycle = (studentAttempt - 1) % 3;
+            bossQList = BANK_TUAN_21.V3.slice(cycle * 2, cycle * 2 + 2);
+            bossIdx = 0;
+            renderBossQuestion();
+        }
+
+        function renderBossQuestion() {
+            if (bossIdx >= bossQList.length) {
+                finishExam();
+                return;
+            }
+            const q = bossQList[bossIdx];
+            document.getElementById('boss-q-text').innerText = `Câu ${bossIdx + 1}: ${q.q}`;
+            const optBox = document.getElementById('boss-options');
+            optBox.innerHTML = '';
+            q.opts.forEach((opt, idx) => {
+                optBox.innerHTML += `<button class="btn-mcq-opt" onclick="checkBossAnswer(${idx})">${String.fromCharCode(65 + idx)}. ${opt}</button>`;
+            });
+        }
+
+        function checkBossAnswer(optIdx) {
+            const q = bossQList[bossIdx];
+            if (optIdx === q.c) {
+                playAudioTone(true);
+                score += 5;
+                updateScoreUI();
+                const hpBar = document.getElementById('boss-hp');
+                hpBar.style.width = (bossIdx === 0 ? "50%" : "0%");
+            } else {
+                playAudioTone(false);
+            }
+            bossIdx++;
+            setTimeout(renderBossQuestion, 700);
+        }
+
+        // ==========================================
+        // 8. CẬP NHẬT GIAO DIỆN & LƯU ĐIỂM FIREBASE
+        // ==========================================
+        function updateScoreUI() {
+            document.getElementById('current-score').innerText = score;
+        }
+
+        function updateLivesUI() {
+            let hearts = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, 3 - lives));
+            document.getElementById('lives-display').innerText = hearts;
+        }
+
+        function finishExam() {
+            isPlaying = false;
+            document.getElementById('game-playground').classList.add('hidden');
+            document.getElementById('result-overlay').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+
+            // Hiển thị huy hiệu vật phẩm lưu niệm theo 3 cấp
+            let souvenirText = "";
+            if (score >= 100) {
+                souvenirText = "🥇 " + SOUVENIRS.cap3;
+            } else if (score >= 90) {
+                souvenirText = "🥈 " + SOUVENIRS.cap2;
+            } else if (score >= 50) {
+                souvenirText = "🥉 " + SOUVENIRS.cap1;
+            } else {
+                souvenirText = "🎯 Đạt từ 50đ để nhận " + SOUVENIRS.cap1 + "!";
+            }
+            document.getElementById('souvenir-badge').innerText = souvenirText;
+
+            let countdownSeconds = (score >= 90 ? 10 : 5);
+            if (score >= 90 && typeof startFireworks === 'function') {
+                startFireworks();
+            }
+
+            const duration = Math.floor((Date.now() - startTime) / 1000);
+            const ref = db.ref('scores/Tuan_21');
+
+            ref.push({
+                username: savedUsername,
+                fullName: savedName,
+                className: savedClass,
+                schoolName: savedSchool || '---',
+                score: score,
+                duration: duration,
+                attempt: studentAttempt,
+                role: savedRole,
+                status: savedStatus,
+                date: new Date().toLocaleString('vi-VN'),
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }, () => {
+                document.getElementById('save-status-msg').innerText = `✅ Đã lưu kết quả lượt thi ${studentAttempt}!`;
+                const itv = setInterval(() => {
+                    countdownSeconds--;
+                    document.getElementById('countdown-redirect').innerText = `Về trang chủ bản đồ sau ${countdownSeconds}s...`;
+                    if (countdownSeconds <= 0) {
+                        clearInterval(itv);
+                        window.location.href = "index.html";
+                    }
+                }, 1000);
+            });
+        }
+    </script>
+</body>
+
+</html>

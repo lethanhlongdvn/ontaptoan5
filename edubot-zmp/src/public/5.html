@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TUẦN 5: RUỘNG BẬC THANG MÙ CANG CHẢI (YÊN BÁI) - EduRobot.id.vn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="js/fireworks.js"></script>
+    <style>
+        :root {
+            --primary: #FF9800;
+            --primary-glow: rgba(255, 152, 0, 0.4);
+            --secondary: #00E5FF;
+            --bg: #0b1329;
+            --card-bg: #16223f;
+            --card-border: #2a3b63;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gold: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* HEADER & STATUS BAR */
+        .top-navbar {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--primary);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .avatar-robot {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .score-board {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .score-box {
+            font-family: 'Bungee', cursive;
+            color: var(--gold);
+            font-size: 1.1rem;
+            text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+        }
+
+        .lives-box {
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        /* MAIN CONTAINER */
+        .main-container {
+            width: 95%;
+            max-width: 800px;
+            flex: 1;
+            padding: 15px 0 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stage-banner {
+            width: 100%;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1.5px solid var(--primary);
+            border-radius: 12px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .stage-title {
+            font-family: 'Bungee', cursive;
+            color: var(--secondary);
+            font-size: 1.1rem;
+            margin: 0;
+            text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+        }
+
+        .stage-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 4px 0 0;
+        }
+
+        /* VÒNG 1: NỐI CỘT NEON */
+        .connect-game-board {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            position: relative;
+        }
+
+        .col-cards {
+            width: 48%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card-item {
+            background: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            word-break: break-word;
+        }
+
+        .card-item:hover {
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .card-item.selected {
+            border-color: var(--primary);
+            background: #1e293b;
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .card-item.matched {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            pointer-events: none;
+            opacity: 0.6;
+            transform: scale(0.98);
+        }
+
+        .card-item.shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: var(--danger);
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        /* VÒNG 2: CHẠM ĐỂ THẢ */
+        .v2-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .v2-question-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .v2-text {
+            font-size: 0.88rem;
+            line-height: 1.45;
+        }
+
+        .drop-target-box {
+            background: #0f172a;
+            border: 2px dashed #475569;
+            border-radius: 8px;
+            padding: 8px 14px;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .drop-target-box.active-wait {
+            border-color: var(--secondary);
+            background: rgba(0, 229, 255, 0.08);
+            animation: pulse-border 1.5s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { border-color: var(--secondary); }
+            50% { border-color: transparent; }
+        }
+
+        .drop-target-box.filled {
+            border-style: solid;
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.15);
+            color: #fff;
+        }
+
+        .ans-pool-dock {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        .chip-ans {
+            background: #1e293b;
+            border: 1.5px solid var(--secondary);
+            color: var(--secondary);
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 229, 255, 0.2);
+        }
+
+        .chip-ans.picked {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #000;
+            box-shadow: 0 0 12px var(--primary-glow);
+            transform: scale(1.05);
+        }
+
+        .chip-ans.used {
+            display: none;
+        }
+
+        /* VÒNG 3: ĐẤU BOSS MỨC 3 */
+        .boss-arena {
+            width: 100%;
+            background: linear-gradient(180deg, #1e1b4b, #0f172a);
+            border: 2px solid #6366f1;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(129, 140, 248, 0.3);
+        }
+
+        .boss-hp-container {
+            width: 85%;
+            margin: 10px auto 15px;
+            background: #334155;
+            border-radius: 10px;
+            height: 18px;
+            overflow: hidden;
+            border: 1.5px solid #64748b;
+            position: relative;
+        }
+
+        .boss-hp-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444, #f59e0b);
+            transition: width 0.6s ease;
+        }
+
+        .boss-avatar {
+            font-size: 3.5rem;
+            margin: 5px 0;
+            filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.7));
+            animation: float 2.5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .mcq-options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        @media (min-width: 600px) {
+            .mcq-options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .btn-mcq-opt {
+            background: #1e293b;
+            border: 1.5px solid #475569;
+            color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-mcq-opt:hover, .btn-mcq-opt:active {
+            border-color: var(--secondary);
+            background: #334155;
+        }
+
+        .btn-next-step {
+            background: linear-gradient(135deg, var(--primary), #ea580c);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-family: 'Bungee', cursive;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.5);
+            transition: 0.2s;
+        }
+
+        .btn-next-step:active {
+            transform: scale(0.96);
+        }
+
+        /* OVERLAYS & MODALS */
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 19, 41, 0.97);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .modal-card {
+            background: #1e293b;
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 440px;
+            width: 92%;
+            box-shadow: 0 0 25px rgba(255, 152, 0, 0.3);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 8px 0;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-align: center;
+            border-top: 1px solid #334155;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP STATUS BAR -->
+    <header class="top-navbar">
+        <div class="user-profile">
+            <div class="avatar-robot">🤖</div>
+            <div>
+                <div id="u-name" style="font-weight:bold; color:var(--secondary); font-size:0.85rem;">Thí sinh</div>
+                <div id="u-class" style="font-size:0.7rem; color:var(--text-muted);">Lớp ...</div>
+            </div>
+        </div>
+        <div class="score-board">
+            <div class="score-box">ĐIỂM: <span id="current-score">0</span>/100</div>
+            <div class="lives-box" id="lives-display">❤️❤️❤️</div>
+        </div>
+    </header>
+
+    <!-- START SCREEN MODAL -->
+    <div id="start-overlay" class="fullscreen-overlay">
+        <div class="modal-card">
+            <h1 style="font-family:'Bungee'; color:var(--primary); font-size:1.3rem; margin:0 0 8px;">TUẦN 5: TRẠM 5</h1>
+            <h3 style="color:var(--secondary); font-size:0.95rem; margin:0 0 10px;">Ruộng bậc thang Mù Cang Chải (Yên Bái)</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.45; margin: 0 0 12px;">
+                <b>Trọng tâm:</b> Khái niệm số thập phân (tiếp), So sánh các số thập phân, Viết số đo đại lượng dưới dạng STP
+            </p>
+
+            <div style="margin:10px 0 15px; font-size:0.75rem; color:#94a3b8; background:rgba(15,23,42,0.65); padding:10px; border-radius:10px; border:1px solid #334155; text-align:left;">
+                <div style="color:var(--gold); font-weight:bold; margin-bottom:5px;">🎒 VẬT PHẨM LƯU NIỆM CHẶNG NÀY:</div>
+                <div style="margin-bottom:3px;">🥉 <b>Cấp 1 (50đ):</b> Bông lúa nếp nương Đồng Vàng (50đ)</div>
+                <div style="margin-bottom:3px;">🥈 <b>Cấp 2 (90đ):</b> Liềm gặt Mùa Vàng Bạc Ánh (90đ)</div>
+                <div>🥇 <b>Cấp 3 (100đ):</b> Vương miện Sóng Vàng Mù Cang Chải Vàng (100đ)</div>
+            </div>
+
+            <div id="attempt-info" style="font-size:0.75rem; color:var(--gold); margin:8px 0 15px;">Đang xác định lượt thi...</div>
+            <button class="btn-next-step" onclick="handleStartGame()" style="width:100%;">BẮT ĐẦU VƯỢT ẢI</button>
+        </div>
+    </div>
+
+    <!-- MAIN GAME AREA -->
+    <main class="main-container hidden" id="game-playground">
+        <div class="stage-banner">
+            <h2 class="stage-title" id="stage-badge-title">VÒNG 1: NỐI CỘT NEON</h2>
+            <p class="stage-desc" id="stage-desc-text">Ghép 10 cặp số và phép tính tương ứng (Mỗi cặp đúng: +5 điểm)</p>
+        </div>
+
+        <!-- STAGE 1 CONTAINER -->
+        <div id="stage-1-area" class="connect-game-board">
+            <div class="col-cards" id="col-left"></div>
+            <div class="col-cards" id="col-right"></div>
+        </div>
+
+        <!-- STAGE 2 CONTAINER -->
+        <div id="stage-2-area" class="v2-wrapper hidden">
+            <div id="v2-questions-container"></div>
+            <div class="ans-pool-dock" id="v2-pool-dock"></div>
+            <div style="text-align:center;">
+                <button class="btn-next-step" onclick="submitStage2()">HOÀN THÀNH VÒNG 2</button>
+            </div>
+        </div>
+
+        <!-- STAGE 3 CONTAINER -->
+        <div id="stage-3-area" class="boss-arena hidden">
+            <div class="boss-avatar">👾</div>
+            <h3 style="font-family:'Bungee'; color:#ef4444; margin:0;">THỦ LĨNH THỬ THÁCH MỨC 3</h3>
+            <div class="boss-hp-container">
+                <div class="boss-hp-bar" id="boss-hp"></div>
+            </div>
+            <div id="boss-q-box" style="text-align:left; background:rgba(15,23,42,0.8); padding:14px; border-radius:10px; border:1px solid #4338ca;">
+                <p id="boss-q-text" style="font-size:0.9rem; margin:0; line-height:1.5; font-weight:600;"></p>
+                <div class="mcq-options-grid" id="boss-options"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-overlay" class="fullscreen-overlay hidden">
+        <div class="modal-card">
+            <h2 style="font-family:'Bungee'; color:var(--primary); margin:0 0 8px;" id="result-title">XUẤT SẮC HOÀN THÀNH!</h2>
+            <div style="font-size:3.2rem; font-family:'Bungee'; color:var(--gold); margin:4px 0;" id="final-score">0</div>
+            
+            <div id="souvenir-box" style="margin: 10px 0 12px; padding: 10px; background: rgba(15,23,42,0.85); border: 1.5px solid var(--gold); border-radius: 12px;">
+                <div style="font-size: 0.72rem; color: #94a3b8; text-transform: uppercase;">🎁 VẬT PHẨM LƯU NIỆM ĐẠT ĐƯỢC:</div>
+                <div id="souvenir-badge" style="font-weight: bold; color: var(--gold); font-size: 0.88rem; margin-top: 5px;">...</div>
+            </div>
+
+            <p id="save-status-msg" style="color:var(--success); font-weight:bold; font-size:0.85rem; margin: 6px 0;">Đang lưu kết quả...</p>
+            <p id="countdown-redirect" style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">Về bản đồ sau 5s...</p>
+        </div>
+    </div>
+
+    <footer>@Học toán 5 cùng RoBot - Phát triển bởi: <b>LÊ THÀNH LONG</b></footer>
+
+    <script>
+        // ==========================================
+        // 1. CẤU HÌNH FIREBASE & THÔNG TIN HỌC SINH
+        // ==========================================
+        const firebaseConfig = { databaseURL: "https://gamhoctap-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const savedUsername = localStorage.getItem('studentUsername') || '';
+        let savedName = localStorage.getItem('studentName') || '';
+        let savedClass = localStorage.getItem('studentClass') || '5';
+        let savedSchool = localStorage.getItem('studentSchool') || '';
+        const savedRole = localStorage.getItem('userRole') || 'guest';
+        const savedStatus = localStorage.getItem('userStatus') || (savedUsername ? 'pending' : 'guest');
+
+        let isPlaying = false, score = 0, startTime = 0, lives = 3, studentAttempt = 1;
+
+        // VẬT PHẨM LƯU NIỆM
+        const SOUVENIRS = {
+        "cap1": "Bông lúa nếp nương Đồng Vàng (50đ)",
+        "cap2": "Liềm gặt Mùa Vàng Bạc Ánh (90đ)",
+        "cap3": "Vương miện Sóng Vàng Mù Cang Chải Vàng (100đ)"
+};
+
+        // THÔNG TIN LỊCH MỞ
+        const STATION_CONFIG = {
+            week: 5,
+            openTime: "2026-10-09T14:00:00",
+            openStr: "14:00 ngày 09/10/2026"
+        };
+
+        // ==========================================
+        // 2. NGÂN HÀNG ĐỀ 48 CÂU (XOAY TUA 3 LƯỢT)
+        // ==========================================
+        const BANK_TUAN_5 = {
+            "V1": [
+                        {
+                                    "q": "Trong số thập phân 85,346, chữ số 3 thuộc hàng nào?",
+                                    "a": "Hàng phần mười"
+                        },
+                        {
+                                    "q": "Trong số thập phân 12,485, chữ số 8 có giá trị là bao nhiêu?",
+                                    "a": "8/100 (hoặc 0,08)"
+                        },
+                        {
+                                    "q": "Viết phân số 3/10 dưới dạng số thập phân",
+                                    "a": "0,3"
+                        },
+                        {
+                                    "q": "Viết phân số 45/100 dưới dạng số thập phân",
+                                    "a": "0,45"
+                        },
+                        {
+                                    "q": "So sánh hai số thập phân: 4,5 và 4,49",
+                                    "a": "4,5 > 4,49"
+                        },
+                        {
+                                    "q": "Đèo hiểm trở và ngoạn mục bậc nhất nối vào Mù Cang Chải là đèo gì?",
+                                    "a": "Đèo Khau Phạ"
+                        },
+                        {
+                                    "q": "Địa danh đồi ruộng bậc thang hình tròn đẹp nổi tiếng bậc nhất ở Mù Cang Chải là gì?",
+                                    "a": "Đồi Mâm Xôi"
+                        },
+                        {
+                                    "q": "Giống gạo nếp nương thơm dẻo trứ danh của vùng thung lũng Tú Lệ là gì?",
+                                    "a": "Nếp nương Tú Lệ"
+                        },
+                        {
+                                    "q": "Số tự nhiên liền trước của số thập phân 9,25 là số nào?",
+                                    "a": "9"
+                        },
+                        {
+                                    "q": "Số tự nhiên liền sau của số thập phân 9,25 là số nào?",
+                                    "a": "10"
+                        },
+                        {
+                                    "q": "Trong số thập phân 234,567, chữ số 7 thuộc hàng nào?",
+                                    "a": "Hàng phần nghìn"
+                        },
+                        {
+                                    "q": "Số thập phân gồm 5 chục, 3 đơn vị, 6 phần mười và 2 phần trăm viết là gì?",
+                                    "a": "53,62"
+                        },
+                        {
+                                    "q": "Viết số thập phân bằng 0,7 nhưng có 2 chữ số ở phần thập phân",
+                                    "a": "0,70"
+                        },
+                        {
+                                    "q": "So sánh hai số thập phân: 12,08 và 12,1",
+                                    "a": "12,08 < 12,1"
+                        },
+                        {
+                                    "q": "Sắp xếp theo thứ tự từ bé đến lớn: 3,45; 3,54; 3,4; 3,5",
+                                    "a": "3,4; 3,45; 3,5; 3,54"
+                        },
+                        {
+                                    "q": "Môn thể thao mạo hiểm lượn trên bầu trời ngắm Mù Cang Chải mùa lúa chín là gì?",
+                                    "a": "Dù lượn"
+                        },
+                        {
+                                    "q": "Đồi ruộng bậc thang có hình móng vuốt kỳ vĩ ở Sáng Nhù tên là gì?",
+                                    "a": "Đồi Móng Ngựa"
+                        },
+                        {
+                                    "q": "Viết hỗn số 4 7/10 thành số thập phân",
+                                    "a": "4,7"
+                        },
+                        {
+                                    "q": "Viết hỗn số 2 15/100 thành số thập phân",
+                                    "a": "2,15"
+                        },
+                        {
+                                    "q": "Tìm chữ số x, biết: 8,3x > 8,38",
+                                    "a": "x = 9"
+                        },
+                        {
+                                    "q": "Viết số đo 5 m 4 dm dưới dạng số thập phân có đơn vị mét",
+                                    "a": "5,4 m"
+                        },
+                        {
+                                    "q": "Viết số đo 3 m 25 cm dưới dạng số thập phân có đơn vị mét",
+                                    "a": "3,25 m"
+                        },
+                        {
+                                    "q": "Viết số đo 2 kg 50 g dưới dạng số thập phân có đơn vị ki-lô-gam",
+                                    "a": "2,05 kg"
+                        },
+                        {
+                                    "q": "Trong số 7,925, giá trị của chữ số 2 là bao nhiêu?",
+                                    "a": "2/100 (hoặc 0,02)"
+                        },
+                        {
+                                    "q": "So sánh hai số thập phân: 0,9 và 0,899",
+                                    "a": "0,9 > 0,899"
+                        },
+                        {
+                                    "q": "Đỉnh đèo Khau Phạ có độ cao khoảng bao nhiêu mét so với mực nước biển?",
+                                    "a": "1 200 m đến 1 500 m"
+                        },
+                        {
+                                    "q": "Ruộng bậc thang Mù Cang Chải được công nhận là Di tích cấp gì?",
+                                    "a": "Di tích Quốc gia đặc biệt"
+                        },
+                        {
+                                    "q": "Chuyển phân số 3/5 thành số thập phân",
+                                    "a": "0,6"
+                        },
+                        {
+                                    "q": "Chuyển phân số 7/4 thành số thập phân",
+                                    "a": "1,75"
+                        },
+                        {
+                                    "q": "Số thập phân bé nhất có hai chữ số khác nhau ở phần thập phân với phần nguyên là 0",
+                                    "a": "0,12"
+                        }
+            ],
+            "V2": [
+                        {
+                                    "q": "Một thửa ruộng bậc thang hình chữ nhật ở Đồi Mâm Xôi có chiều dài 25 m, chiều rộng 12,4 m. Chu vi thửa ruộng đó là ... m.",
+                                    "a": "74,8"
+                        },
+                        {
+                                    "q": "Viết số đo khối lượng hạt lúa nếp Tú Lệ 4 tấn 250 kg dưới dạng số thập phân có đơn vị tấn là ... tấn.",
+                                    "a": "4,25"
+                        },
+                        {
+                                    "q": "Tìm số tự nhiên x lớn nhất thỏa mãn: x < 7,85. Giá trị của x là ...",
+                                    "a": "7"
+                        },
+                        {
+                                    "q": "Bà con người Mông gặt lúa nương: buổi sáng gặt được 1,2 ha, buổi chiều gặt được nhiều hơn buổi sáng 0,4 ha. Cả ngày gặt được tất cả ... ha.",
+                                    "a": "2,8"
+                        },
+                        {
+                                    "q": "Một vận động viên bay dù lượn từ đỉnh đèo Khau Phạ xuống thung lũng lượn 3 vòng hết 0,75 giờ. Đổi 0,75 giờ ra phút là ... phút.",
+                                    "a": "45"
+                        },
+                        {
+                                    "q": "Viết số đo độ dài đoạn đường dốc lên Đồi Móng Ngựa dài 3 km 80 m dưới dạng số thập phân với đơn vị ki-lô-mét là ... km.",
+                                    "a": "3,08"
+                        },
+                        {
+                                    "q": "Tìm chữ số x thích hợp điền vào chỗ chấm: 5,64 < 5,6x < 5,66. Giá trị của x là ...",
+                                    "a": "5"
+                        },
+                        {
+                                    "q": "Một túi cốm Tú Lệ cân nặng 1 kg 500 g. Ba túi cốm như thế cân nặng tất cả ... kg.",
+                                    "a": "4,5"
+                        },
+                        {
+                                    "q": "Thửa ruộng bậc thang thứ nhất thu được 2,4 tấn thóc, thửa thứ hai thu được 3,1 tấn thóc, thửa thứ ba thu được 2,9 tấn thóc. Trung bình mỗi thửa thu được ... tấn thóc.",
+                                    "a": "2,8"
+                        },
+                        {
+                                    "q": "Tìm số tự nhiên y bé nhất thỏa mãn: y > 15,38. Giá trị của y là ...",
+                                    "a": "16"
+                        },
+                        {
+                                    "q": "Đổi số đo diện tích một thửa ruộng nhỏ 450 m² sang đề-ca-mét vuông (dam²) được ... dam².",
+                                    "a": "4,5"
+                        },
+                        {
+                                    "q": "Một đoàn phượt thủ đi xe máy qua đèo Khau Phạ dài 32 km hết 40 phút. Vận tốc trung bình của đoàn xe là ... km/giờ.",
+                                    "a": "48"
+                        }
+            ],
+            "V3": [
+                        {
+                                    "q": "Tìm số thập phân x có hai chữ số ở phần thập phân sao cho: 0,8 < x < 0,9 và tổng các chữ số của phần thập phân bằng 12.",
+                                    "opts": [
+                                                "0,84",
+                                                "0,85",
+                                                "0,86",
+                                                "0,87"
+                                    ],
+                                    "c": 0
+                        },
+                        {
+                                    "q": "Từ 4 chữ số 0; 2; 5; 7, lập được bao nhiêu số thập phân có đủ 4 chữ số trên mà phần thập phân có 2 chữ số?",
+                                    "opts": [
+                                                "12 số",
+                                                "18 số",
+                                                "24 số",
+                                                "16 số"
+                                    ],
+                                    "c": 1
+                        },
+                        {
+                                    "q": "Khi viết một số thập phân, một học sinh đã quên mất dấu phẩy nên được số tự nhiên gấp 100 lần số ban đầu. Biết hiệu giữa số mới và số ban đầu là 198. Tìm số thập phân ban đầu.",
+                                    "opts": [
+                                                "2",
+                                                "1,98",
+                                                "2,02",
+                                                "2,2"
+                                    ],
+                                    "c": 0
+                        },
+                        {
+                                    "q": "Một thửa ruộng bậc thang hình thang có đáy lớn 40 m, đáy bé 24 m. Nếu kéo dài đáy lớn thêm 5 m thì diện tích tăng thêm 45 m². Tính diện tích ban đầu của thửa ruộng hình thang đó.",
+                                    "opts": [
+                                                "576 m²",
+                                                "480 m²",
+                                                "640 m²",
+                                                "540 m²"
+                                    ],
+                                    "c": 0
+                        },
+                        {
+                                    "q": "Cho dãy số thập phân cách đều: 1,1; 1,3; 1,5; 1,7; ... ; 4,9. Dãy số này có bao nhiêu số hạng?",
+                                    "opts": [
+                                                "19 số hạng",
+                                                "20 số hạng",
+                                                "21 số hạng",
+                                                "25 số hạng"
+                                    ],
+                                    "c": 1
+                        },
+                        {
+                                    "q": "Tổng của ba số là 202,5. Biết số thứ nhất gấp 2 lần số thứ hai, số thứ hai gấp 3 lần số thứ ba. Tìm số thứ nhất.",
+                                    "opts": [
+                                                "135",
+                                                "121,5",
+                                                "145",
+                                                "120"
+                                    ],
+                                    "c": 1
+                        }
+            ]
+};
+
+        // ==========================================
+        // 3. KHỞI TẠO & KIỂM TRA QUYỀN TRUY CẬP
+        // ==========================================
+        window.onload = () => {
+            // 1. Kiểm tra giới hạn quyền đối với Trạm > 8 (Khách & Chờ duyệt chỉ làm 1-8)
+            const isApprovedTeacherOrAdmin = (savedRole === 'teacher' || savedRole === 'admin') && (savedStatus === 'approved');
+
+            if (5 > 8) {
+                if (!savedUsername) {
+                    alert("🔒 Trạm 5 thuộc hệ thống nâng cao dành riêng cho tài khoản chính thức!\n\nKhách được tự do luyện tập từ Trạm 1 đến 8.\nVui lòng Đăng nhập hoặc Đăng ký tài khoản để tiếp tục.");
+                    window.location.href = "index.html";
+                    return;
+                }
+                if (savedStatus !== 'approved') {
+                    alert("⏳ Trạm 5 yêu cầu tài khoản đã được phê duyệt!\n\nTài khoản @" + savedUsername + " hiện đang ở trạng thái Chờ phê duyệt.\nVui lòng liên hệ Thầy/Cô quản trị viên để được duyệt.");
+                    window.location.href = "index.html";
+                    return;
+                }
+            }
+
+            // 2. Kiểm tra thời gian mở trạm theo lịch (Giáo viên/Admin duyệt được vào trước)
+            if (!isApprovedTeacherOrAdmin) {
+                const now = new Date();
+                const openDate = new Date(STATION_CONFIG.openTime);
+                if (now < openDate) {
+                    alert("⏳ Trạm 5 (Ruộng bậc thang Mù Cang Chải (Yên Bái)) chưa tới giờ mở!\n\nThời gian mở chính thức: " + STATION_CONFIG.openStr + ".\nVui lòng quay lại sau!");
+                    window.location.href = "index.html";
+                    return;
+                }
+            }
+
+            // 3. Thiết lập thông tin người chơi
+            if (!savedName) {
+                savedName = "Học sinh Khách";
+            }
+            document.getElementById('u-name').innerText = savedName;
+            document.getElementById('u-class').innerText = `Lớp ${savedClass || '5'}`;
+
+            // Kiểm tra attempt từ Firebase
+            const ref = db.ref('scores/Tuan_5');
+            ref.once('value', (snap) => {
+                const data = snap.val();
+                if (data) {
+                    for (let id in data) {
+                        const rec = data[id];
+                        const matchUser = savedUsername && rec.username && (rec.username === savedUsername);
+                        const matchName = (rec.fullName || "").toLowerCase() === savedName.toLowerCase() && rec.className === savedClass;
+                        if (matchUser || matchName) {
+                            studentAttempt++;
+                        }
+                    }
+                }
+                const cycle = (studentAttempt - 1) % 3 + 1;
+                document.getElementById('attempt-info').innerText = `Lượt thám hiểm số: ${studentAttempt} (Bộ đề vòng ${cycle})`;
+            });
+        };
+
+        function handleStartGame() {
+            isPlaying = true;
+            startTime = Date.now();
+            document.getElementById('start-overlay').classList.add('hidden');
+            document.getElementById('game-playground').classList.remove('hidden');
+            initStage1();
+        }
+
+        // ==========================================
+        // 4. BỘ TỔNG HỢP ÂM THANH (WEB AUDIO API)
+        // ==========================================
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playAudioTone(isSuccess) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (isSuccess) {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(110, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                }
+            } catch (e) {}
+        }
+
+        // ==========================================
+        // 5. VÒNG 1: NỐI CỘT NEON (10 CẶP X 5Đ = 50Đ)
+        // ==========================================
+        let selectedLeft = null;
+        let matchedCountV1 = 0;
+
+        function initStage1() {
+            document.getElementById('stage-badge-title').innerText = "VÒNG 1: NỐI CỘT NEON";
+            document.getElementById('stage-desc-text').innerText = "Ghép 10 cặp số và phép tính tương ứng (Mỗi cặp đúng: +5 điểm)";
+
+            const cycle = (studentAttempt - 1) % 3;
+            const currentPool = BANK_TUAN_5.V1.slice(cycle * 10, cycle * 10 + 10);
+
+            let leftItems = currentPool.map((item, idx) => ({ text: item.q, pairId: idx }));
+            let rightItems = currentPool.map((item, idx) => ({ text: item.a, pairId: idx }));
+
+            leftItems = leftItems.sort(() => Math.random() - 0.5);
+            rightItems = rightItems.sort(() => Math.random() - 0.5);
+
+            const colL = document.getElementById('col-left');
+            const colR = document.getElementById('col-right');
+            colL.innerHTML = '';
+            colR.innerHTML = '';
+
+            leftItems.forEach(i => {
+                colL.innerHTML += `<div class="card-item" id="L-${i.pairId}" onclick="handleSelectLeft(${i.pairId})">${i.text}</div>`;
+            });
+            rightItems.forEach(i => {
+                colR.innerHTML += `<div class="card-item" id="R-${i.pairId}" onclick="handleSelectRight(${i.pairId})">${i.text}</div>`;
+            });
+        }
+
+        function handleSelectLeft(pairId) {
+            document.querySelectorAll('#col-left .card-item').forEach(el => el.classList.remove('selected'));
+            const el = document.getElementById(`L-${pairId}`);
+            if (el.classList.contains('matched')) return;
+            el.classList.add('selected');
+            selectedLeft = pairId;
+        }
+
+        function handleSelectRight(pairId) {
+            if (selectedLeft === null) return;
+            const targetLeft = document.getElementById(`L-${selectedLeft}`);
+            const targetRight = document.getElementById(`R-${pairId}`);
+
+            if (selectedLeft === pairId) {
+                // ĐÚNG
+                playAudioTone(true);
+                targetLeft.classList.remove('selected');
+                targetLeft.classList.add('matched');
+                targetRight.classList.add('matched');
+                score += 5;
+                updateScoreUI();
+                matchedCountV1++;
+                selectedLeft = null;
+
+                if (matchedCountV1 === 10) {
+                    setTimeout(initStage2, 500);
+                }
+            } else {
+                // SAI
+                playAudioTone(false);
+                targetLeft.classList.add('shake');
+                targetRight.classList.add('shake');
+                lives--;
+                updateLivesUI();
+
+                setTimeout(() => {
+                    targetLeft.classList.remove('shake', 'selected');
+                    targetRight.classList.remove('shake');
+                    selectedLeft = null;
+                    if (lives <= 0) {
+                        alert("⚠️ Em đã hết 3 mạng! Chuyển thẳng sang Vòng 2.");
+                        initStage2();
+                    }
+                }, 450);
+            }
+        }
+
+        // ==========================================
+        // 6. VÒNG 2: CHẠM ĐỂ THẢ (4 BÀI X 10Đ = 40Đ)
+        // ==========================================
+        let activeSelectionChip = null;
+        let currentV2Questions = [];
+
+        function initStage2() {
+            document.getElementById('stage-1-area').classList.add('hidden');
+            document.getElementById('stage-2-area').classList.remove('hidden');
+            document.getElementById('stage-badge-title').innerText = "VÒNG 2: BẢNG SỐ LIỆU THÁM HIỂM";
+            document.getElementById('stage-desc-text').innerText = "Chọn đáp án ở dưới rồi chạm vào ô điền khuyết (Mỗi câu đúng: +10 điểm)";
+
+            const cycle = (studentAttempt - 1) % 3;
+            currentV2Questions = BANK_TUAN_5.V2.slice(cycle * 4, cycle * 4 + 4);
+
+            const qBox = document.getElementById('v2-questions-container');
+            qBox.innerHTML = '';
+            currentV2Questions.forEach((item, idx) => {
+                qBox.innerHTML += `
+                    <div class="v2-question-card">
+                        <div class="v2-text"><b>Bài ${idx + 1}:</b> ${item.q}</div>
+                        <div class="drop-target-box" id="drop-box-${idx}" onclick="handleTargetBoxClick(${idx})">Chạm vào đây để điền đáp án</div>
+                    </div>
+                `;
+            });
+
+            const poolDock = document.getElementById('v2-pool-dock');
+            let poolAnswers = currentV2Questions.map((q, idx) => ({ ans: q.a, id: idx })).sort(() => Math.random() - 0.5);
+            poolDock.innerHTML = '';
+            poolAnswers.forEach(p => {
+                poolDock.innerHTML += `<div class="chip-ans" id="chip-${p.id}" onclick="handleSelectChip(${p.id}, '${p.ans}')">${p.ans}</div>`;
+            });
+        }
+
+        function handleSelectChip(id, val) {
+            document.querySelectorAll('.chip-ans').forEach(c => c.classList.remove('picked'));
+            const el = document.getElementById(`chip-${id}`);
+            el.classList.add('picked');
+            activeSelectionChip = { id: id, val: val, el: el };
+            document.querySelectorAll('.drop-target-box:not(.filled)').forEach(b => b.classList.add('active-wait'));
+        }
+
+        function handleTargetBoxClick(boxIdx) {
+            if (!activeSelectionChip) return;
+            const targetBox = document.getElementById(`drop-box-${boxIdx}`);
+            targetBox.innerText = activeSelectionChip.val;
+            targetBox.classList.add('filled');
+            targetBox.classList.remove('active-wait');
+            targetBox.dataset.filledVal = activeSelectionChip.val;
+
+            activeSelectionChip.el.classList.add('used');
+            activeSelectionChip = null;
+            document.querySelectorAll('.drop-target-box').forEach(b => b.classList.remove('active-wait'));
+        }
+
+        function submitStage2() {
+            let correctCount = 0;
+            currentV2Questions.forEach((q, idx) => {
+                const filled = document.getElementById(`drop-box-${idx}`).dataset.filledVal;
+                if (filled && filled.trim().toLowerCase() === q.a.trim().toLowerCase()) {
+                    correctCount++;
+                }
+            });
+            score += correctCount * 10;
+            updateScoreUI();
+            playAudioTone(correctCount > 0);
+            initStage3();
+        }
+
+        // ==========================================
+        // 7. VÒNG 3: ĐẤU BOSS PHÂN LOẠI (2 CÂU X 5Đ = 10Đ)
+        // ==========================================
+        let bossQList = [];
+        let bossIdx = 0;
+
+        function initStage3() {
+            document.getElementById('stage-2-area').classList.add('hidden');
+            document.getElementById('stage-3-area').classList.remove('hidden');
+            document.getElementById('stage-badge-title').innerText = "VÒNG 3: THỬ THÁCH MỨC 3 (ĐẤU BOSS)";
+            document.getElementById('stage-desc-text').innerText = "Vận dụng tư duy logic để hạ gục Boss (Mỗi câu đúng: +5 điểm)";
+
+            const cycle = (studentAttempt - 1) % 3;
+            bossQList = BANK_TUAN_5.V3.slice(cycle * 2, cycle * 2 + 2);
+            bossIdx = 0;
+            renderBossQuestion();
+        }
+
+        function renderBossQuestion() {
+            if (bossIdx >= bossQList.length) {
+                finishExam();
+                return;
+            }
+            const q = bossQList[bossIdx];
+            document.getElementById('boss-q-text').innerText = `Câu ${bossIdx + 1}: ${q.q}`;
+            const optBox = document.getElementById('boss-options');
+            optBox.innerHTML = '';
+            q.opts.forEach((opt, idx) => {
+                optBox.innerHTML += `<button class="btn-mcq-opt" onclick="checkBossAnswer(${idx})">${String.fromCharCode(65 + idx)}. ${opt}</button>`;
+            });
+        }
+
+        function checkBossAnswer(optIdx) {
+            const q = bossQList[bossIdx];
+            if (optIdx === q.c) {
+                playAudioTone(true);
+                score += 5;
+                updateScoreUI();
+                const hpBar = document.getElementById('boss-hp');
+                hpBar.style.width = (bossIdx === 0 ? "50%" : "0%");
+            } else {
+                playAudioTone(false);
+            }
+            bossIdx++;
+            setTimeout(renderBossQuestion, 700);
+        }
+
+        // ==========================================
+        // 8. CẬP NHẬT GIAO DIỆN & LƯU ĐIỂM FIREBASE
+        // ==========================================
+        function updateScoreUI() {
+            document.getElementById('current-score').innerText = score;
+        }
+
+        function updateLivesUI() {
+            let hearts = "❤️".repeat(Math.max(0, lives)) + "🖤".repeat(Math.max(0, 3 - lives));
+            document.getElementById('lives-display').innerText = hearts;
+        }
+
+        function finishExam() {
+            isPlaying = false;
+            document.getElementById('game-playground').classList.add('hidden');
+            document.getElementById('result-overlay').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+
+            // Hiển thị huy hiệu vật phẩm lưu niệm theo 3 cấp
+            let souvenirText = "";
+            if (score >= 100) {
+                souvenirText = "🥇 " + SOUVENIRS.cap3;
+            } else if (score >= 90) {
+                souvenirText = "🥈 " + SOUVENIRS.cap2;
+            } else if (score >= 50) {
+                souvenirText = "🥉 " + SOUVENIRS.cap1;
+            } else {
+                souvenirText = "🎯 Đạt từ 50đ để nhận " + SOUVENIRS.cap1 + "!";
+            }
+            document.getElementById('souvenir-badge').innerText = souvenirText;
+
+            let countdownSeconds = (score >= 90 ? 10 : 5);
+            if (score >= 90 && typeof startFireworks === 'function') {
+                startFireworks();
+            }
+
+            const duration = Math.floor((Date.now() - startTime) / 1000);
+            const ref = db.ref('scores/Tuan_5');
+
+            ref.push({
+                username: savedUsername,
+                fullName: savedName,
+                className: savedClass,
+                schoolName: savedSchool || '---',
+                score: score,
+                duration: duration,
+                attempt: studentAttempt,
+                role: savedRole,
+                status: savedStatus,
+                date: new Date().toLocaleString('vi-VN'),
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }, () => {
+                document.getElementById('save-status-msg').innerText = `✅ Đã lưu kết quả lượt thi ${studentAttempt}!`;
+                const itv = setInterval(() => {
+                    countdownSeconds--;
+                    document.getElementById('countdown-redirect').innerText = `Về trang chủ bản đồ sau ${countdownSeconds}s...`;
+                    if (countdownSeconds <= 0) {
+                        clearInterval(itv);
+                        window.location.href = "index.html";
+                    }
+                }, 1000);
+            });
+        }
+    </script>
+</body>
+
+</html>

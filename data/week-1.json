@@ -1,0 +1,250 @@
+{
+  "week": 1,
+  "stationName": "Cột cờ Lũng Cú (Hà Giang)",
+  "config": {
+    "week": 1,
+    "openTime": "2026-09-11T14:00:00",
+    "openStr": "14:00 ngày 11/09/2026"
+  },
+  "souvenirs": {
+    "cap1": "Huy hiệu Cột cờ Lũng Cú Đồng (50đ)",
+    "cap2": "Kính viễn vọng Cực Bắc Bạc (90đ)",
+    "cap3": "Ngọn cờ Thần Phong Hoàng Kim Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Số tự nhiên lớn nhất có 6 chữ số khác nhau",
+        "a": "987 654"
+      },
+      {
+        "q": "Lá cờ Tổ quốc trên đỉnh Cột cờ Lũng Cú rộng bao nhiêu mét vuông?",
+        "a": "54 m²"
+      },
+      {
+        "q": "Tính nhanh: 25 × 36 × 4",
+        "a": "3 600"
+      },
+      {
+        "q": "Phân số chỉ 3 phần tô màu trong 5 phần bằng nhau",
+        "a": "3/5"
+      },
+      {
+        "q": "Rút gọn phân số 18/24 về tối giản",
+        "a": "3/4"
+      },
+      {
+        "q": "Quy đồng mẫu số 2/3 và 3/5 với mẫu chung 15",
+        "a": "10/15 và 9/15"
+      },
+      {
+        "q": "Phân số có tử số bé hơn mẫu số",
+        "a": "Bé hơn 1"
+      },
+      {
+        "q": "Số trung bình cộng của 15, 25 và 50",
+        "a": "30"
+      },
+      {
+        "q": "Một triệu viết bằng chữ số có mấy chữ số 0?",
+        "a": "6 chữ số 0"
+      },
+      {
+        "q": "1/4 thế kỷ bằng bao nhiêu năm?",
+        "a": "25 năm"
+      },
+      {
+        "q": "Số tự nhiên bé nhất có 6 chữ số khác nhau",
+        "a": "102 345"
+      },
+      {
+        "q": "Cột cờ Lũng Cú thuộc tỉnh nào ở cực Bắc nước ta?",
+        "a": "Hà Giang"
+      },
+      {
+        "q": "Tính nhanh: 125 × 47 × 8",
+        "a": "47 000"
+      },
+      {
+        "q": "Phân số chỉ 7 phần trong 10 phần bằng nhau",
+        "a": "7/10"
+      },
+      {
+        "q": "Rút gọn phân số 35/49 về tối giản",
+        "a": "5/7"
+      },
+      {
+        "q": "Quy đồng mẫu số 3/4 và 5/6 với mẫu chung 12",
+        "a": "9/12 và 10/12"
+      },
+      {
+        "q": "Phân số có tử số lớn hơn mẫu số",
+        "a": "Lớn hơn 1"
+      },
+      {
+        "q": "Số trung bình cộng của 20, 30 và 40",
+        "a": "30"
+      },
+      {
+        "q": "Một tỉ viết bằng chữ số có mấy chữ số 0?",
+        "a": "9 chữ số 0"
+      },
+      {
+        "q": "1/2 thế kỷ bằng bao nhiêu năm?",
+        "a": "50 năm"
+      },
+      {
+        "q": "Đỉnh Lũng Cú có độ cao khoảng bao nhiêu mét so với mực nước biển?",
+        "a": "1 470 m"
+      },
+      {
+        "q": "Giá trị của chữ số 9 trong số 892 415",
+        "a": "90 000"
+      },
+      {
+        "q": "Tính nhanh: 50 × 68 × 2",
+        "a": "6 800"
+      },
+      {
+        "q": "Phân số bằng phân số 1/3 có mẫu số là 18",
+        "a": "6/18"
+      },
+      {
+        "q": "Rút gọn phân số 48/60 về tối giản",
+        "a": "4/5"
+      },
+      {
+        "q": "Quy đồng mẫu số 1/2 và 3/4 với mẫu chung 4",
+        "a": "2/4 và 3/4"
+      },
+      {
+        "q": "Phân số có tử số bằng mẫu số (khác 0)",
+        "a": "Bằng 1"
+      },
+      {
+        "q": "Số trung bình cộng của 14, 26, 38 và 42",
+        "a": "30"
+      },
+      {
+        "q": "Số liền trước của số 1 000 000",
+        "a": "999 999"
+      },
+      {
+        "q": "3/4 thế kỷ bằng bao nhiêu năm?",
+        "a": "75 năm"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Để lên đỉnh Cột cờ Lũng Cú (Hà Giang), Robot cần leo 839 bậc đá. Robot đã leo được 539 bậc, Robot còn phải leo ... bậc đá nữa.",
+        "a": "300"
+      },
+      {
+        "q": "Đoàn thám hiểm mua 120 hộp chè Shan tuyết Hà Giang làm quà, buổi sáng đã tặng 2/5 số hộp chè. Buổi sáng đã tặng ... hộp chè.",
+        "a": "48"
+      },
+      {
+        "q": "Tìm x, biết: x × 4 + x × 6 = 2 400. Giá trị của x là ...",
+        "a": "240"
+      },
+      {
+        "q": "Tìm hai số có tổng là 150 và hiệu là 30. Số lớn là ...",
+        "a": "90"
+      },
+      {
+        "q": "Một vườn hoa tam giác mạch ở Lũng Cú hình chữ nhật có chu vi 160 m, chiều rộng kém chiều dài 20 m. Chiều rộng vườn hoa là ... m.",
+        "a": "30"
+      },
+      {
+        "q": "Một đoàn học sinh gồm 40 bạn tham quan Cột cờ Lũng Cú, trong đó 3/5 số bạn là nữ. Số bạn nam là ... bạn.",
+        "a": "16"
+      },
+      {
+        "q": "Tìm y, biết: y × 12 - y × 2 = 1 500. Giá trị của y là ...",
+        "a": "150"
+      },
+      {
+        "q": "Tìm hai số có tổng là 280 và hiệu là 40. Số bé là ...",
+        "a": "120"
+      },
+      {
+        "q": "Một đội công nhân tu sửa đoạn đường lên xã Lũng Cú dài 150 m trong 3 ngày. Trong 5 ngày đội đó sửa được ... m đường (năng suất như nhau).",
+        "a": "250"
+      },
+      {
+        "q": "Bà con vùng cao Lũng Cú thu hoạch được 350 kg ngô nương, đã bán đi 4/7 số ngô đó. Số ngô còn lại là ... kg.",
+        "a": "150"
+      },
+      {
+        "q": "Tìm x, biết: 25 × x × 4 = 10 000. Giá trị của x là ...",
+        "a": "100"
+      },
+      {
+        "q": "Hai bình chứa nước suối Lũng Cú có tất cả 240 lít nước. Nếu chuyển 20 lít từ bình 1 sang bình 2 thì hai bình bằng nhau. Bình 1 ban đầu có ... lít.",
+        "a": "140"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Trên đường thám hiểm Cột cờ Lũng Cú, bác kiểm lâm cưa một thân gỗ dài 8 m thành các khúc dài 2 m để làm biển chỉ dẫn. Mỗi lần cưa mất 5 phút, sau mỗi lần cưa nghỉ ngơi 2 phút. Bác cưa xong thân gỗ trong bao nhiêu phút?",
+        "opts": [
+          "15 phút",
+          "19 phút",
+          "21 phút",
+          "28 phút"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Tính giá trị biểu thức sau bằng cách thuận tiện nhất:\nA = (1 + 3 + 5 + ... + 99) - (2 + 4 + 6 + ... + 98)",
+        "opts": [
+          "49",
+          "50",
+          "100",
+          "25"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Hiện nay tổng số tuổi của hai bố con là 48 tuổi. Bốn năm trước, tuổi bố gấp 4 lần tuổi con. Hỏi tuổi con hiện nay là bao nhiêu?",
+        "opts": [
+          "10 tuổi",
+          "12 tuổi",
+          "14 tuổi",
+          "8 tuổi"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Để đánh số trang của một cuốn sách hướng dẫn du lịch Hà Giang dày 120 trang, người ta phải dùng tất cả bao nhiêu chữ số?",
+        "opts": [
+          "240 chữ số",
+          "252 chữ số",
+          "260 chữ số",
+          "238 chữ số"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Khi cộng một số tự nhiên với một số tự nhiên có hai chữ số, một bạn viết nhầm chữ số 0 vào giữa hai chữ số đó nên tổng là 1 030. Biết số tự nhiên ban đầu là 825. Tìm số có hai chữ số ban đầu.",
+        "opts": [
+          "25",
+          "35",
+          "45",
+          "15"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Trong bãi đỗ xe dưới chân Cột cờ Lũng Cú có cả xe máy (2 bánh) và ô tô con (4 bánh). Bác bảo vệ đếm được tất cả 30 chiếc xe và có tổng cộng 84 chiếc bánh xe. Hỏi có bao nhiêu chiếc ô tô?",
+        "opts": [
+          "18 chiếc ô tô",
+          "12 chiếc ô tô",
+          "14 chiếc ô tô",
+          "16 chiếc ô tô"
+        ],
+        "c": 1
+      }
+    ]
+  }
+}

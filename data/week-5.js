@@ -1,0 +1,250 @@
+window.WEEK_DATA_5 = {
+  "week": 5,
+  "stationName": "Ruộng bậc thang Mù Cang Chải (Yên Bái)",
+  "config": {
+    "week": 5,
+    "openTime": "2026-10-09T14:00:00",
+    "openStr": "14:00 ngày 09/10/2026"
+  },
+  "souvenirs": {
+    "cap1": "Bông lúa nếp nương Đồng Vàng (50đ)",
+    "cap2": "Liềm gặt Mùa Vàng Bạc Ánh (90đ)",
+    "cap3": "Vương miện Sóng Vàng Mù Cang Chải Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Trong số thập phân 85,346, chữ số 3 thuộc hàng nào?",
+        "a": "Hàng phần mười"
+      },
+      {
+        "q": "Trong số thập phân 12,485, chữ số 8 có giá trị là bao nhiêu?",
+        "a": "8/100 (hoặc 0,08)"
+      },
+      {
+        "q": "Viết phân số 3/10 dưới dạng số thập phân",
+        "a": "0,3"
+      },
+      {
+        "q": "Viết phân số 45/100 dưới dạng số thập phân",
+        "a": "0,45"
+      },
+      {
+        "q": "So sánh hai số thập phân: 4,5 và 4,49",
+        "a": "4,5 > 4,49"
+      },
+      {
+        "q": "Đèo hiểm trở và ngoạn mục bậc nhất nối vào Mù Cang Chải là đèo gì?",
+        "a": "Đèo Khau Phạ"
+      },
+      {
+        "q": "Địa danh đồi ruộng bậc thang hình tròn đẹp nổi tiếng bậc nhất ở Mù Cang Chải là gì?",
+        "a": "Đồi Mâm Xôi"
+      },
+      {
+        "q": "Giống gạo nếp nương thơm dẻo trứ danh của vùng thung lũng Tú Lệ là gì?",
+        "a": "Nếp nương Tú Lệ"
+      },
+      {
+        "q": "Số tự nhiên liền trước của số thập phân 9,25 là số nào?",
+        "a": "9"
+      },
+      {
+        "q": "Số tự nhiên liền sau của số thập phân 9,25 là số nào?",
+        "a": "10"
+      },
+      {
+        "q": "Trong số thập phân 234,567, chữ số 7 thuộc hàng nào?",
+        "a": "Hàng phần nghìn"
+      },
+      {
+        "q": "Số thập phân gồm 5 chục, 3 đơn vị, 6 phần mười và 2 phần trăm viết là gì?",
+        "a": "53,62"
+      },
+      {
+        "q": "Viết số thập phân bằng 0,7 nhưng có 2 chữ số ở phần thập phân",
+        "a": "0,70"
+      },
+      {
+        "q": "So sánh hai số thập phân: 12,08 và 12,1",
+        "a": "12,08 < 12,1"
+      },
+      {
+        "q": "Sắp xếp theo thứ tự từ bé đến lớn: 3,45; 3,54; 3,4; 3,5",
+        "a": "3,4; 3,45; 3,5; 3,54"
+      },
+      {
+        "q": "Môn thể thao mạo hiểm lượn trên bầu trời ngắm Mù Cang Chải mùa lúa chín là gì?",
+        "a": "Dù lượn"
+      },
+      {
+        "q": "Đồi ruộng bậc thang có hình móng vuốt kỳ vĩ ở Sáng Nhù tên là gì?",
+        "a": "Đồi Móng Ngựa"
+      },
+      {
+        "q": "Viết hỗn số 4 7/10 thành số thập phân",
+        "a": "4,7"
+      },
+      {
+        "q": "Viết hỗn số 2 15/100 thành số thập phân",
+        "a": "2,15"
+      },
+      {
+        "q": "Tìm chữ số x, biết: 8,3x > 8,38",
+        "a": "x = 9"
+      },
+      {
+        "q": "Viết số đo 5 m 4 dm dưới dạng số thập phân có đơn vị mét",
+        "a": "5,4 m"
+      },
+      {
+        "q": "Viết số đo 3 m 25 cm dưới dạng số thập phân có đơn vị mét",
+        "a": "3,25 m"
+      },
+      {
+        "q": "Viết số đo 2 kg 50 g dưới dạng số thập phân có đơn vị ki-lô-gam",
+        "a": "2,05 kg"
+      },
+      {
+        "q": "Trong số 7,925, giá trị của chữ số 2 là bao nhiêu?",
+        "a": "2/100 (hoặc 0,02)"
+      },
+      {
+        "q": "So sánh hai số thập phân: 0,9 và 0,899",
+        "a": "0,9 > 0,899"
+      },
+      {
+        "q": "Đỉnh đèo Khau Phạ có độ cao khoảng bao nhiêu mét so với mực nước biển?",
+        "a": "1 200 m đến 1 500 m"
+      },
+      {
+        "q": "Ruộng bậc thang Mù Cang Chải được công nhận là Di tích cấp gì?",
+        "a": "Di tích Quốc gia đặc biệt"
+      },
+      {
+        "q": "Chuyển phân số 3/5 thành số thập phân",
+        "a": "0,6"
+      },
+      {
+        "q": "Chuyển phân số 7/4 thành số thập phân",
+        "a": "1,75"
+      },
+      {
+        "q": "Số thập phân bé nhất có hai chữ số khác nhau ở phần thập phân với phần nguyên là 0",
+        "a": "0,12"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một thửa ruộng bậc thang hình chữ nhật ở Đồi Mâm Xôi có chiều dài 25 m, chiều rộng 12,4 m. Chu vi thửa ruộng đó là ... m.",
+        "a": "74,8"
+      },
+      {
+        "q": "Viết số đo khối lượng hạt lúa nếp Tú Lệ 4 tấn 250 kg dưới dạng số thập phân có đơn vị tấn là ... tấn.",
+        "a": "4,25"
+      },
+      {
+        "q": "Tìm số tự nhiên x lớn nhất thỏa mãn: x < 7,85. Giá trị của x là ...",
+        "a": "7"
+      },
+      {
+        "q": "Bà con người Mông gặt lúa nương: buổi sáng gặt được 1,2 ha, buổi chiều gặt được nhiều hơn buổi sáng 0,4 ha. Cả ngày gặt được tất cả ... ha.",
+        "a": "2,8"
+      },
+      {
+        "q": "Một vận động viên bay dù lượn từ đỉnh đèo Khau Phạ xuống thung lũng lượn 3 vòng hết 0,75 giờ. Đổi 0,75 giờ ra phút là ... phút.",
+        "a": "45"
+      },
+      {
+        "q": "Viết số đo độ dài đoạn đường dốc lên Đồi Móng Ngựa dài 3 km 80 m dưới dạng số thập phân với đơn vị ki-lô-mét là ... km.",
+        "a": "3,08"
+      },
+      {
+        "q": "Tìm chữ số x thích hợp điền vào chỗ chấm: 5,64 < 5,6x < 5,66. Giá trị của x là ...",
+        "a": "5"
+      },
+      {
+        "q": "Một túi cốm Tú Lệ cân nặng 1 kg 500 g. Ba túi cốm như thế cân nặng tất cả ... kg.",
+        "a": "4,5"
+      },
+      {
+        "q": "Thửa ruộng bậc thang thứ nhất thu được 2,4 tấn thóc, thửa thứ hai thu được 3,1 tấn thóc, thửa thứ ba thu được 2,9 tấn thóc. Trung bình mỗi thửa thu được ... tấn thóc.",
+        "a": "2,8"
+      },
+      {
+        "q": "Tìm số tự nhiên y bé nhất thỏa mãn: y > 15,38. Giá trị của y là ...",
+        "a": "16"
+      },
+      {
+        "q": "Đổi số đo diện tích một thửa ruộng nhỏ 450 m² sang đề-ca-mét vuông (dam²) được ... dam².",
+        "a": "4,5"
+      },
+      {
+        "q": "Một đoàn phượt thủ đi xe máy qua đèo Khau Phạ dài 32 km hết 40 phút. Vận tốc trung bình của đoàn xe là ... km/giờ.",
+        "a": "48"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Tìm số thập phân x có hai chữ số ở phần thập phân sao cho: 0,8 < x < 0,9 và tổng các chữ số của phần thập phân bằng 12.",
+        "opts": [
+          "0,84",
+          "0,85",
+          "0,86",
+          "0,87"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Từ 4 chữ số 0; 2; 5; 7, lập được bao nhiêu số thập phân có đủ 4 chữ số trên mà phần thập phân có 2 chữ số?",
+        "opts": [
+          "12 số",
+          "18 số",
+          "24 số",
+          "16 số"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Khi viết một số thập phân, một học sinh đã quên mất dấu phẩy nên được số tự nhiên gấp 100 lần số ban đầu. Biết hiệu giữa số mới và số ban đầu là 198. Tìm số thập phân ban đầu.",
+        "opts": [
+          "2",
+          "1,98",
+          "2,02",
+          "2,2"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một thửa ruộng bậc thang hình thang có đáy lớn 40 m, đáy bé 24 m. Nếu kéo dài đáy lớn thêm 5 m thì diện tích tăng thêm 45 m². Tính diện tích ban đầu của thửa ruộng hình thang đó.",
+        "opts": [
+          "576 m²",
+          "480 m²",
+          "640 m²",
+          "540 m²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Cho dãy số thập phân cách đều: 1,1; 1,3; 1,5; 1,7; ... ; 4,9. Dãy số này có bao nhiêu số hạng?",
+        "opts": [
+          "19 số hạng",
+          "20 số hạng",
+          "21 số hạng",
+          "25 số hạng"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Tổng của ba số là 202,5. Biết số thứ nhất gấp 2 lần số thứ hai, số thứ hai gấp 3 lần số thứ ba. Tìm số thứ nhất.",
+        "opts": [
+          "135",
+          "121,5",
+          "145",
+          "120"
+        ],
+        "c": 1
+      }
+    ]
+  }
+};

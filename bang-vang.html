@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Vàng Thành Tích (Trọn Bộ 35 Tuần) - Học toán 5 cùng Robot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&family=Bungee&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #2196F3;
+            --bg: #f4f7f6;
+            --dark: #2c3e50;
+            --gold: #FFD700;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background: var(--bg);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: white;
+            padding: 0.8rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 18px 10px;
+            background: linear-gradient(135deg, #1e3a8a, #0284c7);
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 1.5rem;
+            margin: 0 0 4px;
+            font-family: 'Bungee', cursive;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+
+        .hero p {
+            font-size: 0.85rem;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        /* FILTER BAR */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 15px auto;
+            max-width: 900px;
+            padding: 0 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-filter-bv {
+            background: white;
+            border: 1.5px solid #cbd5e1;
+            color: #475569;
+            padding: 7px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-filter-bv:hover, .btn-filter-bv.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+        }
+
+        .admin-container {
+            max-width: 1100px;
+            margin: 5px auto 50px;
+            padding: 0 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .week-accordion {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: 0.2s;
+        }
+
+        .week-header {
+            padding: 12px 15px;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+            user-select: none;
+        }
+
+        .week-header.active {
+            background: #e0f2fe;
+            border-bottom: 2px solid #0284c7;
+        }
+
+        .week-title {
+            font-weight: bold;
+            font-size: 0.92rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .week-badge {
+            background: #0284c7;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            white-space: nowrap;
+        }
+
+        .week-content {
+            display: none;
+            padding: 0;
+            background: white;
+        }
+
+        .week-content.show {
+            display: block;
+        }
+
+        .chart-section {
+            padding: 15px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chart-title {
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .action-bar {
+            padding: 8px 15px;
+            background: #fafafa;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-excel {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        th {
+            background: #f1f2f6;
+            color: #555;
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .rank {
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #eee;
+            font-size: 0.75rem;
+        }
+
+        tr:nth-child(1) .rank { background: #ffd700; color: #000; }
+        tr:nth-child(2) .rank { background: #cbd5e1; color: #000; }
+        tr:nth-child(3) .rank { background: #cd7f32; color: #fff; }
+
+        .score-badge {
+            color: #d35400;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .time-badge {
+            color: #27ae60;
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+
+        .class-badge {
+            background: #eef2f7;
+            color: #333;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid #ddd;
+            white-space: nowrap;
+        }
+
+        .attempt-badge {
+            background: #fff3e0;
+            color: #ef6c00;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            border: 1px solid #ffe0b2;
+            white-space: nowrap;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.75rem;
+            margin-top: auto;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">Học toán 5 cùng Robot 🤖</a>
+        <nav style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <button id="btn-toggle-admin-bv" onclick="toggleAdminModeBV()" style="background:#fff7ed; color:#ea580c; border:1.5px solid #fdba74; padding:5px 12px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; display:inline-flex; align-items:center; gap:5px; font-family:'Lexend',sans-serif; transition:all 0.2s;">
+                🛡️ Chế độ Quản trị: <span id="admin-mode-text">TẮT</span>
+            </button>
+            <a href="admin.html" style="text-decoration:none; color:#ea580c; font-size: 0.8rem; font-weight: 600; background:#fef2f2; padding:5px 10px; border-radius:6px; border:1px solid #fecaca;">Cổng Admin</a>
+            <a href="index.html" style="text-decoration:none; color:#333; font-size: 0.85rem; font-weight: 600;">Trang chủ</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>🏆 BẢNG VÀNG VINH DANH</h1>
+        <p>Thành tích xuất sắc nhất của các nhà thám hiểm (Trọn bộ 35 Trạm)</p>
+    </section>
+
+    <!-- BỘ LỌC CHẾ ĐỘ & HỌC KỲ -->
+    <div class="filter-bar" style="flex-direction:column; gap:8px;">
+        <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; width:100%;">
+            <button class="btn-filter-bv" id="btn-mode-official" onclick="setModeFilter('official')" style="background:#fff; color:#333; border-color:#ccc;">🏆 ĐUA TOP TUẦN (14H T6 - 13H59 T6 SAU)</button>
+            <button class="btn-filter-bv active" id="btn-mode-all" onclick="setModeFilter('all')" style="background:#4CAF50; color:#fff; border-color:#4CAF50;">🌟 TẤT CẢ LƯỢT THI (TỰ LUYỆN)</button>
+        </div>
+        <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; width:100%;">
+            <button class="btn-filter-bv active" id="btn-bv-all" onclick="filterBv('all')">🌟 TOÀN BỘ (35 TUẦN)</button>
+            <button class="btn-filter-bv" id="btn-bv-hk1" onclick="filterBv('hk1')">📘 HỌC KỲ 1 (TUẦN 1 - 18)</button>
+            <button class="btn-filter-bv" id="btn-bv-hk2" onclick="filterBv('hk2')">📙 HỌC KỲ 2 (TUẦN 19 - 35)</button>
+        </div>
+    </div>
+
+    <main class="admin-container" id="accordion-container"></main>
+
+    <footer>@Học toán 5 cùng RoBot - Phát triển bởi: <b>LÊ THÀNH LONG</b></footer>
+
+    <script>
+        const firebaseConfig = {
+            databaseURL: "https://gamhoctap-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const SCHEDULE = {
+            "1": {
+                        "week": 1,
+                        "monday": "2026-09-07",
+                        "open": "2026-09-11T14:00:00",
+                        "close": "2026-09-18T13:59:59",
+                        "open_str": "14:00 ngày 11/09/2026",
+                        "close_str": "13:59:59 ngày 18/09/2026",
+                        "is_cap_for_guest": false
+            },
+            "2": {
+                        "week": 2,
+                        "monday": "2026-09-14",
+                        "open": "2026-09-18T14:00:00",
+                        "close": "2026-09-25T13:59:59",
+                        "open_str": "14:00 ngày 18/09/2026",
+                        "close_str": "13:59:59 ngày 25/09/2026",
+                        "is_cap_for_guest": false
+            },
+            "3": {
+                        "week": 3,
+                        "monday": "2026-09-21",
+                        "open": "2026-09-25T14:00:00",
+                        "close": "2026-10-02T13:59:59",
+                        "open_str": "14:00 ngày 25/09/2026",
+                        "close_str": "13:59:59 ngày 02/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "4": {
+                        "week": 4,
+                        "monday": "2026-09-28",
+                        "open": "2026-10-02T14:00:00",
+                        "close": "2026-10-09T13:59:59",
+                        "open_str": "14:00 ngày 02/10/2026",
+                        "close_str": "13:59:59 ngày 09/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "5": {
+                        "week": 5,
+                        "monday": "2026-10-05",
+                        "open": "2026-10-09T14:00:00",
+                        "close": "2026-10-16T13:59:59",
+                        "open_str": "14:00 ngày 09/10/2026",
+                        "close_str": "13:59:59 ngày 16/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "6": {
+                        "week": 6,
+                        "monday": "2026-10-12",
+                        "open": "2026-10-16T14:00:00",
+                        "close": "2026-10-23T13:59:59",
+                        "open_str": "14:00 ngày 16/10/2026",
+                        "close_str": "13:59:59 ngày 23/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "7": {
+                        "week": 7,
+                        "monday": "2026-10-19",
+                        "open": "2026-10-23T14:00:00",
+                        "close": "2026-10-30T13:59:59",
+                        "open_str": "14:00 ngày 23/10/2026",
+                        "close_str": "13:59:59 ngày 30/10/2026",
+                        "is_cap_for_guest": false
+            },
+            "8": {
+                        "week": 8,
+                        "monday": "2026-10-26",
+                        "open": "2026-10-30T14:00:00",
+                        "close": "2026-11-06T13:59:59",
+                        "open_str": "14:00 ngày 30/10/2026",
+                        "close_str": "13:59:59 ngày 06/11/2026",
+                        "is_cap_for_guest": true
+            },
+            "9": {
+                        "week": 9,
+                        "monday": "2026-11-02",
+                        "open": "2026-11-06T14:00:00",
+                        "close": "2026-11-13T13:59:59",
+                        "open_str": "14:00 ngày 06/11/2026",
+                        "close_str": "13:59:59 ngày 13/11/2026",
+                        "is_cap_for_guest": false
+            },
+            "10": {
+                        "week": 10,
+                        "monday": "2026-11-09",
+                        "open": "2026-11-13T14:00:00",
+                        "close": "2026-11-20T13:59:59",
+                        "open_str": "14:00 ngày 13/11/2026",
+                        "close_str": "13:59:59 ngày 20/11/2026",
+                        "is_cap_for_guest": false
+            },
+            "11": {
+                        "week": 11,
+                        "monday": "2026-11-16",
+                        "open": "2026-11-20T14:00:00",
+                        "close": "2026-11-27T13:59:59",
+                        "open_str": "14:00 ngày 20/11/2026",
+                        "close_str": "13:59:59 ngày 27/11/2026",
+                        "is_cap_for_guest": false
+            },
+            "12": {
+                        "week": 12,
+                        "monday": "2026-11-23",
+                        "open": "2026-11-27T14:00:00",
+                        "close": "2026-12-04T13:59:59",
+                        "open_str": "14:00 ngày 27/11/2026",
+                        "close_str": "13:59:59 ngày 04/12/2026",
+                        "is_cap_for_guest": false
+            },
+            "13": {
+                        "week": 13,
+                        "monday": "2026-11-30",
+                        "open": "2026-12-04T14:00:00",
+                        "close": "2026-12-11T13:59:59",
+                        "open_str": "14:00 ngày 04/12/2026",
+                        "close_str": "13:59:59 ngày 11/12/2026",
+                        "is_cap_for_guest": false
+            },
+            "14": {
+                        "week": 14,
+                        "monday": "2026-12-07",
+                        "open": "2026-12-11T14:00:00",
+                        "close": "2026-12-18T13:59:59",
+                        "open_str": "14:00 ngày 11/12/2026",
+                        "close_str": "13:59:59 ngày 18/12/2026",
+                        "is_cap_for_guest": false
+            },
+            "15": {
+                        "week": 15,
+                        "monday": "2026-12-14",
+                        "open": "2026-12-18T14:00:00",
+                        "close": "2026-12-25T13:59:59",
+                        "open_str": "14:00 ngày 18/12/2026",
+                        "close_str": "13:59:59 ngày 25/12/2026",
+                        "is_cap_for_guest": false
+            },
+            "16": {
+                        "week": 16,
+                        "monday": "2026-12-21",
+                        "open": "2026-12-25T14:00:00",
+                        "close": "2027-01-01T13:59:59",
+                        "open_str": "14:00 ngày 25/12/2026",
+                        "close_str": "13:59:59 ngày 01/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "17": {
+                        "week": 17,
+                        "monday": "2026-12-28",
+                        "open": "2027-01-01T14:00:00",
+                        "close": "2027-01-08T13:59:59",
+                        "open_str": "14:00 ngày 01/01/2027",
+                        "close_str": "13:59:59 ngày 08/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "18": {
+                        "week": 18,
+                        "monday": "2027-01-04",
+                        "open": "2027-01-08T14:00:00",
+                        "close": "2027-01-15T13:59:59",
+                        "open_str": "14:00 ngày 08/01/2027",
+                        "close_str": "13:59:59 ngày 15/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "19": {
+                        "week": 19,
+                        "monday": "2027-01-11",
+                        "open": "2027-01-15T14:00:00",
+                        "close": "2027-01-22T13:59:59",
+                        "open_str": "14:00 ngày 15/01/2027",
+                        "close_str": "13:59:59 ngày 22/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "20": {
+                        "week": 20,
+                        "monday": "2027-01-18",
+                        "open": "2027-01-22T14:00:00",
+                        "close": "2027-01-29T13:59:59",
+                        "open_str": "14:00 ngày 22/01/2027",
+                        "close_str": "13:59:59 ngày 29/01/2027",
+                        "is_cap_for_guest": false
+            },
+            "21": {
+                        "week": 21,
+                        "monday": "2027-01-25",
+                        "open": "2027-01-29T14:00:00",
+                        "close": "2027-02-19T13:59:59",
+                        "open_str": "14:00 ngày 29/01/2027",
+                        "close_str": "13:59:59 ngày 19/02/2027",
+                        "is_cap_for_guest": false
+            },
+            "22": {
+                        "week": 22,
+                        "monday": "2027-02-15",
+                        "open": "2027-02-19T14:00:00",
+                        "close": "2027-02-26T13:59:59",
+                        "open_str": "14:00 ngày 19/02/2027",
+                        "close_str": "13:59:59 ngày 26/02/2027",
+                        "is_cap_for_guest": false
+            },
+            "23": {
+                        "week": 23,
+                        "monday": "2027-02-22",
+                        "open": "2027-02-26T14:00:00",
+                        "close": "2027-03-05T13:59:59",
+                        "open_str": "14:00 ngày 26/02/2027",
+                        "close_str": "13:59:59 ngày 05/03/2027",
+                        "is_cap_for_guest": false
+            },
+            "24": {
+                        "week": 24,
+                        "monday": "2027-03-01",
+                        "open": "2027-03-05T14:00:00",
+                        "close": "2027-03-12T13:59:59",
+                        "open_str": "14:00 ngày 05/03/2027",
+                        "close_str": "13:59:59 ngày 12/03/2027",
+                        "is_cap_for_guest": false
+            },
+            "25": {
+                        "week": 25,
+                        "monday": "2027-03-08",
+                        "open": "2027-03-12T14:00:00",
+                        "close": "2027-03-19T13:59:59",
+                        "open_str": "14:00 ngày 12/03/2027",
+                        "close_str": "13:59:59 ngày 19/03/2027",
+                        "is_cap_for_guest": false
+            },
+            "26": {
+                        "week": 26,
+                        "monday": "2027-03-15",
+                        "open": "2027-03-19T14:00:00",
+                        "close": "2027-03-26T13:59:59",
+                        "open_str": "14:00 ngày 19/03/2027",
+                        "close_str": "13:59:59 ngày 26/03/2027",
+                        "is_cap_for_guest": false
+            },
+            "27": {
+                        "week": 27,
+                        "monday": "2027-03-22",
+                        "open": "2027-03-26T14:00:00",
+                        "close": "2027-04-02T13:59:59",
+                        "open_str": "14:00 ngày 26/03/2027",
+                        "close_str": "13:59:59 ngày 02/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "28": {
+                        "week": 28,
+                        "monday": "2027-03-29",
+                        "open": "2027-04-02T14:00:00",
+                        "close": "2027-04-09T13:59:59",
+                        "open_str": "14:00 ngày 02/04/2027",
+                        "close_str": "13:59:59 ngày 09/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "29": {
+                        "week": 29,
+                        "monday": "2027-04-05",
+                        "open": "2027-04-09T14:00:00",
+                        "close": "2027-04-16T13:59:59",
+                        "open_str": "14:00 ngày 09/04/2027",
+                        "close_str": "13:59:59 ngày 16/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "30": {
+                        "week": 30,
+                        "monday": "2027-04-12",
+                        "open": "2027-04-16T14:00:00",
+                        "close": "2027-04-23T13:59:59",
+                        "open_str": "14:00 ngày 16/04/2027",
+                        "close_str": "13:59:59 ngày 23/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "31": {
+                        "week": 31,
+                        "monday": "2027-04-19",
+                        "open": "2027-04-23T14:00:00",
+                        "close": "2027-04-30T13:59:59",
+                        "open_str": "14:00 ngày 23/04/2027",
+                        "close_str": "13:59:59 ngày 30/04/2027",
+                        "is_cap_for_guest": false
+            },
+            "32": {
+                        "week": 32,
+                        "monday": "2027-04-26",
+                        "open": "2027-04-30T14:00:00",
+                        "close": "2027-05-07T13:59:59",
+                        "open_str": "14:00 ngày 30/04/2027",
+                        "close_str": "13:59:59 ngày 07/05/2027",
+                        "is_cap_for_guest": false
+            },
+            "33": {
+                        "week": 33,
+                        "monday": "2027-05-03",
+                        "open": "2027-05-07T14:00:00",
+                        "close": "2027-05-14T13:59:59",
+                        "open_str": "14:00 ngày 07/05/2027",
+                        "close_str": "13:59:59 ngày 14/05/2027",
+                        "is_cap_for_guest": false
+            },
+            "34": {
+                        "week": 34,
+                        "monday": "2027-05-10",
+                        "open": "2027-05-14T14:00:00",
+                        "close": "2027-05-21T13:59:59",
+                        "open_str": "14:00 ngày 14/05/2027",
+                        "close_str": "13:59:59 ngày 21/05/2027",
+                        "is_cap_for_guest": false
+            },
+            "35": {
+                        "week": 35,
+                        "monday": "2027-05-17",
+                        "open": "2027-05-21T14:00:00",
+                        "close": "2027-05-28T13:59:59",
+                        "open_str": "14:00 ngày 21/05/2027",
+                        "close_str": "13:59:59 ngày 28/05/2027",
+                        "is_cap_for_guest": false
+            }
+};
+        let currentModeFilter = 'all'; // 'all' (Tất cả lượt thi tự luyện) | 'official' (Khung giờ đua Top)
+        let currentSemesterFilter = 'all'; // 'all' | 'hk1' | 'hk2'
+        let cachedAllScores = {};
+        const charts = {};
+
+        const WEEK_LANDMARKS = {
+            1: "Cột cờ Lũng Cú (Hà Giang)",
+            2: "Hẻm Tu Sản & Sông Nho Quế",
+            3: "Thác Bản Giốc (Cao Bằng)",
+            4: "Hồ Ba Bể (Bắc Kạn)",
+            5: "Ruộng bậc thang Mù Cang Chải",
+            6: "Đỉnh Fansipan (Lào Cai)",
+            7: "Thủ đô Hà Nội",
+            8: "Vịnh Hạ Long & Yên Tử",
+            9: "Tràng An & Cố đô Hoa Lư 🌟",
+            10: "Thành Nhà Hồ (Thanh Hóa)",
+            11: "Làng Sen Quê Bác (Nghệ An)",
+            12: "Ngã ba Đồng Lộc (Hà Tĩnh)",
+            13: "VQG Phong Nha - Kẻ Bàng",
+            14: "Thành cổ Quảng Trị & Hiền Lương",
+            15: "Quần thể Cố đô Huế",
+            16: "Cầu Rồng & Ngũ Hành Sơn",
+            17: "Phố cổ Hội An (Quảng Nam)",
+            18: "Đảo Lý Sơn (Quảng Ngãi) 🏆",
+            19: "Kon Tum (Bờ Y - Ngã ba Đông Dương)",
+            20: "Gia Lai (Biển Hồ Tơ Nưng)",
+            21: "Đắk Lắk (Buôn Đôn, Dray Nur)",
+            22: "Đắk Nông (Hồ Tà Đùng)",
+            23: "Phú Yên (Gành Đá Đĩa & Mũi Điện)",
+            24: "Khánh Hòa (Vịnh Nha Trang, Trầm Hương)",
+            25: "Ninh Thuận (Tháp Po Klong Garai)",
+            26: "Bình Thuận (Đồi cát Mũi Né, Bàu Trắng)",
+            27: "Lâm Đồng (Đỉnh Lang Biang, Đà Lạt) 🌟",
+            28: "TP.HCM (Địa đạo Củ Chi, Rừng Sác)",
+            29: "Tây Ninh (Núi Bà Đen)",
+            30: "TP.HCM (Bến Nhà Rồng, Landmark 81)",
+            31: "Đồng Tháp (Sa Đéc, Sen Tháp Mười)",
+            32: "Cà Mau (Đất Mũi Cà Mau)",
+            33: "Kiên Giang (Đảo Ngọc Phú Quốc)",
+            34: "Khánh Hòa (Quần đảo Trường Sa)",
+            35: "Đà Nẵng (Quần đảo Hoàng Sa) 🏆"
+        };
+
+        function formatTime(s) {
+            if (!s || s === 9999) return "---";
+            const m = Math.floor(s / 60);
+            const rs = s % 60;
+            return m > 0 ? `${m}m ${rs}s` : `${rs}s`;
+        }
+
+        function filterBv(mode) {
+            document.querySelectorAll('.btn-filter-bv').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-bv-' + mode).classList.add('active');
+            for (let i = 1; i <= 35; i++) {
+                const el = document.getElementById(`accordion-week-${i}`);
+                if (!el) continue;
+                if (mode === 'hk1') {
+                    el.style.display = (i <= 18) ? 'block' : 'none';
+                } else if (mode === 'hk2') {
+                    el.style.display = (i >= 19) ? 'block' : 'none';
+                } else {
+                    el.style.display = 'block';
+                }
+            }
+        }
+
+        function initAccordion() {
+            const container = document.getElementById('accordion-container');
+            let html = '';
+            for (let i = 1; i <= 35; i++) {
+                const landmark = WEEK_LANDMARKS[i] || "";
+                const sched = SCHEDULE[i];
+                const timeInfo = sched ? `<span style="font-size:0.75rem; color:#e0f2fe; font-weight:normal; margin-left:8px; display:inline-block;">(⏱ Mở: ${sched.open_str} -> Chốt: ${sched.close_str})</span>` : '';
+                html += `
+                <div class="week-accordion" id="accordion-week-${i}">
+                    <div class="week-header" onclick="toggleWeek(${i})">
+                        <div class="week-title">
+                            <div>
+                                <span>📂 Tuần ${i}: ${landmark}</span>
+                                ${timeInfo}
+                            </div>
+                            <span class="week-badge" id="count-${i}">0 bạn</span>
+                        </div>
+                        <span id="icon-${i}">▼</span>
+                    </div>
+                    <div class="week-content" id="content-${i}">
+                        <div class="chart-section" id="chart-section-${i}" style="display:none;">
+                            <div class="chart-title">Phân bổ khoảng điểm (Tuần ${i}: ${landmark})</div>
+                            <div class="chart-container"><canvas id="chart-canvas-${i}"></canvas></div>
+                        </div>
+                        <div class="action-bar" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                            <button class="btn-excel" onclick="exportExcel(${i})">📄 Xuất Excel Tuần ${i}</button>
+                            <button class="btn-clean-test btn-admin-only" style="display:none; background:#ea580c; color:#fff; border:none; padding:7px 12px; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.75rem; font-family:'Lexend',sans-serif;" onclick="cleanTestScoresWeek(${i})">🧹 Dọn dẹp điểm test Tuần ${i}</button>
+                            <button class="btn-clean-all btn-admin-only" style="display:none; background:#dc2626; color:#fff; border:none; padding:7px 12px; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.75rem; font-family:'Lexend',sans-serif;" onclick="resetWeekScores(${i})">⚠️ Xóa toàn bộ điểm Tuần ${i}</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Hạng</th>
+                                        <th>Học sinh</th>
+                                        <th>Lớp</th>
+                                        <th>Trường</th>
+                                        <th>Điểm</th>
+                                        <th>Thời gian</th>
+                                        <th>Lần thi</th>
+                                        <th>Ngày đạt</th>
+                                        <th class="th-admin-action" style="display:none; text-align:center;">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-${i}"><tr><td colspan="9" style="text-align:center; padding:20px; color:#999;">Chưa có dữ liệu lượt thi nào.</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function toggleWeek(i) {
+            const content = document.getElementById(`content-${i}`);
+            const header = content.previousElementSibling;
+            const icon = document.getElementById(`icon-${i}`);
+            content.classList.toggle('show');
+            header.classList.toggle('active');
+            icon.innerText = content.classList.contains('show') ? '▲' : '▼';
+        }
+
+        const topLabelsPlugin = {
+            id: 'topLabels',
+            afterDatasetsDraw(chart) {
+                const { ctx } = chart;
+                ctx.save();
+                chart.data.datasets.forEach((dataset, i) => {
+                    chart.getDatasetMeta(i).data.forEach((bar, index) => {
+                        const value = dataset.data[index];
+                        if (value > 0) {
+                            ctx.fillStyle = '#444';
+                            ctx.font = 'bold 10px Lexend';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            ctx.fillText(value, bar.x, bar.y - 5);
+                        }
+                    });
+                });
+                ctx.restore();
+            }
+        };
+
+        function updateChart(week, distribution) {
+            const ctx = document.getElementById(`chart-canvas-${week}`).getContext('2d');
+            if (charts[week]) charts[week].destroy();
+            charts[week] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['50-59', '60-69', '70-79', '80-89', '90-100'],
+                    datasets: [{
+                        data: distribution,
+                        backgroundColor: [
+                            'rgba(231, 76, 60, 0.7)', 'rgba(230, 126, 34, 0.7)',
+                            'rgba(241, 196, 15, 0.7)', 'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                plugins: [topLabelsPlugin],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 9 } } },
+                        x: { ticks: { font: { size: 9, weight: '600' } } }
+                    }
+                }
+            });
+        }
+
+        function exportExcel(week) {
+            const table = document.querySelector(`#tbody-${week}`).parentElement;
+            const rows = table.querySelectorAll('tr');
+            const data = [];
+
+            rows.forEach((row, rowIndex) => {
+                const cols = row.querySelectorAll('th, td');
+                const rowData = [];
+                cols.forEach((col, colIndex) => {
+                    let value = col.innerText.replace('⏱ ', '').replace('/100', '');
+                    if (colIndex === 2 && rowIndex > 0) {
+                        rowData.push({ v: value, t: 's' });
+                    } else {
+                        rowData.push(value);
+                    }
+                });
+                data.push(rowData);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Tuần " + week);
+            XLSX.writeFile(wb, `BangVang_Tuan_${week}.xlsx`);
+        }
+
+        function setModeFilter(mode) {
+            currentModeFilter = mode;
+            document.getElementById('btn-mode-official').classList.toggle('active', mode === 'official');
+            document.getElementById('btn-mode-all').classList.toggle('active', mode === 'all');
+            if (mode === 'official') {
+                document.getElementById('btn-mode-official').style.background = '#4CAF50';
+                document.getElementById('btn-mode-official').style.color = '#fff';
+                document.getElementById('btn-mode-all').style.background = '#fff';
+                document.getElementById('btn-mode-all').style.color = '#333';
+            } else {
+                document.getElementById('btn-mode-all').style.background = '#4CAF50';
+                document.getElementById('btn-mode-all').style.color = '#fff';
+                document.getElementById('btn-mode-official').style.background = '#fff';
+                document.getElementById('btn-mode-official').style.color = '#333';
+            }
+            renderAllWeeks();
+        }
+
+        function parseDateToMs(str) {
+            if (!str) return 0;
+            try {
+                const parts = str.split(' ');
+                const timeParts = parts[0].split(':');
+                const dateParts = parts[1].split('/');
+                const d = new Date(dateParts[2], dateParts[1] - 1, dateParts[0], timeParts[0], timeParts[1], timeParts[2] || 0);
+                return d.getTime();
+            } catch(e) {
+                return 0;
+            }
+        }
+
+        db.ref('scores').on('value', (snap) => {
+            cachedAllScores = snap.val() || {};
+            renderAllWeeks();
+        });
+
+        function renderAllWeeks() {
+            const allData = cachedAllScores;
+            for (let i = 1; i <= 35; i++) {
+                const weekData = allData[`Tuan_${i}`] || allData[`tuan${i}`];
+                const tbody = document.getElementById(`tbody-${i}`);
+                const countBadge = document.getElementById(`count-${i}`);
+                const chartSection = document.getElementById(`chart-section-${i}`);
+
+                if (!tbody) continue;
+
+                if (!weekData) {
+                    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:15px; color:#999; font-size:0.8rem;">Chưa có dữ liệu lượt thi nào.</td></tr>`;
+                    countBadge.innerText = `0 bạn`;
+                    chartSection.style.display = 'none';
+                    continue;
+                }
+
+                let filteredMap = new Map();
+                for (let pushId in weekData) {
+                    let entry = weekData[pushId];
+                    entry._pushId = pushId;
+                    let key = ((entry.fullName || entry.name || entry.username || "") + "|" + (entry.className || entry.class || "")).toLowerCase().trim();
+                    if (!filteredMap.has(key)) {
+                        filteredMap.set(key, entry);
+                    } else {
+                        let old = filteredMap.get(key);
+                        if (entry.score > old.score || (entry.score === old.score && (entry.duration || 999) < (old.duration || 999))) {
+                            filteredMap.set(key, entry);
+                        }
+                    }
+                }
+
+                const sched = SCHEDULE[i];
+                let sorted = Array.from(filteredMap.values())
+                    .filter(s => {
+                        let nameValue = (s.fullName || s.name || s.username || "").trim();
+                        let nameLower = nameValue.toLowerCase();
+
+                        const draftKeywords = ['test', 'abc', 'nhap', 'nháp', '123', 'demo', 'đemo', 'xxx', '...', '---'];
+                        if (draftKeywords.some(k => nameLower === k || nameLower.startsWith(k + ' ') || nameLower.endsWith(' ' + k))) return false;
+                        if (/^\d+$/.test(nameLower)) return false;
+                        if (nameValue.length < 2) return false;
+
+                        // Lọc theo khung giờ đua Top tuần chính thức
+                        if (currentModeFilter === 'official' && sched) {
+                            const openMs = new Date(sched.open).getTime();
+                            const closeMs = new Date(sched.close).getTime();
+                            const submitTime = s.timestamp || parseDateToMs(s.date);
+                            if (submitTime > 0) {
+                                if (submitTime < openMs || submitTime > closeMs) return false;
+                            }
+                        }
+
+                        return (s.score || 0) >= 50;
+                    })
+                    .sort((a, b) => (b.score !== a.score) ? b.score - a.score : (a.duration || 999) - (b.duration || 999));
+
+                let dist = [0, 0, 0, 0, 0];
+                sorted.forEach(s => {
+                    let sc = s.score || 0;
+                    if (sc <= 59) dist[0]++;
+                    else if (sc <= 69) dist[1]++;
+                    else if (sc <= 79) dist[2]++;
+                    else if (sc <= 89) dist[3]++;
+                    else dist[4]++;
+                });
+
+                countBadge.innerText = `${sorted.length} bạn`;
+                if (sorted.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:15px; color:#999; font-size:0.8rem;">Chưa có bạn nào đạt từ 50 điểm trở lên.</td></tr>`;
+                    chartSection.style.display = 'none';
+                } else {
+                    tbody.innerHTML = sorted.map((s, idx) => `
+                        <tr>
+                            <td><div class="rank">${idx + 1}</div></td>
+                            <td><b>${s.fullName || s.name || s.username}</b></td>
+                            <td><span class="class-badge">${s.className || s.class || '---'}</span></td>
+                            <td><span style="font-size:0.8rem; color:#555;">${s.schoolName || '---'}</span></td>
+                            <td><span class="score-badge">${s.score}/100</span></td>
+                            <td><span class="time-badge">⏱ ${formatTime(s.duration)}</span></td>
+                            <td><span class="attempt-badge">Lần ${s.attempt || 1}</span></td>
+                            <td style="font-size:0.75rem; color:#888;">${s.date || ""}</td>
+                            <td class="td-admin-action" style="display:${isAdminModeBV ? 'table-cell' : 'none'}; text-align:center;">
+                                <button class="btn-del-score" onclick="deleteWeekScore(${i}, '${s._pushId}', '${(s.fullName || s.name || s.username || '').replace(/'/g, "\\'")}', ${s.score}, '${(s.username || '').replace(/'/g, "\\'")}')" style="background:#ef4444; color:#fff; border:none; padding:4px 9px; border-radius:6px; cursor:pointer; font-size:0.75rem; font-weight:bold; font-family:'Lexend',sans-serif;" title="Xóa triệt để tất cả lượt thi của thí sinh này">🗑️ Xóa</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    chartSection.style.display = 'block';
+                    updateChart(i, dist);
+                }
+            }
+        }
+
+        let isAdminModeBV = false;
+
+        function toggleAdminModeBV() {
+            if (isAdminModeBV) {
+                isAdminModeBV = false;
+                applyAdminModeBV();
+                return;
+            }
+            const role = localStorage.getItem('userRole');
+            const adminUser = localStorage.getItem('adminUsername');
+            if (role === 'admin' || adminUser === 'admin') {
+                isAdminModeBV = true;
+                applyAdminModeBV();
+                return;
+            }
+            const pwd = prompt("Nhập mật khẩu quản trị để bật quyền Xóa/Dọn dẹp điểm:");
+            if (pwd === "EduBot@2026") {
+                isAdminModeBV = true;
+                localStorage.setItem('adminUsername', 'admin');
+                localStorage.setItem('userRole', 'admin');
+                applyAdminModeBV();
+                alert("✅ Đã bật Chế độ Quản trị! Bạn có thể xóa điểm từng thí sinh hoặc dọn dẹp hàng loạt.");
+            } else if (pwd !== null) {
+                alert("❌ Sai mật khẩu quản trị!");
+            }
+        }
+
+        function applyAdminModeBV() {
+            const btn = document.getElementById('btn-toggle-admin-bv');
+            const txt = document.getElementById('admin-mode-text');
+            if (btn && txt) {
+                if (isAdminModeBV) {
+                    btn.style.background = '#10b981';
+                    btn.style.borderColor = '#059669';
+                    btn.style.color = '#fff';
+                    txt.innerText = 'ĐANG BẬT';
+                } else {
+                    btn.style.background = '#fff7ed';
+                    btn.style.borderColor = '#fdba74';
+                    btn.style.color = '#ea580c';
+                    txt.innerText = 'TẮT';
+                }
+            }
+            document.querySelectorAll('.th-admin-action, .td-admin-action').forEach(el => {
+                el.style.display = isAdminModeBV ? 'table-cell' : 'none';
+            });
+            document.querySelectorAll('.btn-admin-only').forEach(el => {
+                el.style.display = isAdminModeBV ? 'inline-block' : 'none';
+            });
+        }
+
+        function deleteWeekScore(week, pushId, name, score, username) {
+            if (!confirm(`Quản trị viên: Xác nhận XÓA TRIỆT ĐỂ tất cả các lượt thi của thí sinh "${name}" ở Tuần ${week}?`)) {
+                return;
+            }
+
+            db.ref(`scores/Tuan_${week}`).once('value', (snap) => {
+                const weekData = snap.val() || {};
+                const updates = {};
+                let count = 0;
+
+                for (let k in weekData) {
+                    const item = weekData[k];
+                    const isMatch = k === pushId ||
+                                   (username && item.username && item.username.toLowerCase() === username.toLowerCase()) ||
+                                   (name && item.fullName && item.fullName.trim().toLowerCase() === name.trim().toLowerCase());
+                    if (isMatch) {
+                        updates[k] = null;
+                        count++;
+                    }
+                }
+
+                if (count === 0 && pushId) {
+                    updates[pushId] = null;
+                    count = 1;
+                }
+
+                db.ref(`scores/Tuan_${week}`).update(updates).then(() => {
+                    // Xóa trong localStorage nếu trùng với tài khoản đang đăng nhập
+                    const curUser = localStorage.getItem('studentUsername') || localStorage.getItem('adminUsername');
+                    const curName = localStorage.getItem('studentName');
+                    if (curUser === username || (curName && curName.trim().toLowerCase() === name.trim().toLowerCase())) {
+                        localStorage.removeItem(`bestScore_Tuan_${week}`);
+                        localStorage.removeItem('lastCompletedWeek');
+                        localStorage.removeItem('lastCompletedScore');
+                    }
+                    alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở Tuần ${week}!`);
+                }).catch((err) => {
+                    alert(`⚠️ Lỗi khi xóa: ${err.message}`);
+                });
+            });
+        }
+
+        function cleanTestScoresWeek(week) {
+            const weekData = cachedAllScores[`Tuan_${week}`] || cachedAllScores[`tuan${week}`];
+            if (!weekData) {
+                alert(`Tuần ${week} chưa có lượt thi nào!`);
+                return;
+            }
+            const draftKeywords = ['test', 'abc', 'nhap', 'nháp', '123', 'demo', 'đemo', 'xxx', '...', '---', 'admin'];
+            const toDelete = [];
+            for (let key in weekData) {
+                const item = weekData[key];
+                const uname = (item.username || '').toLowerCase();
+                const fname = (item.fullName || item.name || '').toLowerCase();
+                const isTest = draftKeywords.some(k => uname.includes(k) || fname.includes(k)) || uname.startsWith('guest_');
+                if (isTest) {
+                    toDelete.push({ key, name: item.fullName || item.name || item.username, score: item.score, date: item.date });
+                }
+            }
+            if (toDelete.length === 0) {
+                alert(`Tuần ${week}: Không tìm thấy lượt thi nháp / tài khoản test nào!`);
+                return;
+            }
+            const preview = toDelete.map((x, i) => `${i + 1}. ${x.name} - ${x.score}đ (${x.date || '---'})`).join('\n');
+            if (confirm(`Tìm thấy ${toDelete.length} lượt thi test/nháp ở Tuần ${week}:\n\n${preview}\n\nBạn có chắc chắn muốn XÓA TOÀN BỘ ${toDelete.length} lượt thi này?`)) {
+                const updates = {};
+                toDelete.forEach(x => {
+                    updates[`scores/Tuan_${week}/${x.key}`] = null;
+                });
+                db.ref().update(updates).then(() => {
+                    alert(`✅ Đã dọn dẹp thành công ${toDelete.length} lượt thi test ở Tuần ${week}!`);
+                }).catch(err => {
+                    alert(`⚠️ Lỗi: ${err.message}`);
+                });
+            }
+        }
+
+        function resetWeekScores(week) {
+            const weekData = cachedAllScores[`Tuan_${week}`] || cachedAllScores[`tuan${week}`];
+            const count = weekData ? Object.keys(weekData).length : 0;
+            if (count === 0) {
+                alert(`Tuần ${week} không có dữ liệu để xóa!`);
+                return;
+            }
+            const check = prompt(`⚠️ CẢNH BÁO: Thao tác này sẽ xóa vĩnh viễn TOÀN BỘ ${count} lượt thi của Tuần ${week}!\nNhập chữ 'XOA' để xác nhận:`);
+            if (check === 'XOA') {
+                db.ref(`scores/Tuan_${week}`).remove().then(() => {
+                    alert(`✅ Đã xóa toàn bộ điểm số của Tuần ${week}!`);
+                }).catch(err => {
+                    alert(`⚠️ Lỗi: ${err.message}`);
+                });
+            } else if (check !== null) {
+                alert("Đã hủy thao tác xóa.");
+            }
+        }
+
+        initAccordion();
+
+        // Tự động kiểm tra quyền Admin khi tải trang
+        const savedRole = localStorage.getItem('userRole');
+        const savedAdmin = localStorage.getItem('adminUsername');
+        if (savedRole === 'admin' || savedAdmin === 'admin') {
+            isAdminModeBV = true;
+            setTimeout(applyAdminModeBV, 200);
+        }
+    </script>
+</body>
+
+</html>

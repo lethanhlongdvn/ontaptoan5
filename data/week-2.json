@@ -1,0 +1,250 @@
+{
+  "week": 2,
+  "stationName": "Hẻm Tu Sản & Sông Nho Quế (Hà Giang)",
+  "config": {
+    "week": 2,
+    "openTime": "2026-09-18T14:00:00",
+    "openStr": "14:00 ngày 18/09/2026"
+  },
+  "souvenirs": {
+    "cap1": "Mảnh ngọc lục bảo Nho Quế Đồng (50đ)",
+    "cap2": "Cung tên Hẻm núi Bạc (90đ)",
+    "cap3": "Song kiếm Tu Sản Long Phụng Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Phân số thập phân có mẫu số là bao nhiêu?",
+        "a": "10; 100; 1000..."
+      },
+      {
+        "q": "Viết phân số 3/5 thành phân số thập phân có mẫu số là 10",
+        "a": "6/10"
+      },
+      {
+        "q": "Viết phân số 7/25 thành phân số thập phân có mẫu số là 100",
+        "a": "28/100"
+      },
+      {
+        "q": "Tính kết quả phép cộng: 2/7 + 3/7",
+        "a": "5/7"
+      },
+      {
+        "q": "Tính kết quả phép trừ: 5/6 - 1/6",
+        "a": "4/6 (hoặc 2/3)"
+      },
+      {
+        "q": "Tính kết quả phép nhân: 3/4 × 5/7",
+        "a": "15/28"
+      },
+      {
+        "q": "Tính kết quả phép chia: 2/5 : 3/4",
+        "a": "8/15"
+      },
+      {
+        "q": "Hẻm Tu Sản nằm dưới chân con đèo nổi tiếng nào?",
+        "a": "Đèo Mã Pí Lèng"
+      },
+      {
+        "q": "Vách đá hẻm vực Tu Sản có chiều cao hùng vĩ khoảng bao nhiêu mét?",
+        "a": "700 m đến 800 m"
+      },
+      {
+        "q": "Dòng sông Nho Quế có màu nước đặc trưng là màu gì?",
+        "a": "Màu xanh ngọc bích"
+      },
+      {
+        "q": "Viết phân số 9/20 thành phân số thập phân có mẫu số là 100",
+        "a": "45/100"
+      },
+      {
+        "q": "Viết phân số 1/8 thành phân số thập phân có mẫu số là 1000",
+        "a": "125/1000"
+      },
+      {
+        "q": "Phân số nào trong các phân số sau là phân số thập phân: 3/10; 5/7; 9/20; 11/15",
+        "a": "3/10"
+      },
+      {
+        "q": "Tính kết quả: 1/4 + 3/8",
+        "a": "5/8"
+      },
+      {
+        "q": "Tính kết quả: 7/9 - 1/3",
+        "a": "4/9"
+      },
+      {
+        "q": "Tính kết quả: 4/5 × 15/16",
+        "a": "3/4"
+      },
+      {
+        "q": "Tính kết quả: 3/7 : 6/7",
+        "a": "1/2"
+      },
+      {
+        "q": "Hẻm vực Tu Sản được mệnh danh là hẻm vực sâu nhất khu vực nào?",
+        "a": "Đông Nam Á"
+      },
+      {
+        "q": "Tính nhanh: 3/5 × 4/7 + 3/5 × 3/7",
+        "a": "3/5"
+      },
+      {
+        "q": "Rút gọn phân số 60/100 về phân số tối giản",
+        "a": "3/5"
+      },
+      {
+        "q": "Viết phân số 13/50 thành phân số thập phân có mẫu số là 100",
+        "a": "26/100"
+      },
+      {
+        "q": "Viết phân số 3/4 thành phân số thập phân có mẫu số là 100",
+        "a": "75/100"
+      },
+      {
+        "q": "Phân số 12/200 rút gọn thành phân số thập phân mẫu số 100",
+        "a": "6/100"
+      },
+      {
+        "q": "Tính kết quả: 2/3 + 1/6",
+        "a": "5/6"
+      },
+      {
+        "q": "Tính kết quả: 5/8 - 1/4",
+        "a": "3/8"
+      },
+      {
+        "q": "Tính kết quả: 5/12 × 4/15",
+        "a": "1/9"
+      },
+      {
+        "q": "Tính kết quả: 5/9 : 10/27",
+        "a": "3/2 (hoặc 1 1/2)"
+      },
+      {
+        "q": "Sông Nho Quế bắt nguồn từ vùng núi Vân Nam chảy vào tỉnh nào nước ta?",
+        "a": "Hà Giang"
+      },
+      {
+        "q": "Tìm phân số nghịch đảo của phân số 4/9",
+        "a": "9/4"
+      },
+      {
+        "q": "Tính nhanh: (1/2 + 1/3) × 6",
+        "a": "5"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Đội thuyền du lịch ngắm Hẻm Tu Sản trên sông Nho Quế có 36 chiếc thuyền. Buổi sáng có 5/9 số thuyền xuất bến. Số thuyền còn lại tại bến là ... chiếc.",
+        "a": "16"
+      },
+      {
+        "q": "Một thuyền chở du khách xuôi dòng sông Nho Quế đoạn qua Hẻm Tu Sản dài 6 km hết 2/5 giờ. Vận tốc xuôi dòng của thuyền là ... km/giờ.",
+        "a": "15"
+      },
+      {
+        "q": "Tìm x, biết: x + 1/3 = 5/6. Giá trị của x là phân số tối giản có mẫu số là ...",
+        "a": "2 (x = 1/2)"
+      },
+      {
+        "q": "Một mảnh vườn hình chữ nhật ven sông Nho Quế có chiều dài 4/5 km, chiều rộng 1/2 km. Diện tích mảnh vườn đó là ... km² (nhập phân số dạng a/b).",
+        "a": "2/5"
+      },
+      {
+        "q": "Đội tình nguyện viên dọn dẹp rác sông Nho Quế: ngày thứ nhất vớt được 3/8 tấn rác, ngày thứ hai vớt được nhiều hơn ngày thứ nhất 1/4 tấn. Cả hai ngày đội vớt được tất cả ... tấn rác.",
+        "a": "1"
+      },
+      {
+        "q": "Một đoàn khách du lịch 45 người thuê thuyền đi ngắm Hẻm Tu Sản. Mỗi thuyền chở được tối đa 6 người. Đoàn cần thuê ít nhất ... chiếc thuyền.",
+        "a": "8"
+      },
+      {
+        "q": "Tìm y, biết: y × 2/5 = 4/15. Giá trị của y là phân số tối giản dạng a/b, tử số là ...",
+        "a": "2 (y = 2/3)"
+      },
+      {
+        "q": "Một bình đựng nước khoáng cho đoàn leo núi Mã Pí Lèng có 5 lít nước. Mỗi người uống 1/4 lít nước thì chia đủ cho ... người.",
+        "a": "20"
+      },
+      {
+        "q": "Đoạn đường đèo Mã Pí Lèng ngắm xuống sông Nho Quế dài 20 km. Một đội đạp xe thể thao đã đi được 3/4 đoạn đường. Quãng đường còn lại phải đi là ... km.",
+        "a": "5"
+      },
+      {
+        "q": "Bác lái thuyền sông Nho Quế dự trữ 60 lít dầu. Chuyến thứ nhất dùng 1/3 lượng dầu, chuyến thứ hai dùng 1/4 lượng dầu ban đầu. Sau 2 chuyến bác còn lại ... lít dầu.",
+        "a": "25"
+      },
+      {
+        "q": "Tìm x, biết: x : 3/4 = 8/9. Giá trị của x dưới dạng phân số tối giản có tử số là ...",
+        "a": "2 (x = 2/3)"
+      },
+      {
+        "q": "Một tấm biển quảng cáo du lịch Hẻm Tu Sản hình vuông có cạnh dài 3/4 m. Diện tích tấm biển đó là ... m² (nhập phân số dạng a/b).",
+        "a": "9/16"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Tính giá trị biểu thức sau bằng cách thuận tiện nhất:\nA = (1 - 1/2) × (1 - 1/3) × (1 - 1/4) × ... × (1 - 1/10)",
+        "opts": [
+          "1/2",
+          "1/10",
+          "9/10",
+          "1/9"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Hai chiếc thuyền du lịch cùng xuất phát từ bến sông Nho Quế đi ngược chiều nhau. Thuyền A đi hết khúc sông trong 3 giờ, thuyền B đi hết khúc sông trong 6 giờ. Nếu hai thuyền cùng khởi hành thì sau bao lâu sẽ gặp nhau?",
+        "opts": [
+          "2 giờ",
+          "4,5 giờ",
+          "1,5 giờ",
+          "2,5 giờ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Tính tổng sau: S = 1/(1×2) + 1/(2×3) + 1/(3×4) + ... + 1/(99×100)",
+        "opts": [
+          "99/100",
+          "100/99",
+          "1/100",
+          "1"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một cửa hàng lưu niệm đèo Mã Pí Lèng bán một tấm khăn thổ cẩm với giá lãi 20% so với giá vốn. Biết số tiền lãi là 40 000 đồng. Hỏi giá bán tấm khăn đó là bao nhiêu?",
+        "opts": [
+          "200 000 đồng",
+          "240 000 đồng",
+          "160 000 đồng",
+          "280 000 đồng"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Một vòi nước chảy vào bể chứa trên thuyền ngắm hẻm Tu Sản: vòi thứ nhất chảy một mình trong 4 giờ thì đầy bể, vòi thứ hai chảy một mình trong 6 giờ thì đầy bể. Hỏi cả hai vòi cùng chảy thì sau bao lâu bể đầy?",
+        "opts": [
+          "5 giờ",
+          "2,4 giờ (2 giờ 24 phút)",
+          "3 giờ",
+          "2,5 giờ"
+        ],
+        "c": 1
+      },
+      {
+        "q": "Lớp 5A có số học sinh nam bằng 2/3 số học sinh nữ. Nếu chuyển 2 bạn nam thành 2 bạn nữ thì số nam bằng 1/2 số nữ. Tính tổng số học sinh lớp 5A tham gia chuyến đi Hà Giang.",
+        "opts": [
+          "35 học sinh",
+          "40 học sinh",
+          "30 học sinh",
+          "45 học sinh"
+        ],
+        "c": 2
+      }
+    ]
+  }
+}

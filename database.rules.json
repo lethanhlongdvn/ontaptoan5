@@ -1,0 +1,39 @@
+{
+  "rules": {
+    "users": {
+      ".read": true,
+      "$username": {
+        // Cho phép đăng ký mới hoặc người dùng tự cập nhật thông tin của mình
+        ".write": "true",
+        ".validate": "newData.hasChildren(['username', 'fullName', 'className', 'role', 'status'])",
+        "username": {
+          ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 30"
+        },
+        "score": {
+          ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0)"
+        }
+      }
+    },
+    "scores": {
+      // Cho phép đọc để hiển thị bảng vàng & bảng xếp hạng top 10
+      ".read": true,
+      "$tuan": {
+        ".write": "!newData.exists()",
+        "$pushId": {
+          // Cho phép ghi lượt thi mới hoặc xóa lượt thi để dọn dẹp dữ liệu
+          ".write": "(!data.exists() && newData.exists()) || !newData.exists()",
+          ".validate": "!newData.exists() || (newData.hasChildren(['fullName', 'className', 'score', 'duration']) && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('score').val() <= 100 && newData.child('duration').isNumber() && newData.child('duration').val() >= 0)",
+          "score": {
+            ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0 && newData.val() <= 100)"
+          },
+          "duration": {
+            ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 0)"
+          },
+          "attempt": {
+            ".validate": "!newData.exists() || (newData.isNumber() && newData.val() >= 1)"
+          }
+        }
+      }
+    }
+  }
+}

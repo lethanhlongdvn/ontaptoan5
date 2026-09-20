@@ -1,0 +1,250 @@
+window.WEEK_DATA_24 = {
+  "week": 24,
+  "stationName": "Khánh Hòa (Vịnh Nha Trang, Tháp Trầm Hương)",
+  "config": {
+    "week": 24,
+    "openTime": "2027-03-05T14:00:00",
+    "openStr": "14:00 ngày 05/03/2027"
+  },
+  "souvenirs": {
+    "cap1": "Vỏ ốc ngọc Nha Trang Đồng (50đ)",
+    "cap2": "Tháp Trầm Hương Bạc (90đ)",
+    "cap3": "San hô biển Ngọc Hoàng Kim Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Công thức tính diện tích xung quanh của hình hộp chữ nhật là gì?",
+        "a": "Sxq = Chu vi đáy × Chiều cao = (a + b) × 2 × c"
+      },
+      {
+        "q": "Công thức tính diện tích toàn phần của hình hộp chữ nhật là gì?",
+        "a": "Stp = Sxq + 2 × Sđáy = Sxq + 2 × a × b"
+      },
+      {
+        "q": "Diện tích xung quanh của hình hộp chữ nhật bằng tổng diện tích của mấy mặt bên?",
+        "a": "4 mặt bên"
+      },
+      {
+        "q": "Diện tích toàn phần của hình hộp chữ nhật bằng tổng diện tích của mấy mặt?",
+        "a": "6 mặt"
+      },
+      {
+        "q": "Tính diện tích xung quanh của hình hộp chữ nhật có chu vi đáy 20 cm, chiều cao 5 cm",
+        "a": "100 cm²"
+      },
+      {
+        "q": "Tháp biểu tượng kiến trúc hình búp sen màu cam hồng bên bờ biển Nha Trang là tháp gì?",
+        "a": "Tháp Trầm Hương"
+      },
+      {
+        "q": "Quần thể đền tháp Chăm Pa cổ kính trên đồi Cù Lao nhìn ra cửa sông Cái Nha Trang là gì?",
+        "a": "Tháp Bà Ponagar"
+      },
+      {
+        "q": "Vịnh Nha Trang được công nhận là một trong 29 vịnh biển đẹp nhất thế giới vào năm nào?",
+        "a": "Năm 2003"
+      },
+      {
+        "q": "Hòn đảo lớn nhất trong Vịnh Nha Trang nơi có khu vui chơi giải trí VinWonders là đảo nào?",
+        "a": "Đảo Hòn Tre"
+      },
+      {
+        "q": "Viện nghiên cứu hải dương học lâu đời và quy mô hàng đầu Đông Nam Á tại Nha Trang là gì?",
+        "a": "Viện Hải dương học Nha Trang"
+      },
+      {
+        "q": "Một hình hộp chữ nhật có chiều dài 6 cm, chiều rộng 4 cm và chiều cao 5 cm. Tính chu vi đáy",
+        "a": "20 cm ((6 + 4) × 2 = 20)"
+      },
+      {
+        "q": "Một hình hộp chữ nhật có dài 6 cm, rộng 4 cm, cao 5 cm. Tính diện tích 2 đáy",
+        "a": "48 cm² (2 × 6 × 4 = 48)"
+      },
+      {
+        "q": "Một hình hộp chữ nhật có dài 6 cm, rộng 4 cm, cao 5 cm. Tính diện tích xung quanh",
+        "a": "100 cm² (20 × 5 = 100)"
+      },
+      {
+        "q": "Một hình hộp chữ nhật có dài 6 cm, rộng 4 cm, cao 5 cm. Tính diện tích toàn phần",
+        "a": "148 cm² (100 + 48 = 148)"
+      },
+      {
+        "q": "Hộp không có nắp thì diện tích toàn phần gồm diện tích xung quanh cộng thêm mấy đáy?",
+        "a": "1 đáy"
+      },
+      {
+        "q": "Đặc sản tự nhiên vô cùng quý hiếm trên các đảo đá vôi Khánh Hòa là gì?",
+        "a": "Tổ yến (Yến sào Khánh Hòa)"
+      },
+      {
+        "q": "Khánh Hòa được mệnh danh trong câu thơ dân gian là xứ sở của hai thứ gì?",
+        "a": "Xứ Trầm biển Yến"
+      },
+      {
+        "q": "Khu bảo tồn biển đầu tiên của Việt Nam nằm tại hòn đảo nào trong Vịnh Nha Trang?",
+        "a": "Đảo Hòn Mun"
+      },
+      {
+        "q": "Tính diện tích xung quanh hình hộp chữ nhật có đáy vuông cạnh 3 cm, chiều cao 4 cm",
+        "a": "48 cm² (12 × 4 = 48)"
+      },
+      {
+        "q": "Nếu chiều cao hình hộp chữ nhật gấp 2 lần, chu vi đáy giữ nguyên thì diện tích xung quanh thay đổi thế nào?",
+        "a": "Gấp 2 lần"
+      },
+      {
+        "q": "Tính diện tích toàn phần hình hộp chữ nhật có dài 5 cm, rộng 2 cm, cao 3 cm",
+        "a": "62 cm² (Sxq = 42, 2Sđáy = 20)"
+      },
+      {
+        "q": "Một hình hộp chữ nhật có Sxq = 80 cm², chiều cao 4 cm. Chu vi đáy là bao nhiêu cm?",
+        "a": "20 cm (80 : 4 = 20)"
+      },
+      {
+        "q": "Tính diện tích 1 mặt đáy hình hộp chữ nhật biết dài 1,5 m và rộng 0,8 m",
+        "a": "1,2 m²"
+      },
+      {
+        "q": "Hồ cá nhân tạo độc đáo hình con tàu cổ hóa thạch ngoài đảo Nha Trang là hồ cá nào?",
+        "a": "Hồ cá Trí Nguyên (Hòn Miễu)"
+      },
+      {
+        "q": "Vịnh biển kín gió nước sâu bậc nhất nước ta nằm ở phía bắc Khánh Hòa là vịnh gì?",
+        "a": "Vịnh Cam Ranh"
+      },
+      {
+        "q": "Tháp Bà Ponagar được xây dựng để thờ nữ thần nào trong tín ngưỡng Chăm Pa?",
+        "a": "Nữ thần Thiên Y A Na (Po Nagar)"
+      },
+      {
+        "q": "Cáp treo vượt biển nối đất liền Nha Trang ra đảo Hòn Tre dài bao nhiêu mét?",
+        "a": "Khoảng 3 320 m"
+      },
+      {
+        "q": "Tính diện tích một hộp chữ nhật không nắp có dài 4 dm, rộng 3 dm và cao 2 dm",
+        "a": "40 dm² (Sxq = 28, Sđáy = 12)"
+      },
+      {
+        "q": "Hình lập phương có phải là trường hợp đặc biệt của hình hộp chữ nhật không?",
+        "a": "Có (khi dài = rộng = cao)"
+      },
+      {
+        "q": "Đổi 2,4 m² sang đề-xi-mét vuông",
+        "a": "240 dm²"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Một thùng các-tông đựng tổ yến sào Nha Trang hình hộp chữ nhật có chiều dài 40 cm, chiều rộng 30 cm và chiều cao 20 cm. Diện tích xung quanh chiếc thùng đó là ... cm².",
+        "a": "2800"
+      },
+      {
+        "q": "Bác thợ mộc làm một bể kính nuôi cá cảnh biển Nha Trang (không có nắp) dài 80 cm, rộng 50 cm và cao 45 cm. Diện tích kính cần dùng để làm bể là ... cm².",
+        "a": "15700"
+      },
+      {
+        "q": "Người ta sơn toàn bộ 4 bức tường xung quanh một phòng trưng bày trầm hương dài 8 m, rộng 5 m và cao 3,5 m. Biết tổng diện tích các cửa là 9 m². Diện tích tường cần sơn là ... m².",
+        "a": "82"
+      },
+      {
+        "q": "Một chiếc hộp đựng trầm hương hình hộp chữ nhật có chu vi đáy 48 cm, chiều cao 10 cm và diện tích đáy 140 cm². Diện tích toàn phần của chiếc hộp là ... cm².",
+        "a": "760"
+      },
+      {
+        "q": "Một bể bơi mini trong khu nghỉ dưỡng Nha Trang hình hộp chữ nhật dài 12 m, rộng 5 m và sâu 1,5 m. Người ta ốp gạch men toàn bộ đáy và 4 thành bể bơi. Diện tích ốp gạch là ... m².",
+        "a": "111"
+      },
+      {
+        "q": "Một khối hộp chữ nhật có diện tích xung quanh là 120 cm², chiều cao 6 cm. Nửa chu vi mặt đáy của khối hộp đó là ... cm.",
+        "a": "10"
+      },
+      {
+        "q": "Tuyến cáp treo vượt biển Nha Trang dài 3 320 m. Một cabin chạy với vận tốc 5 m/giây. Thời gian cabin vượt biển là ... giây.",
+        "a": "664"
+      },
+      {
+        "q": "Một hộp quà lưu niệm ốc biển Nha Trang có diện tích toàn phần là 240 cm², diện tích xung quanh là 160 cm². Diện tích một mặt đáy của hộp là ... cm².",
+        "a": "40"
+      },
+      {
+        "q": "Một phòng học tại Viện Hải dương học dài 9 m, rộng 6 m và cao 4 m. Người ta quét vôi trần nhà và 4 bức tường phía trong. Biết diện tích các cửa sổ là 15 m². Diện tích cần quét vôi là ... m².",
+        "a": "159"
+      },
+      {
+        "q": "Một thùng tôn đựng hải sản không nắp có chiều dài 1,2 m; chiều rộng 0,8 m và chiều cao 0,6 m. Diện tích tôn cần dùng làm thùng là ... m².",
+        "a": "3,36"
+      },
+      {
+        "q": "Tìm chiều cao của hình hộp chữ nhật có diện tích xung quanh 180 dm², chiều dài 10 dm và chiều rộng 5 dm. Chiều cao là ... dm.",
+        "a": "6"
+      },
+      {
+        "q": "Một kiện hàng yến sào hình hộp chữ nhật có kích thước 6 dm, 4 dm và 3 dm. Thể tích kiện hàng đó là ... dm³.",
+        "a": "72"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Một bể chứa nước biển nuôi sinh vật biển tại Viện Hải dương học Nha Trang hình hộp chữ nhật có chiều dài 3 m, chiều rộng 2 m và chiều cao 1,5 m. Người ta lát gạch men xung quanh và đáy bể bằng những viên gạch hình vuông cạnh 20 cm. Hỏi cần mua bao nhiêu viên gạch (bỏ qua mép vữa)?",
+        "opts": [
+          "525 viên",
+          "500 viên",
+          "550 viên",
+          "600 viên"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một phòng trưng bày san hô hình hộp chữ nhật có chiều dài 8 m, chiều rộng 5 m và chiều cao 3,5 m. Người ta thuê quét sơn trần nhà và 4 bức tường phía trong phòng với giá 25 000 đồng/m². Biết tổng diện tích các cửa là 12 m². Hỏi chi phí quét sơn là bao nhiêu tiền?",
+        "opts": [
+          "2 975 000 đồng",
+          "3 000 000 đồng",
+          "2 850 000 đồng",
+          "3 100 000 đồng"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một hình hộp chữ nhật có chiều dài gấp đôi chiều rộng và chiều cao bằng 4 cm. Biết diện tích xung quanh của hình hộp chữ nhật là 144 cm². Tính diện tích toàn phần của hình hộp chữ nhật đó.",
+        "opts": [
+          "288 cm²",
+          "240 cm²",
+          "216 cm²",
+          "256 cm²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một bể bơi hình hộp chữ nhật có chiều dài 25 m, chiều rộng 10 m và sâu 1,8 m. Hiện tại trong bể đã có sẵn 300 m³ nước. Hỏi phải bơm thêm vào bể bao nhiêu mét khối nước nữa để nước đầy tới cách miệng bể 0,3 m?",
+        "opts": [
+          "75 m³",
+          "100 m³",
+          "125 m³",
+          "150 m³"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Người ta ghép 8 hình lập phương nhỏ cạnh 3 cm thành một hình lập phương lớn. Sau đó sơn toàn bộ các mặt ngoài của hình lập phương lớn. Tính diện tích phần được sơn của hình lập phương lớn.",
+        "opts": [
+          "216 cm²",
+          "144 cm²",
+          "288 cm²",
+          "180 cm²"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một chiếc tàu cano chở du khách khám phá Vịnh Nha Trang từ bến tàu ra đảo Hòn Mun dài 10 km hết 20 phút. Vận tốc của cano là bao nhiêu km/giờ?",
+        "opts": [
+          "30 km/giờ",
+          "25 km/giờ",
+          "35 km/giờ",
+          "40 km/giờ"
+        ],
+        "c": 0
+      }
+    ]
+  }
+};

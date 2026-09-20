@@ -1,0 +1,250 @@
+window.WEEK_DATA_30 = {
+  "week": 30,
+  "stationName": "TP. Hồ Chí Minh (Bến Nhà Rồng, Landmark 81)",
+  "config": {
+    "week": 30,
+    "openTime": "2027-04-16T14:00:00",
+    "openStr": "14:00 ngày 16/04/2027"
+  },
+  "souvenirs": {
+    "cap1": "Bánh lái Tàu Bến Nhà Rồng Đồng (50đ)",
+    "cap2": "Mô hình Tòa tháp Landmark 81 Bạc (90đ)",
+    "cap3": "Kim khánh Thành phố Bác Vàng (100đ)"
+  },
+  "bank": {
+    "V1": [
+      {
+        "q": "Biểu đồ hình quạt tròn thường dùng để biểu thị cái gì?",
+        "a": "Tỉ số phần trăm của các phần trong toàn thể"
+      },
+      {
+        "q": "Hình tròn trên biểu đồ quạt tròn tương ứng với bao nhiêu phần trăm?",
+        "a": "100%"
+      },
+      {
+        "q": "Một nửa hình tròn trên biểu đồ quạt tròn tương ứng với bao nhiêu phần trăm?",
+        "a": "50%"
+      },
+      {
+        "q": "Một phần tư hình tròn trên biểu đồ quạt tròn tương ứng với bao nhiêu phần trăm?",
+        "a": "25%"
+      },
+      {
+        "q": "Bến cảng lịch sử nơi người thanh niên yêu nước Nguyễn Tất Thành ra đi tìm đường cứu nước là gì?",
+        "a": "Bến Nhà Rồng (Bảo tàng Hồ Chí Minh)"
+      },
+      {
+        "q": "Bác Hồ ra đi tìm đường cứu nước trên con tàu Đô đốc Latouche-Tréville vào ngày tháng năm nào?",
+        "a": "Ngày 5 tháng 6 năm 1911"
+      },
+      {
+        "q": "Tòa tháp cao nhất Việt Nam và thuộc top những tòa nhà cao nhất thế giới tại TP.HCM là gì?",
+        "a": "Landmark 81"
+      },
+      {
+        "q": "Số tầng của tòa tháp Landmark 81 là bao nhiêu tầng?",
+        "a": "81 tầng"
+      },
+      {
+        "q": "Tung một đồng xu 10 lần có 6 lần xuất hiện mặt ngửa. Tỉ số số lần xuất hiện mặt ngửa là gì?",
+        "a": "6/10 (hoặc 3/5)"
+      },
+      {
+        "q": "Trên biểu đồ quạt tròn, phần quạt biểu thị 20% ứng với góc ở tâm bao nhiêu độ?",
+        "a": "72 độ (360 × 20% = 72)"
+      },
+      {
+        "q": "Biểu đồ quạt tròn có 3 phần: phần A chiếm 40%, phần B chiếm 35%. Phần C chiếm bao nhiêu?",
+        "a": "25% (100% - 40% - 35% = 25%)"
+      },
+      {
+        "q": "Số lần lặp lại của một sự kiện chia cho tổng số lần thực hiện gọi là gì?",
+        "a": "Tỉ số của số lần lặp lại sự kiện"
+      },
+      {
+        "q": "Chiều cao tổng thể đỉnh tháp của Landmark 81 là bao nhiêu mét?",
+        "a": "461,3 m"
+      },
+      {
+        "q": "Cây cầu dây văng hiện đại nối quận 1 với bán đảo Thủ Thiêm bắc qua sông Sài Gòn là cầu gì?",
+        "a": "Cầu Ba Son (Cầu Thủ Thiêm 2)"
+      },
+      {
+        "q": "Công trình chợ truyền thống mang biểu tượng tháp đồng hồ 4 mặt nổi tiếng ở trung tâm TP.HCM là gì?",
+        "a": "Chợ Bến Thành"
+      },
+      {
+        "q": "Di tích lịch sử nơi xe tăng húc đổ cổng sắt trưa ngày 30/4/1975 giải phóng miền Nam là gì?",
+        "a": "Dinh Độc Lập (Hội trường Thống Nhất)"
+      },
+      {
+        "q": "Gieo một con xúc xắc 20 lần có 4 lần xuất hiện mặt 6 chấm. Tỉ số lặp lại là bao nhiêu?",
+        "a": "4/20 (hoặc 1/5, 20%)"
+      },
+      {
+        "q": "Trong hộp có 3 viên bi xanh và 2 viên bi đỏ. Lấy ngẫu nhiên 1 viên, có mấy khả năng xảy ra?",
+        "a": "2 khả năng (xanh hoặc đỏ)"
+      },
+      {
+        "q": "Biểu đồ quạt biểu thị kết quả học tập: 50% Giỏi, 30% Khá. Còn lại là Đạt chiếm bao nhiêu?",
+        "a": "20%"
+      },
+      {
+        "q": "Tên gọi trước đây của Bến Nhà Rồng trong thời Pháp thuộc là gì?",
+        "a": "Cảng Sài Gòn"
+      },
+      {
+        "q": "Tòa tháp Landmark 81 lấy cảm hứng thiết kế từ hình ảnh biểu tượng văn hóa nào của Việt Nam?",
+        "a": "Bó tre truyền thống vươn lên bầu trời"
+      },
+      {
+        "q": "Dòng sông uốn lượn ôm trọn bán đảo Thủ Thiêm và trung tâm TP.HCM là sông gì?",
+        "a": "Sông Sài Gòn"
+      },
+      {
+        "q": "Tuyến đường sắt đô thị ngầm hiện đại đầu tiên tại TP.HCM là tuyến Metro số mấy?",
+        "a": "Tuyến Metro số 1 (Bến Thành - Suối Tiên)"
+      },
+      {
+        "q": "Tung đồng xu 50 lần có 28 lần mặt sấp. Số lần xuất hiện mặt ngửa là bao nhiêu?",
+        "a": "22 lần (50 - 28 = 22)"
+      },
+      {
+        "q": "Một trường có 500 học sinh. Biểu đồ quạt cho biết có 20% học sinh đi xe đạp. Số bạn đi xe đạp là?",
+        "a": "100 bạn (500 × 20% = 100)"
+      },
+      {
+        "q": "Một hình tròn tương ứng với góc ở tâm bằng bao nhiêu độ?",
+        "a": "360 độ"
+      },
+      {
+        "q": "Phố đi bộ hiện đại rộng lớn trước trụ sở UBND TP.HCM nối thẳng ra Bến Bạch Đằng là phố nào?",
+        "a": "Phố đi bộ Nguyễn Huệ"
+      },
+      {
+        "q": "Nhà thờ chính tòa cổ kính xây bằng gạch ngói đỏ Marseille tại trung tâm TP.HCM là nhà thờ nào?",
+        "a": "Nhà thờ Đức Bà Sài Gòn"
+      },
+      {
+        "q": "Biểu đồ quạt: mục chi tiêu ăn uống chiếm 50%, tiền nhà chiếm 30%, tiết kiệm chiếm bao nhiêu?",
+        "a": "20%"
+      },
+      {
+        "q": "Tỉ số của số lần xuất hiện sự kiện A luôn nằm trong khoảng từ mấy đến mấy?",
+        "a": "Từ 0 đến 1 (hoặc từ 0% đến 100%)"
+      }
+    ],
+    "V2": [
+      {
+        "q": "Khảo sát 200 du khách tham quan Bến Nhà Rồng: biểu đồ quạt tròn cho biết có 45% khách quốc tế, còn lại là khách nội địa. Số khách nội địa là ... người.",
+        "a": "110"
+      },
+      {
+        "q": "Tòa tháp Landmark 81 có chiều cao 461,3 m. Thang máy chạy với vận tốc 8 m/giây. Thời gian thang máy chạy từ tầng hầm lên đỉnh đài quan sát là ... giây (làm tròn số thập phân: 57,7 giây).",
+        "a": "57,7"
+      },
+      {
+        "q": "Bạn Nam thực hiện tung một con xúc xắc 6 mặt 50 lần, đếm được mặt chẵn xuất hiện 28 lần. Tỉ số phần trăm số lần xuất hiện mặt chẵn là ... %.",
+        "a": "56"
+      },
+      {
+        "q": "Một công ty lữ hành tại TP.HCM thống kê phương tiện du khách chọn: 50% chọn xe buýt 2 tầng, 30% chọn buýt đường sông, còn lại chọn taxi. Tỉ số phần trăm chọn taxi là ... %.",
+        "a": "20"
+      },
+      {
+        "q": "Đài quan sát Landmark 81 SkyView nằm ở 3 tầng cao nhất: tầng 79, 80 và 81. Trong một ngày đón 1 500 lượt khách, trong đó có 60% khách lên vào buổi tối. Số khách buổi tối là ... người.",
+        "a": "900"
+      },
+      {
+        "q": "Tàu buýt đường sông (Saigon Waterbus) từ bến Bạch Đằng đi Thủ Đức dài 10,8 km hết 36 phút (0,6 giờ). Vận tốc của buýt sông là ... km/giờ.",
+        "a": "18"
+      },
+      {
+        "q": "Một hộp kín chứa 40 viên bi quà tặng lưu niệm gồm hai màu xanh và đỏ. Lấy ngẫu nhiên 100 lần (có hoàn lại) thấy có 65 lần bi đỏ. Ước lượng số bi đỏ trong hộp là khoảng ... viên.",
+        "a": "26 (40 × 65% = 26)"
+      },
+      {
+        "q": "Biểu đồ quạt tròn thể hiện phương tiện đến trường của 400 học sinh: đi bộ chiếm 15%, xe đạp chiếm 25%, xe đưa đón chiếm 40%, còn lại bố mẹ chở. Số học sinh được bố mẹ chở là ... bạn.",
+        "a": "80"
+      },
+      {
+        "q": "Cầu Ba Son có chiều dài 1 465 m, nhịp chính dây văng dài 200 m. Nhịp chính chiếm khoảng ... % chiều dài toàn cầu (làm tròn số tự nhiên).",
+        "a": "14"
+      },
+      {
+        "q": "Tại chợ Bến Thành, một quầy hàng bán 240 chiếc nón lá lưu niệm trong 3 ngày: ngày 1 bán được 35%, ngày 2 bán được 40%. Ngày 3 bán được ... chiếc nón lá.",
+        "a": "60"
+      },
+      {
+        "q": "Gieo đồng xu 80 lần thấy có 44 lần xuất hiện mặt ngửa. Tỉ số của số lần xuất hiện mặt sấp là phân số tối giản ... (nhập a/b).",
+        "a": "9/20 (36/80 = 9/20)"
+      },
+      {
+        "q": "Phố đi bộ Nguyễn Huệ dài 670 m, rộng 64 m. Diện tích mặt phố đi bộ là ... m².",
+        "a": "42880"
+      }
+    ],
+    "V3": [
+      {
+        "q": "Biểu đồ hình quạt tròn biểu thị cơ cấu 600 du khách lên đài quan sát Landmark 81: khách châu Á chiếm 50%, khách châu Âu chiếm 30%, khách châu Mỹ chiếm 15%, còn lại là khách châu Úc. Hỏi có bao nhiêu du khách châu Úc?",
+        "opts": [
+          "30 người",
+          "25 người",
+          "35 người",
+          "40 người"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một nhóm bạn thực hiện thí nghiệm quay vòng quay may mắn có 4 ô màu: Xanh, Đỏ, Vàng, Trắng. Sau 120 lần quay, kim chỉ vào ô màu Đỏ 36 lần, ô màu Xanh 48 lần, ô màu Vàng 24 lần. Tính tỉ số phần trăm số lần kim chỉ vào ô màu Trắng.",
+        "opts": [
+          "10%",
+          "15%",
+          "12%",
+          "8%"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Một cano du lịch trên sông Sài Gòn chạy xuôi dòng từ Bến Bạch Đằng về Bến Nhà Rồng và cầu Ba Son dài 15 km hết 30 phút, ngược dòng hết 45 phút. Tính vận tốc của cano khi nước yên lặng.",
+        "opts": [
+          "25 km/giờ",
+          "20 km/giờ",
+          "28 km/giờ",
+          "24 km/giờ"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Trong một hộp kín có 15 quả bóng bàn màu trắng và một số quả màu vàng. Bạn Mai bốc ngẫu nhiên 1 quả, ghi lại màu rồi bỏ lại vào hộp. Sau 100 lần bốc, Mai thấy bóng trắng xuất hiện 60 lần. Hỏi trong hộp có khoảng bao nhiêu quả bóng bàn màu vàng?",
+        "opts": [
+          "10 quả",
+          "12 quả",
+          "8 quả",
+          "15 quả"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Thang máy Landmark 81 đưa khách lên tầng quan sát cao 360 m. Chiều lên thang máy đi với vận tốc 8 m/s, chiều xuống đi với vận tốc 6 m/s. Tính vận tốc trung bình của thang máy cả chiều lên và chiều xuống (bỏ qua thời gian dừng đón khách).",
+        "opts": [
+          "6,86 m/giây",
+          "7 m/giây",
+          "7,2 m/giây",
+          "6,5 m/giây"
+        ],
+        "c": 0
+      },
+      {
+        "q": "Khảo sát sở thích thể thao của 400 học sinh: Bóng đá chiếm 45%, Cầu lông chiếm 30%, Bơi lội chiếm 15%, còn lại là Bóng rổ. Số học sinh thích bóng đá nhiều hơn số học sinh thích bóng rổ bao nhiêu bạn?",
+        "opts": [
+          "140 bạn",
+          "120 bạn",
+          "150 bạn",
+          "130 bạn"
+        ],
+        "c": 0
+      }
+    ]
+  }
+};
