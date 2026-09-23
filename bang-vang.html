@@ -303,9 +303,12 @@
         </nav>
     </header>
 
-    <section class="hero">
-        <h1>🏆 BẢNG VÀNG VINH DANH</h1>
-        <p>Thành tích xuất sắc nhất của các nhà thám hiểm (Trọn bộ 35 Trạm)</p>
+    <section class="hero" style="position: relative; overflow: hidden;">
+        <canvas id="hero-antigravity" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></canvas>
+        <div style="position: relative; z-index: 2;">
+            <h1>🏆 BẢNG VÀNG VINH DANH</h1>
+            <p>Thành tích xuất sắc nhất của các nhà thám hiểm (Trọn bộ 35 Trạm)</p>
+        </div>
     </section>
 
     <!-- BỘ LỌC CHẾ ĐỘ & HỌC KỲ -->
@@ -1139,6 +1142,17 @@
         if (savedRole === 'admin' || savedAdmin === 'admin') {
             isAdminModeBV = true;
             setTimeout(applyAdminModeBV, 200);
+        }
+    </script>
+    <script src="js/antigravity.js"></script>
+    <script>
+        if (window.EduAntigravity) {
+            EduAntigravity.startAmbient('hero-antigravity', {
+                count: window.innerWidth < 600 ? 18 : 28,
+                speed: 0.35,
+                colors: ['#FFD700', '#FF9800', '#FFFFFF', '#38BDF8', '#F43F5E'],
+                opacity: 0.65
+            });
         }
     </script>
 </body>

@@ -1,16 +1,69 @@
 # -*- coding: utf-8 -*-
+"""
+Script sinh tài liệu Chuyên đề Dạy học Toán 5 theo định hướng Chuyển đổi số
+Tên chuyên đề: ÔN TẬP MÔN TOÁN LỚP 5 THEO ĐỊNH HƯỚNG CHUYỂN ĐỔI SỐ VỚI HỆ THỐNG BÀI TẬP TƯƠNG TÁC
+Đơn vị: Trường Tiểu học Đỗ Văn Nại - Tổ chuyên môn Khối 5
+Tác giả: Lê Thành Long
+Phạm vi: Trọn bộ 35 tuần học (Cả năm học: Học kỳ 1 và Học kỳ 2)
+Tích hợp: Mô hình Gamification, Hành trình Xuyên Việt, Web App, Zalo Mini App, Firebase Realtime Database
+"""
+
+import os
+import sys
+import re
+import json
 import docx
 from docx.shared import Inches, Pt, RGBColor, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
 from docx.oxml import parse_xml, OxmlElement
 from docx.oxml.ns import nsdecls, qn
-import os
 
-def create_chuyen_de_document():
+if sys.stdout.encoding != 'utf-8':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
+# Thư mục gốc dự án
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TOOLS_DIR = os.path.join(BASE_DIR, "tools")
+sys.path.insert(0, TOOLS_DIR)
+
+# Nạp dữ liệu 35 tuần từ các module data
+from data_tuan_01_06 import TUAN_01_TO_06
+from data_tuan_07_12 import TUAN_07_TO_12
+from data_tuan_13_18 import TUAN_13_TO_18
+from data_tuan_19_24 import TUAN_19_TO_24
+from data_tuan_25_30 import TUAN_25_TO_30
+from data_tuan_31_35 import TUAN_31_TO_35
+
+ALL_35_STATIONS = (
+    TUAN_01_TO_06 +
+    TUAN_07_TO_12 +
+    TUAN_13_TO_18 +
+    TUAN_19_TO_24 +
+    TUAN_25_TO_30 +
+    TUAN_31_TO_35
+)
+
+# Nạp dữ liệu bảo vật từ tuido.html
+tuido_path = os.path.join(BASE_DIR, "tuido.html")
+items_dict = {}
+if os.path.exists(tuido_path):
+    with open(tuido_path, "r", encoding="utf-8") as f:
+        tcontent = f.read()
+    m = re.search(r'const ITEMS_DATA = ({.*?});', tcontent, re.DOTALL)
+    if m:
+        try:
+            items_dict = json.loads(m.group(1))
+        except Exception:
+            pass
+
+def create_full_chuyen_de_document():
     doc = docx.Document()
 
-    # 1. Page Setup: A4, Margins: Top 2cm, Bottom 2cm, Left 3cm, Right 2cm
+    # 1. Page Setup: A4, Margins: Top 2cm, Bottom 2cm, Left 3cm, Right 2cm (Chuẩn văn bản quản lý GD)
     for section in doc.sections:
         section.page_width = Cm(21.0)
         section.page_height = Cm(29.7)
@@ -20,17 +73,17 @@ def create_chuyen_de_document():
         section.right_margin = Cm(2.0)
         section.different_first_page_header_footer = True
 
-        # Header
+        # Header (Trang 2 trở đi)
         header = section.header
         hp = header.paragraphs[0]
         hp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-        hrun = hp.add_run("Chuyên đề dạy học Toán 5: Ứng dụng hệ thống bài tập tương tác EduRobot")
+        hrun = hp.add_run("Chuyên đề dạy học Toán 5: Ứng dụng hệ thống bài tập tương tác EduRobot (Trọn bộ 35 tuần)")
         hrun.font.name = "Times New Roman"
         hrun.font.size = Pt(8.5)
         hrun.font.italic = True
         hrun.font.color.rgb = RGBColor(120, 120, 120)
 
-        # Footer
+        # Footer (Trang 2 trở đi)
         footer = section.footer
         fp = footer.paragraphs[0]
         fp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
@@ -38,8 +91,7 @@ def create_chuyen_de_document():
         frun.font.name = "Times New Roman"
         frun.font.size = Pt(9)
         frun.font.color.rgb = RGBColor(100, 100, 100)
-        
-        # Add Page Number XML field
+
         fldSimple = OxmlElement('w:fldSimple')
         fldSimple.set(qn('w:instr'), 'PAGE')
         fp._p.append(fldSimple)
@@ -53,7 +105,7 @@ def create_chuyen_de_document():
         fldSimple_n.set(qn('w:instr'), 'NUMPAGES')
         fp._p.append(fldSimple_n)
 
-    # Styling helper functions
+    # Helper format font
     def set_font(run, name="Times New Roman", size=13, bold=False, italic=False, color=None):
         run.font.name = name
         run.font.size = Pt(size)
@@ -123,10 +175,8 @@ def create_chuyen_de_document():
         cell = tbl.cell(0, 0)
         cell.width = Cm(16.0)
         tcPr = cell._tc.get_or_add_tcPr()
-        # light grey blue background
         shd = parse_xml(r'<w:shd {} w:fill="F0F4F8"/>'.format(nsdecls('w')))
         tcPr.append(shd)
-        # Left thick border
         borders = parse_xml(r'''
             <w:tcBorders {} >
                 <w:top w:val="none"/>
@@ -137,8 +187,9 @@ def create_chuyen_de_document():
         '''.format(nsdecls('w')))
         tcPr.append(borders)
         cp = cell.paragraphs[0]
-        cp.paragraph_format.space_before = Pt(4)
-        cp.paragraph_format.space_after = Pt(2)
+        cp.paragraph_format.space_before = Pt(5)
+        cp.paragraph_format.space_after = Pt(4)
+        cp.paragraph_format.line_spacing = 1.25
         r_title = cp.add_run(f"📌 {title}: ")
         set_font(r_title, size=12.5, bold=True, color=RGBColor(26, 54, 93))
         r_text = cp.add_run(text)
@@ -146,76 +197,76 @@ def create_chuyen_de_document():
         doc.add_paragraph().paragraph_format.space_after = Pt(4)
 
     # -------------------------------------------------------------
-    # TRANG BÌA (COVER PAGE)
+    # 1. TRANG BÌA (COVER PAGE)
     # -------------------------------------------------------------
     p_cq = doc.add_paragraph()
     p_cq.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_cq.paragraph_format.space_after = Pt(2)
-    p_cq.paragraph_format.space_before = Pt(10)
-    r = p_cq.add_run("PHÒNG GIÁO DỤC VÀ ĐÀO TẠO ...\nTRƯỜNG TIỂU HỌC ...")
-    set_font(r, size=12, bold=True, color=RGBColor(50, 50, 50))
+    p_cq.paragraph_format.space_before = Pt(5)
+    r1 = p_cq.add_run("TRƯỜNG TIỂU HỌC ĐỖ VĂN NẠI\n")
+    set_font(r1, size=13, bold=True, color=RGBColor(40, 40, 40))
+    r2 = p_cq.add_run("TỔ CHUYÊN MÔN KHỐI 5")
+    set_font(r2, size=13, bold=True, color=RGBColor(40, 40, 40))
 
-    # Divider line
     p_line = doc.add_paragraph()
     p_line.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_line.paragraph_format.space_after = Pt(25)
-    r_line = p_line.add_run("————————— 🕮 —————————")
-    set_font(r_line, size=11, bold=True, color=RGBColor(150, 150, 150))
+    p_line.paragraph_format.space_after = Pt(20)
+    r_line = p_line.add_run("————— 🕮 —————")
+    set_font(r_line, size=12, bold=True, color=RGBColor(150, 150, 150))
 
-    # Robot logo if exists
-    if os.path.exists("assets/robot-head.png"):
+    # Logo Robot
+    robot_img_path = os.path.join(BASE_DIR, "assets", "robot-head.png")
+    if os.path.exists(robot_img_path):
         p_img = doc.add_paragraph()
         p_img.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p_img.paragraph_format.space_after = Pt(15)
-        p_img.add_run().add_picture("assets/robot-head.png", width=Cm(3.2))
+        p_img.paragraph_format.space_after = Pt(12)
+        p_img.add_run().add_picture(robot_img_path, width=Cm(3.0))
 
-    # Title report
     p_rp = doc.add_paragraph()
     p_rp.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_rp.paragraph_format.space_after = Pt(10)
-    r_rp = p_rp.add_run("BÁO CÁO CHUYÊN ĐỀ CHUYÊN MÔN\nĐỔI MỚI PHƯƠNG PHÁP DẠY HỌC TIỂU HỌC")
-    set_font(r_rp, size=14, bold=True, color=RGBColor(194, 65, 12))
+    p_rp.paragraph_format.space_after = Pt(8)
+    r_rp = p_rp.add_run("BÁO CÁO CHUYÊN ĐỀ CHUYÊN MÔN CẤP TRƯỜNG\nĐỔI MỚI PHƯƠNG PHÁP DẠY HỌC & ĐÁNH GIÁ HỌC SINH TIỂU HỌC")
+    set_font(r_rp, size=13.5, bold=True, color=RGBColor(194, 65, 12))
 
     p_title = doc.add_paragraph()
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_title.paragraph_format.space_after = Pt(20)
-    r_title = p_title.add_run("ÔN TẬP MÔN TOÁN LỚP 5\nTHEO ĐỊNH HƯỚNG CHUYỂN ĐỔI SỐ\nVỚI HỆ THỐNG BÀI TẬP TƯƠNG TÁC")
-    set_font(r_title, size=19, bold=True, color=RGBColor(26, 54, 93))
+    p_title.paragraph_format.space_after = Pt(14)
+    r_title = p_title.add_run("DẠY HỌC VÀ ÔN TẬP MÔN TOÁN LỚP 5\nTHEO ĐỊNH HƯỚNG CHUYỂN ĐỔI SỐ\nVỚI HỆ SINH THÁI BÀI TẬP TƯƠNG TÁC EDUBOT")
+    set_font(r_title, size=18, bold=True, color=RGBColor(26, 54, 93))
 
     p_sub = doc.add_paragraph()
     p_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_sub.paragraph_format.space_after = Pt(40)
-    r_sub = p_sub.add_run("(Giải pháp ứng dụng mô hình Gamification và nền tảng đa phương thức EduRobot\nphục vụ dạy học ôn tập học kỳ 2 - Chương trình GDPT 2018)")
-    set_font(r_sub, size=12.5, italic=True, color=RGBColor(74, 85, 104))
+    p_sub.paragraph_format.space_after = Pt(35)
+    r_sub = p_sub.add_run("(Giải pháp ứng dụng mô hình Gamification 'Hành trình Xuyên Việt' và nền tảng đa phương thức\nphục vụ củng cố kiến thức trọn bộ 35 tuần học - Chương trình GDPT 2018)")
+    set_font(r_sub, size=12, italic=True, color=RGBColor(74, 85, 104))
 
-    # Author info table
+    # Thông tin tác giả
     info_tbl = doc.add_table(rows=4, cols=2)
     info_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
     info_data = [
         ("Người thực hiện:", "Lê Thành Long"),
         ("Chức vụ:", "Giáo viên Tiểu học"),
         ("Tổ chuyên môn:", "Tổ chuyên môn Khối 5"),
-        ("Năm học:", "2025 - 2026")
+        ("Năm học:", "2026 - 2027")
     ]
     for row_idx, (label, val) in enumerate(info_data):
         c1, c2 = info_tbl.cell(row_idx, 0), info_tbl.cell(row_idx, 1)
         c1.width = Cm(4.5)
-        c2.width = Cm(7.0)
-        p1 = c1.paragraphs[0]
+        c2.width = Cm(7.5)
+        p1, p2 = c1.paragraphs[0], c2.paragraphs[0]
         p1.paragraph_format.space_after = Pt(3)
         p1.paragraph_format.space_before = Pt(2)
-        r1 = p1.add_run(label)
-        set_font(r1, size=12.5, bold=True)
-        p2 = c2.paragraphs[0]
         p2.paragraph_format.space_after = Pt(3)
         p2.paragraph_format.space_before = Pt(2)
+        r1 = p1.add_run(label)
+        set_font(r1, size=12.5, bold=True)
         r2 = p2.add_run(val)
         set_font(r2, size=12.5)
 
     doc.add_page_break()
 
     # -------------------------------------------------------------
-    # MỤC LỤC & TÓM TẮT
+    # 2. MỤC LỤC TỔNG THỂ & TÓM TẮT
     # -------------------------------------------------------------
     p_ml = doc.add_paragraph()
     p_ml.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -226,31 +277,33 @@ def create_chuyen_de_document():
     toc_items = [
         ("PHẦN I: ĐẶT VẤN ĐỀ (LÝ DO CHỌN CHUYÊN ĐỀ)", "Trang 2"),
         ("   1.1. Bối cảnh chuyển đổi số trong giáo dục và Chương trình GDPT 2018", "Trang 2"),
-        ("   1.2. Thực trạng công tác ôn tập môn Toán lớp 5 học kỳ 2 hiện nay", "Trang 2"),
-        ("   1.3. Tính cấp thiết và mục đích nghiên cứu của chuyên đề", "Trang 3"),
-        ("PHẦN II: CƠ SỞ KHOA HỌC VÀ NGUYÊN TẮC THIẾT KẾ", "Trang 3"),
-        ("   2.1. Cơ sở lý luận: Thuyết kiến tạo và mô hình Trò chơi hóa (Gamification)", "Trang 3"),
-        ("   2.2. Tâm lý tiếp nhận và thói quen công nghệ của học sinh lớp 5", "Trang 4"),
-        ("   2.3. Các nguyên tắc sư phạm trong xây dựng hệ sinh thái EduRobot", "Trang 4"),
-        ("PHẦN III: NỘI DUNG VÀ CÁC BIỆN PHÁP THỰC HIỆN (TRỌNG TÂM)", "Trang 5"),
-        ("   3.1. Ý tưởng 'Hành trình Xuyên Việt' – Tích hợp liên môn Toán và Lịch sử - Địa lý", "Trang 5"),
-        ("   3.2. Cấu trúc bài tập tương tác 3 vòng thử thách tư duy", "Trang 5"),
-        ("   3.3. Các cơ chế Game hóa tạo động lực học tập bền vững", "Trang 6"),
-        ("   3.4. Giải pháp công nghệ đa nền tảng: Web tương tác và Zalo Mini App", "Trang 7"),
-        ("   3.5. Hệ thống thu thập dữ liệu tự động và số hóa quản lý chuyên môn", "Trang 7"),
-        ("   3.6. Ma trận nội dung ôn tập 17 tuần học kỳ 2 (Tuần 19 đến Tuần 35)", "Trang 8"),
-        ("PHẦN IV: QUY TRÌNH TỔ CHỨC DẠY HỌC THỰC NGHIỆM TẠI ĐƠN VỊ", "Trang 9"),
-        ("   4.1. Quy trình 4 bước triển khai linh hoạt trong dạy học", "Trang 9"),
-        ("   4.2. Phối hợp giữa nhà trường, giáo viên và phụ huynh qua kênh Zalo", "Trang 9"),
-        ("   4.3. Khai thác dữ liệu thời gian thực để phân hóa và phụ đạo học sinh", "Trang 9"),
-        ("PHẦN V: KẾT QUẢ ĐẠT ĐƯỢC VÀ ĐÁNH GIÁ TÁC ĐỘNG", "Trang 10"),
-        ("   5.1. Đánh giá về mặt định lượng (Tỉ lệ tham gia, điểm số, thời gian hoàn thành)", "Trang 10"),
-        ("   5.2. Đánh giá về mặt định tính (Năng lực tự chủ, hứng thú học tập và kỹ năng số)", "Trang 10"),
-        ("   5.3. Khả năng chuyển giao và nhân rộng mô hình", "Trang 11"),
-        ("PHẦN VI: KẾT LUẬN VÀ KIẾN NGHỊ", "Trang 11"),
-        ("   6.1. Kết luận", "Trang 11"),
-        ("   6.2. Bài học kinh nghiệm", "Trang 11"),
-        ("   6.3. Đề xuất, kiến nghị", "Trang 12"),
+        ("   1.2. Thực trạng công tác ôn tập, củng cố môn Toán lớp 5 hiện nay", "Trang 2"),
+        ("   1.3. Tính cấp thiết, mục đích và đối tượng nghiên cứu của chuyên đề", "Trang 3"),
+        ("PHẦN II: CƠ SỞ KHOA HỌC VÀ NGUYÊN TẮC THIẾT KẾ", "Trang 4"),
+        ("   2.1. Cơ sở lý luận: Thuyết kiến tạo, Mô hình SAMR và Trò chơi hóa (Gamification)", "Trang 4"),
+        ("   2.2. Đặc điểm tâm sinh lý tiếp nhận và thói quen công nghệ của học sinh lớp 5", "Trang 4"),
+        ("   2.3. Bốn nguyên tắc sư phạm cốt lõi trong xây dựng hệ sinh thái EduRobot", "Trang 5"),
+        ("PHẦN III: HỆ THỐNG GIẢI PHÁP VÀ BIỆN PHÁP THỰC HIỆN (TRỌNG TÂM)", "Trang 6"),
+        ("   3.1. Tuyến ý tưởng 'Hành trình Xuyên Việt' – Tích hợp liên môn Toán và Lịch sử - Địa lý", "Trang 6"),
+        ("   3.2. Cấu trúc bài tập tương tác 3 vòng thử thách tư duy (Thang điểm chuẩn 100)", "Trang 7"),
+        ("   3.3. Hệ thống cơ chế Gamification đa tầng kích thích động lực tự thân bền vững", "Trang 8"),
+        ("   3.4. Kiến trúc công nghệ đa nền tảng và cơ chế phân quyền kiểm soát thông minh", "Trang 9"),
+        ("   3.5. Hệ thống cơ sở dữ liệu thời gian thực và tự động hóa quản lý chuyên môn", "Trang 10"),
+        ("   3.6. Ma trận phân phối kiến thức trọn bộ 35 tuần học (18 tuần HK1 và 17 tuần HK2)", "Trang 11"),
+        ("PHẦN IV: QUY TRÌNH TỔ CHỨC DẠY HỌC THỰC NGHIỆM TẠI ĐƠN VỊ", "Trang 14"),
+        ("   4.1. Quy trình 4 bước tổ chức dạy học linh hoạt tại lớp và hướng dẫn tự học ở nhà", "Trang 14"),
+        ("   4.2. Xây dựng mối liên kết tam giác Nhà trường – Giáo viên – Gia đình qua kênh Zalo", "Trang 15"),
+        ("   4.3. Khai thác dữ liệu thời gian thực để phân hóa đối tượng và phụ đạo kịp thời", "Trang 15"),
+        ("PHẦN V: KẾT QUẢ ĐẠT ĐƯỢC VÀ ĐÁNH GIÁ TÁC ĐỘNG", "Trang 16"),
+        ("   5.1. Đánh giá về mặt định lượng (Tỉ lệ tự giác, phổ điểm, thời gian quản lý chuyên môn)", "Trang 16"),
+        ("   5.2. Đánh giá về mặt định tính (Phát triển năng lực tự chủ, say mê học tập và văn hóa số)", "Trang 17"),
+        ("   5.3. Khả năng chuyển giao, tính ứng dụng thực tiễn và nhân rộng mô hình", "Trang 17"),
+        ("PHẦN VI: KẾT LUẬN VÀ KIẾN NGHỊ", "Trang 18"),
+        ("   6.1. Kết luận", "Trang 18"),
+        ("   6.2. Bài học kinh nghiệm quý báu", "Trang 18"),
+        ("   6.3. Đề xuất, kiến nghị với các cấp quản lý", "Trang 19"),
+        ("PHẦN KÝ DUYỆT CỦA BGH VÀ NGƯỜI BÁO CÁO", "Trang 19"),
+        ("PHỤ LỤC: DANH MỤC 35 TRẠM XUYÊN VIỆT & HƯỚNG DẪN TRUY CẬP ĐA NỀN TẢNG", "Trang 20"),
     ]
 
     for title, pg in toc_items:
@@ -259,96 +312,101 @@ def create_chuyen_de_document():
         p_toc.paragraph_format.line_spacing = 1.2
         r_t = p_toc.add_run(title)
         set_font(r_t, size=11.5, bold=("PHẦN" in title))
-        r_dots = p_toc.add_run(" " + "." * max(10, 85 - len(title) * 2) + " ")
+        r_dots = p_toc.add_run(" " + "." * max(8, 85 - len(title) * 2) + " ")
         set_font(r_dots, size=10, color=RGBColor(160, 160, 160))
         r_p = p_toc.add_run(pg)
         set_font(r_p, size=11, italic=True)
 
     add_p()
-    add_callout("TÓM TẮT NỘI DUNG CHUYÊN ĐỀ", 
-                "Chuyên đề đề xuất một giải pháp đột phá trong đổi mới phương pháp củng cố, ôn tập môn Toán lớp 5 học kỳ 2 thông qua hệ thống học tập tương tác EduRobot (EduBot-BTCT5). Giải pháp kết hợp giữa lý thuyết Trò chơi hóa (Gamification), tích hợp liên môn (Toán học gắn liền với bản đồ địa danh Việt Nam) và công nghệ đa nền tảng hiện đại (Web trực tuyến và Zalo Mini App). Hệ thống giúp biến các bài tập khô khan thành hành trình khám phá cuốn hút, đồng thời cung cấp cho giáo viên công cụ thống kê phổ điểm, xếp hạng và xuất dữ liệu Excel tự động từ Firebase Database để đánh giá quá trình chính xác.")
+    add_callout(
+        "TÓM TẮT NỘI DUNG CHUYÊN ĐỀ",
+        "Chuyên đề đề xuất một giải pháp đột phá, toàn diện trong đổi mới phương pháp dạy học, củng cố và ôn tập môn Toán lớp 5 trọn bộ 35 tuần học (18 tuần Học kỳ 1 và 17 tuần Học kỳ 2) thông qua hệ sinh thái học tập tương tác EduRobot (EduBot-BTCT5). Giải pháp kết hợp nhuần nhuyễn giữa lý thuyết Trò chơi hóa (Gamification), tích hợp liên môn (Toán học gắn liền với 35 địa danh văn hóa - lịch sử trên bản đồ Việt Nam và biển đảo Tổ quốc) cùng công nghệ đa nền tảng hiện đại (Web trực tuyến và Zalo Mini App). Hệ thống chuyển hóa các bài tập cuối tuần khô khan thành chuyến thám hiểm hấp dẫn, tích hợp phân quyền 3 vai trò (Học sinh, Giáo viên, Quản trị viên), cơ chế mở chặng tự động 14h00 Thứ Sáu, đồng thời cung cấp cho giáo viên công cụ thống kê phổ điểm tự động, đua top tuần và xuất dữ liệu Excel thời gian thực từ Google Firebase Database để phục vụ đánh giá quá trình chính xác, khách quan."
+    )
 
     # -------------------------------------------------------------
-    # PHẦN I: ĐẶT VẤN ĐỀ (LÝ DO CHỌN CHUYÊN ĐỀ)
+    # PHẦN I: ĐẶT VẤN ĐỀ
     # -------------------------------------------------------------
     add_h1("PHẦN I: ĐẶT VẤN ĐỀ (LÝ DO CHỌN CHUYÊN ĐỀ)")
 
     add_h2("1.1. Bối cảnh chuyển đổi số trong giáo dục và Chương trình GDPT 2018")
-    add_p("Trong giai đoạn hiện nay, ngành Giáo dục và Đào tạo đang đẩy mạnh thực hiện Chương trình Giáo dục phổ thông 2018 (GDPT 2018) với mục tiêu căn bản là chuyển từ nền giáo dục nặng về trang bị kiến thức sang nền giáo dục chú trọng phát triển toàn diện phẩm chất và năng lực người học. Đặc biệt, Quyết định số 131/QĐ-TTg của Thủ tướng Chính phủ về việc phê duyệt Đề án 'Tăng cường ứng dụng công nghệ thông tin và chuyển đổi số trong giáo dục và đào tạo giai đoạn 2022 - 2025, định hướng đến năm 2030' đã đặt ra yêu cầu cấp thiết: chuyển đổi số không chỉ dừng lại ở khâu quản lý hay trình chiếu bài giảng mà phải thâm nhập sâu vào quy trình dạy học, đổi mới phương thức tương tác và kiểm tra đánh giá.")
-    add_p("Môn Toán ở cấp Tiểu học, đặc biệt là lớp 5 – lớp cuối cấp chuẩn bị chuyển tiếp lên Trung học cơ sở – có vị trí then chốt trong việc hình thành tư duy logic, năng lực giải quyết vấn đề và mô hình hóa toán học. Đổi mới phương pháp dạy học môn Toán theo định hướng chuyển đổi số đòi hỏi người giáo viên phải kiến tạo được môi trường học tập linh hoạt, mở rộng không gian lớp học vượt ra ngoài 4 bức tường truyền thống, tạo điều kiện cho học sinh tự học mọi lúc, mọi nơi một cách hứng thú và chủ động.")
+    add_p("Trong bối cảnh kỷ nguyên số bùng nổ, ngành Giáo dục và Đào tạo Việt Nam đang đẩy mạnh thực hiện đổi mới căn bản, toàn diện theo tinh thần Nghị quyết số 29-NQ/TW và Chương trình Giáo dục phổ thông 2018 (GDPT 2018). Mục tiêu cốt lõi của chương trình là chuyển từ nền giáo dục nặng về truyền thụ kiến thức một chiều sang nền giáo dục chú trọng bồi dưỡng phẩm chất và phát triển toàn diện các năng lực người học: tự chủ và tự học, giao tiếp và hợp tác, giải quyết vấn đề và sáng tạo.")
+    add_p("Đặc biệt, Quyết định số 131/QĐ-TTg của Thủ tướng Chính phủ phê duyệt Đề án 'Tăng cường ứng dụng công nghệ thông tin và chuyển đổi số trong giáo dục và đào tạo giai đoạn 2022 - 2025, định hướng đến năm 2030' đã nhấn mạnh yêu cầu: chuyển đổi số không được dừng lại ở các khâu hành chính hay trình chiếu bài giảng điện tử đơn thuần, mà phải đi sâu vào cốt lõi của hoạt động dạy học, phương thức tương tác giữa thầy và trò, phương pháp kiểm tra đánh giá thường xuyên và kiến tạo không gian học tập số linh hoạt.")
+    add_p("Môn Toán ở cấp Tiểu học, đặc biệt là khối lớp 5 – năm học bản lề chuyển tiếp lên bậc Trung học cơ sở – giữ vị trí đặc biệt quan trọng trong việc hoàn thiện nền tảng tư duy logic, năng lực mô hình hóa toán học và tư duy giải quyết vấn đề thực tiễn. Đổi mới phương pháp dạy học và ôn tập môn Toán theo định hướng chuyển đổi số chính là chìa khóa tháo gỡ rào cản tâm lý e ngại, biến môn học vốn bị coi là 'khô khan, trừu tượng' thành niềm đam mê khám phá của các em.")
 
-    add_h2("1.2. Thực trạng công tác ôn tập môn Toán lớp 5 học kỳ 2 hiện nay")
-    add_p("Qua thực tiễn giảng dạy nhiều năm tại khối lớp 5, chúng tôi nhận thấy giai đoạn Học kỳ 2 (từ tuần 19 đến tuần 35) là khoảng thời gian học sinh phải tiếp thu và củng cố một khối lượng kiến thức rất lớn, mang tính trừu tượng và có độ phân hóa cao:")
-    add_bullet("Về mặt kiến thức: ", "Học sinh phải làm chủ nhiều mảng kiến thức phức tạp như Tỉ số và Tỉ số phần trăm; Diện tích, thể tích các hình khối (hình hộp chữ nhật, hình lập phương); Hình tròn và chu vi, diện tích hình tròn; Mối quan hệ giữa các đơn vị đo; và đặc biệt là mạch kiến thức Toán chuyển động đều (vận tốc, quãng đường, thời gian với chuyển động cùng chiều, ngược chiều).")
-    add_bullet("Về phương pháp ôn tập truyền thống: ", "Phần lớn giáo viên vẫn áp dụng việc giao phiếu bài tập in trên giấy, sách bài tập hoặc giao bài trên bảng để học sinh về nhà làm vào vở. Hình thức này tồn tại nhiều hạn chế: khô khan, mang tính áp đặt, dễ gây tâm lý ngán ngẩm, đối phó cho các em; phản hồi kết quả bị trễ (thường phải chờ đến ngày hôm sau giáo viên mới chấm và sửa bài, khiến các em mất đi thời điểm 'vàng' để sửa chữa sai lầm tư duy).")
-    add_bullet("Về bối cảnh sinh hoạt của học sinh: ", "Tại hầu hết các gia đình hiện nay, điện thoại thông minh và mạng Internet đã trở nên phổ biến. Tuy nhiên, phần lớn học sinh sử dụng thiết bị để xem video ngắn trên TikTok, YouTube Shorts hoặc chơi game giải trí không có tính giáo dục. Phụ huynh rất lo lắng nhưng thường lúng túng trong việc tìm kiếm các công cụ học tập lành mạnh, hấp dẫn để hướng con em sử dụng thiết bị đúng mục đích.")
-    add_bullet("Về phía giáo viên: ", "Việc theo dõi, kiểm soát và thống kê mức độ hoàn thành bài tự học ở nhà của từng học sinh trong lớp (từ 35 - 40 em) chiếm quá nhiều thời gian, công sức. Giáo viên thiếu công cụ số để thu thập số liệu tự động, khó nắm bắt chính xác điểm nghẽn nhận thức chung của cả lớp để điều chỉnh bài giảng kịp thời.")
+    add_h2("1.2. Thực trạng công tác ôn tập, củng cố môn Toán lớp 5 hiện nay")
+    add_p("Qua thực tiễn trực tiếp đứng lớp giảng dạy khối lớp 5 nhiều năm tại đơn vị, chúng tôi nhận thấy hoạt động củng cố, ôn tập cuối tuần của học sinh đang đối mặt với nhiều khó khăn, bất cập:")
+    add_bullet("Về khối lượng và độ khó của chương trình: ", "Chương trình Toán 5 (đặc biệt theo bộ sách Kết nối tri thức với cuộc sống) có dung lượng kiến thức rất lớn, trải dài 35 tuần học. Học kỳ 1 tập trung vào số tự nhiên, phân số, hỗn số, bảng đơn vị đo diện tích (ha, km²) và đặc biệt là hệ thống số thập phân cùng 4 phép tính. Học kỳ 2 tiếp tục đẩy mạnh các mảng kiến thức nâng cao: Tỉ số và tỉ số phần trăm, hình tam giác, hình thang, hình tròn, thể tích các hình khối (hình hộp chữ nhật, hình lập phương), số đo thời gian và đặc biệt là mạch toán chuyển động đều. Độ trừu tượng cao khiến học sinh dễ bị hổng kiến thức nếu không được củng cố thường xuyên.")
+    add_bullet("Về phương pháp giao bài và phản hồi truyền thống: ", "Đa số giáo viên vẫn sử dụng hình thức in phiếu bài tập cuối tuần trên giấy (photo phát cho học sinh) hoặc chép bài tập lên bảng để học sinh ghi vào vở về nhà làm. Phương thức này bộc lộ những hạn chế cố hữu: tốn kém chi phí in ấn; hình thức bài tập đen trắng đơn điệu, dễ gây tâm lý ngán ngẩm, đối phó; và đặc biệt là độ trễ thông tin rất lớn (thường phải chờ đến thứ Hai hoặc thứ Ba tuần sau giáo viên mới chấm và sửa bài, làm trôi qua 'thời điểm vàng' để sửa chữa sai lầm nhận thức của học sinh).")
+    add_bullet("Về thói quen sử dụng công nghệ của học sinh và phụ huynh: ", "Hiện nay, hơn 95% gia đình học sinh đều sở hữu điện thoại thông minh kết nối Internet. Tuy nhiên, phần lớn học sinh sử dụng thiết bị để xem video ngắn trên TikTok, YouTube Shorts hoặc chơi game điện tử mang tính giải trí thụ động. Phụ huynh rất lo lắng nhưng thường lúng túng, thiếu các công cụ học tập tương tác bổ ích, hấp dẫn để định hướng con em biến thiết bị thông minh thành phương tiện học tập bổ ích.")
+    add_bullet("Về phía giáo viên: ", "Việc theo dõi, thu thập bài vở và chấm chữa thủ công cho 35 - 40 học sinh mỗi tuần tiêu tốn hàng giờ đồng hồ quý báu của giáo viên ngoài giờ lên lớp. Giáo viên thiếu công cụ số để thu thập số liệu tự động, khó vẽ được bức tranh toàn cảnh về phổ điểm và những lỗi sai phổ biến của cả lớp để kịp thời điều chỉnh kế hoạch bài dạy tuần tiếp theo.")
 
-    add_h2("1.3. Tính cấp thiết và mục đích nghiên cứu của chuyên đề")
-    add_p("Xuất phát từ những trăn trở và yêu cầu thực tiễn nêu trên, chúng tôi đã chủ động nghiên cứu, thiết kế và triển khai hệ sinh thái bài tập tương tác mang tên EduRobot (EduBot-BTCT5) với địa chỉ hoạt động tại edurobot.id.vn cùng phiên bản Zalo Mini App. Chuyên đề này được đúc kết nhằm đạt các mục tiêu trọng tâm:")
-    add_bullet("Mục tiêu 1: ", "Xây dựng hệ thống bài tập tương tác trực quan, sống động cho toàn bộ 17 tuần học kỳ 2 môn Toán 5 theo mô hình Gamification, giúp chuyển hóa nhiệm vụ ôn tập thành cuộc thám hiểm hấp dẫn.")
-    add_bullet("Mục tiêu 2: ", "Tích hợp liên môn giáo dục tình yêu quê hương, đất nước thông qua 'Hành trình Xuyên Việt', gắn mỗi bài toán với một cột mốc địa danh và bảo vật văn hóa dân tộc.")
-    add_bullet("Mục tiêu 3: ", "Tối ưu hóa khả năng tiếp cận bằng việc triển khai song song trên nền tảng Web và Zalo Mini App, giúp học sinh mở bài luyện tập ngay lập tức trên điện thoại mà không cần thao tác cài đặt phức tạp.")
-    add_bullet("Mục tiêu 4: ", "Cung cấp cho giáo viên công cụ quản lý và kiểm tra đánh giá thời gian thực (Realtime Dashboard), phân tích phổ điểm trực quan bằng biểu đồ và xuất báo cáo Excel chỉ với một cú nhấp chuột.")
+    add_h2("1.3. Tính cấp thiết, mục đích và đối tượng nghiên cứu của chuyên đề")
+    add_p("Từ những vấn đề thực tiễn cấp bách nêu trên, tác giả đã chủ động nghiên cứu, lập trình và xây dựng hoàn chỉnh hệ sinh thái bài tập tương tác mang tên EduRobot (EduBot-BTCT5) với địa chỉ truy cập trực tuyến tại edurobot.id.vn và phiên bản Zalo Mini App chạy trực tiếp trên ứng dụng Zalo.")
+    add_p("Chuyên đề được hoàn thiện với các mục đích cụ thể:")
+    add_bullet("1. Xây dựng ngân hàng 1.680 bài toán tương tác chuẩn hóa: ", "Bao phủ toàn diện 35 tuần học cả năm (18 tuần HK1 và 17 tuần HK2) bám sát tuyệt đối các yêu cầu cần đạt (YCCĐ) của môn Toán lớp 5 Chương trình GDPT 2018.")
+    add_bullet("2. Ứng dụng thuyết Trò chơi hóa (Gamification) và tích hợp liên môn: ", "Lồng ghép hành trình xuyên suốt 35 trạm địa danh văn hóa, lịch sử và danh lam thắng cảnh Việt Nam, khơi dậy lòng tự hào dân tộc và tình yêu quê hương đất nước song hành cùng kiến thức toán học.")
+    add_bullet("3. Tối ưu hóa trải nghiệm không rào cản qua Zalo Mini App: ", "Giúp phụ huynh và học sinh mở bài làm ngay trên Zalo mà không phải tải app, không lo tốn bộ nhớ hay quên mật khẩu đăng nhập.")
+    add_bullet("4. Tự động hóa đánh giá quá trình bằng công nghệ đám mây: ", "Cung cấp cho giáo viên công cụ Realtime Dashboard để theo dõi kết quả, phân tích phổ điểm trực quan bằng biểu đồ và xuất báo cáo Excel chỉ với 1 cú nhấp chuột.")
 
     # -------------------------------------------------------------
     # PHẦN II: CƠ SỞ KHOA HỌC VÀ NGUYÊN TẮC THIẾT KẾ
     # -------------------------------------------------------------
     add_h1("PHẦN II: CƠ SỞ KHOA HỌC VÀ NGUYÊN TẮC THIẾT KẾ")
 
-    add_h2("2.1. Cơ sở lý luận: Thuyết kiến tạo và mô hình Trò chơi hóa (Gamification)")
-    add_p("Chuyên đề được xây dựng dựa trên sự giao thoa của hai nền tảng lý thuyết giáo dục hiện đại:")
-    add_bullet("Thuyết kiến tạo trong dạy học (Constructivism): ", "Nhà tâm lý học Jean Piaget và Lev Vygotsky khẳng định người học không tiếp thu tri thức một cách thụ động mà chủ động xây dựng tri thức thông qua hoạt động tương tác với môi trường. Khi tương tác với các thẻ bài, kéo thả hình vẽ hay chọn đáp án trong hệ thống số, học sinh được trải nghiệm quá trình thử - sai - điều chỉnh, từ đó khắc sâu bản chất của khái niệm toán học.")
-    add_bullet("Mô hình Trò chơi hóa (Gamification in Education): ", "Gamification là việc ứng dụng các cơ chế trò chơi (điểm thưởng, mạng sống, huy chương, bảng xếp hạng, thanh tiến trình) vào hoạt động phi trò chơi nhằm tạo động lực tự thân (Intrinsic Motivation). Theo giáo sư Karl Kapp, gamification kích thích não bộ tiết ra Dopamine – chất dẫn truyền thần kinh tạo cảm giác hưng phấn và thỏa mãn khi chinh phục thử thách, giúp duy trì sự chú ý bền bỉ của trẻ em.")
+    add_h2("2.1. Cơ sở lý luận: Thuyết kiến tạo, Mô hình SAMR và Trò chơi hóa (Gamification)")
+    add_p("Hệ thống EduRobot được thiết kế dựa trên sự giao thoa vững chắc của 3 lý thuyết giáo dục và công nghệ hiện đại:")
+    add_bullet("Thuyết kiến tạo xã hội (Social Constructivism): ", "Lev Vygotsky và Jean Piaget đã chứng minh người học không tiếp thu tri thức bằng sự ghi nhớ thụ động mà thông qua quá trình chủ động tương tác với môi trường học tập, trải nghiệm 'thử nghiệm - thất bại - rút kinh nghiệm - điều chỉnh'. Thông qua các thao tác kéo thả thẻ bài, kiểm tra điều kiện và nhận phản hồi tức thì, học sinh tự mình phát hiện ra quy luật và khắc sâu bản chất của các công thức, thuật toán.")
+    add_bullet("Khung chuyển đổi số giáo dục SAMR (Dr. Ruben Puentedura): ", "Hệ sinh thái EduRobot đưa hoạt động ôn tập vượt qua hai bậc thang đầu tiên là Substitution (Thay thế phiếu giấy bằng màn hình) và Augmentation (Tăng cường thêm âm thanh, hình ảnh), tiến thẳng lên nấc thang Modification (Biến đổi quy trình học tập với cơ chế phân quyền, đua top tuần) và Redefinition (Tái định nghĩa môi trường học tập thành cuộc phiêu lưu xuyên Việt đa phương thức, kết nối thời gian thực mà phương pháp truyền thống không thể làm được).")
+    add_bullet("Mô hình Trò chơi hóa Octalysis (Yu-kai Chou) & Karl Kapp: ", "Ứng dụng các động lực cốt lõi của trò chơi vào bối cảnh học tập: Ý nghĩa cao cả & Sứ mệnh (đồng hành cùng Robot giải cứu các vùng đất), Cảm giác tiến bộ & Chinh phục (thanh tiến trình 3 vòng, mở khóa 35 bảo vật hoàng kim), và Sự công nhận xã hội (Bảng vàng Top 10 cao thủ). Cơ chế này kích hoạt sự giải phóng Dopamine tự nhiên trong não bộ, tạo sự hào hứng và say mê bền vững mà không cần người lớn thúc ép.")
 
-    add_h2("2.2. Tâm lý tiếp nhận và thói quen công nghệ của học sinh lớp 5")
-    add_p("Học sinh lớp 5 (10 - 11 tuổi) đang ở giai đoạn chuyển tiếp từ tư duy trực quan hình ảnh sang tư duy logic trừu tượng. Các em có đặc điểm tâm lý:")
-    add_bullet("Tính hiếu động và ham khám phá: ", "Dễ bị lôi cuốn bởi âm thanh vui nhộn, hình ảnh rực rỡ và các thử thách mang tính cạnh tranh lành mạnh.")
-    add_bullet("Nhu cầu khẳng định bản thân: ", "Rất thích được công nhận thành tích, vinh danh trước tập thể bạn bè (thông qua Bảng vàng hay Huân chương).")
-    add_bullet("Khả năng thích ứng công nghệ cao nhưng dễ phân tán: ", "Các em thuần thục thao tác cảm ứng trên điện thoại thông minh, nhưng nếu giao diện ứng dụng quá rườm rà hoặc bắt đăng nhập phức tạp thì các em sẽ nhanh chóng nản chí và chuyển sang ứng dụng khác.")
+    add_h2("2.2. Đặc điểm tâm sinh lý tiếp nhận và thói quen công nghệ của học sinh lớp 5")
+    add_p("Học sinh lớp 5 (độ tuổi 10 - 11 tuổi) đang ở bước ngoặt tâm lý quan trọng: tư duy đang chuyển dần từ trực quan cụ thể sang tư duy trừu tượng, logic. Các em có những đặc tính nổi bật:")
+    add_bullet("Nhu cầu khẳng định bản sắc cá nhân cao: ", "Rất thích được vinh danh, khen thưởng trước tập thể, tự hào khi thấy tên mình xuất hiện trên Bảng vàng hay sở hữu những bảo vật độc nhất vô nhị.")
+    add_bullet("Nhạy bén với công nghệ nhưng mức độ tập trung hữu hạn: ", "Các em thao tác ngón tay trên màn hình cảm ứng rất nhanh nhưng dễ bị xao nhãng nếu nội dung bài học quá dài hoặc giao diện ứng dụng phức tạp, nhiều chữ. Do đó, bài học cần được chia nhỏ thành các chặng (Micro-learning) từ 10 - 15 phút với màu sắc bắt mắt, âm thanh sinh động.")
 
-    add_h2("2.3. Các nguyên tắc sư phạm trong xây dựng hệ thống tương tác EduRobot")
-    add_p("Để đảm bảo tính khoa học và giá trị giáo dục thực chất, hệ thống EduRobot được thiết kế tuân thủ nghiêm ngặt 4 nguyên tắc sư phạm:")
-    add_bullet("1. Nguyên tắc bám sát chuẩn kiến thức, kỹ năng: ", "Toàn bộ hệ thống bài tập được thẩm định kỹ lưỡng, bám sát các yêu cầu cần đạt của Chương trình GDPT 2018 môn Toán lớp 5, bảo đảm mức độ phân hóa từ nhận biết, thông hiểu đến vận dụng thực tiễn.")
-    add_bullet("2. Nguyên tắc phản hồi tức thì (Immediate Feedback): ", "Mỗi thao tác của học sinh đều nhận được phản hồi ngay lập tức (âm thanh 'ting' vui tươi khi làm đúng, âm thanh nhắc nhở nhẹ nhàng khi chọn sai kèm cơ chế trừ mạng sống). Học sinh không phải đợi chấm bài mới biết kết quả.")
-    add_bullet("3. Nguyên tắc tối ưu hóa trải nghiệm di động (Mobile-First): ", "Nhận định hơn 90% học sinh sử dụng điện thoại thông minh của phụ huynh, toàn bộ giao diện bài tập được thiết kế chuẩn tỉ lệ màn hình dọc, thao tác 'chạm - thả' thông minh, phông chữ Lexend rõ nét, chống mỏi mắt.")
-    add_bullet("4. Nguyên tắc trung thực và an toàn dữ liệu: ", "Hệ thống tích hợp thuật toán lọc bỏ dữ liệu rác (loại bỏ tên tài khoản thử nghiệm như test, abc, 123; bắt buộc nhập họ tên thật ít nhất 3 từ), đảm bảo môi trường thi đua công bằng và minh bạch.")
+    add_h2("2.3. Bốn nguyên tắc sư phạm cốt lõi trong xây dựng hệ sinh thái EduRobot")
+    add_p("Để đảm bảo hệ thống không bị sa đà vào tính chất giải trí thuần túy mà luôn giữ vững chuẩn mực giáo dục, chúng tôi đặt ra 4 nguyên tắc sư phạm bắt buộc:")
+    add_bullet("1. Nguyên tắc chuẩn mực chương trình (Curriculum Alignment): ", "100% câu hỏi trong hệ thống được thẩm định chặt chẽ, bám sát từng tiết học trong Bảng phân phối chương trình môn Toán 5 (bộ sách Kết nối tri thức với cuộc sống), phủ đủ 3 mức độ nhận thức: Nhận biết, Thông hiểu và Vận dụng.")
+    add_bullet("2. Nguyên tắc phản hồi lập tức (Immediate Feedback): ", "Mọi hành vi chọn đáp án đều được hệ thống phát tín hiệu phản hồi ngay tức khắc (âm thanh chúc mừng rộn rã khi đúng, âm thanh báo hiệu khi sai kèm cơ chế trừ mạng sống). Học sinh nhận biết ngay sai lầm để tự sửa chữa trong não bộ.")
+    add_bullet("3. Nguyên tắc công bằng và chống gian lận (Fair Play & Data Hygiene): ", "Hệ thống tích hợp thuật toán làm sạch dữ liệu tự động: lọc bỏ các tài khoản rác (tên 1 ký tự, test, 123...), quy định họ và tên thật phải từ 2 - 3 từ có nghĩa, chốt dữ liệu đua top theo khung giờ vàng để đảm bảo tính minh bạch tuyệt đối.")
+    add_bullet("4. Nguyên tắc tối ưu hóa thiết bị di động (Mobile-First Accessibility): ", "Hơn 90% các em dùng điện thoại của cha mẹ, nên mọi nút bấm, thẻ bài, cỡ chữ đều được thiết kế chuẩn tỉ lệ màn hình dọc 9:16, phông chữ Lexend rõ nét chống mỏi mắt, thao tác 'chạm là ăn' mượt mà.")
 
     # -------------------------------------------------------------
-    # PHẦN III: NỘI DUNG VÀ CÁC BIỆN PHÁP THỰC HIỆN
+    # PHẦN III: HỆ THỐNG GIẢI PHÁP VÀ BIỆN PHÁP THỰC HIỆN
     # -------------------------------------------------------------
-    add_h1("PHẦN III: NỘI DUNG VÀ CÁC BIỆN PHÁP THỰC HIỆN (TRỌNG TÂM)")
+    add_h1("PHẦN III: HỆ THỐNG GIẢI PHÁP VÀ BIỆN PHÁP THỰC HIỆN (TRỌNG TÂM)")
 
-    add_h2("3.1. Ý tưởng 'Hành trình Xuyên Việt' – Tích hợp liên môn Toán và Lịch sử - Địa lý")
-    add_p("Điểm nhấn độc đáo nhất của chuyên đề chính là ý tưởng lồng ghép toàn bộ tiến trình ôn tập 17 tuần học kỳ 2 vào bản đồ địa lý Việt Nam. Học sinh đóng vai trò là 'Nhà thám hiểm' đồng hành cùng chú robot thông minh EduRobot khởi hành từ địa đầu phía Bắc đến mũi cực Nam của Tổ quốc.")
-    
-    # Map image if exists
-    if os.path.exists("Bandogame.jpg"):
+    add_h2("3.1. Tuyến ý tưởng 'Hành trình Xuyên Việt' – Tích hợp liên môn Toán và Lịch sử - Địa lý")
+    add_p("Điểm sáng tạo đặc biệt của chuyên đề là ý tưởng số hóa bản đồ địa lý Việt Nam thành một 'Hành trình Xuyên Việt kỳ thú'. Học sinh hóa thân thành 'Nhà thám hiểm nhí' cùng chú robot thông minh EduRobot xuất phát từ địa đầu Lũng Cú (Hà Giang) và đi qua trọn vẹn 35 tuần học tương ứng với 35 địa danh văn hóa, lịch sử và danh lam thắng cảnh tiêu biểu trên khắp dải đất hình chữ S:")
+
+    # Chèn ảnh Bản đồ nếu tồn tại
+    map_img_path = os.path.join(BASE_DIR, "Bandogame.jpg")
+    if os.path.exists(map_img_path):
         p_map = doc.add_paragraph()
         p_map.alignment = WD_ALIGN_PARAGRAPH.CENTER
         p_map.paragraph_format.space_before = Pt(6)
         p_map.paragraph_format.space_after = Pt(4)
-        p_map.add_run().add_picture("Bandogame.jpg", width=Cm(13.5))
-        p_caption = doc.add_paragraph()
-        p_caption.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p_caption.paragraph_format.space_after = Pt(8)
-        rc = p_caption.add_run("Hình 1: Giao diện Bản đồ tương tác 'Hành trình Xuyên Việt cùng Robot' (edurobot.id.vn)")
+        p_map.add_run().add_picture(map_img_path, width=Cm(13.5))
+        p_cap = doc.add_paragraph()
+        p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_cap.paragraph_format.space_after = Pt(8)
+        rc = p_cap.add_run("Hình 1: Giao diện Bản đồ tương tác 'Hành trình Xuyên Việt cùng Robot' (edurobot.id.vn)")
         set_font(rc, size=11, italic=True, color=RGBColor(80, 80, 80))
 
-    add_p("Các trạm kiểm soát tương ứng với từng tuần học được định vị chính xác theo tọa độ địa lý và kết nối với nhau bằng các cung đường bộ rực rỡ và đường biển lấp lánh (vẽ tự động bằng công nghệ SVG):")
-    add_bullet("Trạm khởi đầu (Tuần 19): ", "Cột cờ Lũng Cú (Hà Giang) – Nơi địa đầu Tổ quốc.")
-    add_bullet("Các trạm miền Bắc (Tuần 20 - 24): ", "Thủ đô Hà Nội nghìn năm văn hiến, Tây Bắc, Đồng bằng sông Hồng.")
-    add_bullet("Các trạm miền Trung (Tuần 25 - 29): ", "Cố đô Huế cổ kính, Duyên hải Nam Trung Bộ, Đà Nẵng, Tây Nguyên hùng vĩ.")
-    add_bullet("Các trạm miền Nam & Hải đảo (Tuần 30 - 35): ", "Thành phố Hồ Chí Minh năng động, Đồng bằng sông Cửu Long, Mũi Cà Mau và vươn xa ra các đảo biển đảo thiêng liêng.")
-    add_p("Thông qua lộ trình này, mỗi lần mở trạm học sinh không chỉ làm bài tập toán mà còn được gợi mở tri thức về địa danh, văn hóa và bồi đắp lòng tự hào dân tộc một cách tự nhiên, sâu sắc.")
+    add_p("Lộ trình 35 trạm được quy hoạch khoa học theo không gian địa lý và tiến trình năm học:")
+    add_bullet("Trạm 01 đến 08 (Miền núi phía Bắc & Đồng bằng Bắc Bộ): ", "Khởi hành từ Cột cờ Lũng Cú, Hẻm Tu Sản - Sông Nho Quế, Thác Bản Giốc, Hồ Ba Bể, Ruộng bậc thang Mù Cang Chải, Đỉnh Fansipan, Thủ đô Hà Nội đến Vịnh Hạ Long & Núi Yên Tử.")
+    add_bullet("Trạm 09 đến 18 (Bắc Trung Bộ & Duyên hải miền Trung): ", "Tràng An Hoa Lư (Ninh Bình - GK1), Thành Nhà Hồ (Thanh Hóa), Làng Sen Quê Bác (Nghệ An), Ngã ba Đồng Lộc (Hà Tĩnh), Phong Nha - Kẻ Bàng (Quảng Bình), Thành cổ Quảng Trị - Cầu Hiền Lương, Cố đô Huế, Cầu Rồng Đà Nẵng, Phố cổ Hội An và Đảo Lý Sơn Quảng Ngãi (CK1).")
+    add_bullet("Trạm 19 đến 27 (Tây Nguyên đại ngàn & Duyên hải Nam Trung Bộ): ", "Ngã ba Đông Dương Kon Tum, Biển Hồ Gia Lai, Buôn Đôn Đắk Lắk, Hồ Tà Đùng Đắk Nông, Gành Đá Đĩa Phú Yên, Vịnh Nha Trang, Tháp Chàm Ninh Thuận, Đồi cát Mũi Né Bình Thuận và Đỉnh Lang Biang Đà Lạt (GK2).")
+    add_bullet("Trạm 28 đến 35 (Nam Bộ, Đồng bằng sông Cửu Long & Biển đảo thiêng liêng): ", "Địa đạo Củ Chi, Núi Bà Đen Tây Ninh, Bến Nhà Rồng Landmark 81, Làng hoa Sa Đéc Đồng Tháp, Đất Mũi Cà Mau, Đảo Ngọc Phú Quốc và hai chặng thiêng liêng vươn xa tới Quần đảo Trường Sa (Trạm 34) và Quần đảo Hoàng Sa (Trạm 35 - CK2).")
+    add_p("Nhờ đó, mỗi tuần học không chỉ đơn thuần là giải các bài toán khô khan, mà các em còn được bồi đắp kiến thức lịch sử, địa lý, nuôi dưỡng tình yêu quê hương đất nước và ý thức chủ quyền biển đảo thiêng liêng một cách tự nhiên, sâu sắc.")
 
-    add_h2("3.2. Cấu trúc bài tập tương tác 3 vòng thử thách tư duy")
-    add_p("Mỗi tuần ôn tập được thiết kế công phu thành một chuỗi 3 vòng thử thách liên hoàn với thang điểm chuẩn 100 điểm, bảo đảm tính vừa sức và nâng cao dần cấp độ tư duy:")
-    
+    add_h2("3.2. Cấu trúc bài tập tương tác 3 vòng thử thách tư duy (Thang điểm chuẩn 100)")
+    add_p("Để tạo sự cân bằng giữa tính giải trí và chiều sâu tư duy, mỗi tuần học được thiết kế thành một bài thi liên hoàn gồm 3 vòng thử thách, với thang điểm tổng tuyệt đối là 100 điểm:")
+
     # Table 3 rounds
     v_tbl = doc.add_table(rows=4, cols=4)
     v_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-    v_headers = ["Vòng thi", "Tên gọi & Hình thức", "Cơ chế tương tác & Điểm", "Mục tiêu sư phạm"]
+    v_headers = ["Vòng thi", "Hình thức & Cơ chế", "Thang điểm & Quy tắc", "Mục tiêu sư phạm"]
     for col_idx, h in enumerate(v_headers):
         cell = v_tbl.cell(0, col_idx)
         shd = parse_xml(r'<w:shd {} w:fill="1A365D"/>'.format(nsdecls('w')))
@@ -361,11 +419,10 @@ def create_chuyen_de_document():
         set_font(r, size=11.5, bold=True, color=RGBColor(255, 255, 255))
 
     v_data = [
-        ("Vòng 1", "Ghép đôi thẻ bài\n(Matching Cards)", "10 cặp thẻ (40 điểm).\nCó 3 mạng sống (❤️❤️❤️).\nChọn cặp tương ứng để mở khóa.", "Rèn luyện nhận diện khái niệm, công thức, ước lượng và ghép nối tỉ số."),
-        ("Vòng 2", "Sắp xếp & Điền khuyết\n(Touch-to-Drop)", "5 bài toán thực tế (30 điểm).\nChạm đáp án rồi chạm ô nhận trên bảng số liệu.", "Khắc phục lỗi trượt ngón tay trên điện thoại; rèn tư duy tính toán chính xác."),
-        ("Vòng 3", "Về đích trắc nghiệm\n(Multiple Choice)", "5 câu hỏi 4 lựa chọn (30 điểm).\nTính điểm tốc độ và chuyển câu tự động.", "Rèn luyện phản xạ tính nhanh, phân tích bẫy đề thi và bản lĩnh vượt chướng ngại vật.")
+        ("Vòng 1", "Ghép đôi thẻ bài\n(Matching Cards)", "10 cặp thẻ tương ứng.\nTối đa 40 điểm (4đ/cặp).\nCấp 3 mạng sống (❤️❤️❤️).\nGhép sai mất 1 mạng.", "Rèn luyện khả năng nhận diện định nghĩa, ghi nhớ công thức, ước lượng nhanh và liên hệ toán học thực tiễn."),
+        ("Vòng 2", "Sắp xếp & Điền khuyết\n(Touch-to-Drop)", "5 bài toán thực hành.\nTối đa 30 điểm (6đ/bài).\nChạm chọn đáp án rồi chạm ô nhận trên bảng dữ liệu.", "Khắc phục triệt để lỗi trượt ngón tay khi kéo thả trên di động; rèn tính cẩn thận, chính xác trong tính toán số liệu."),
+        ("Vòng 3", "Về đích trắc nghiệm\n(Multiple Choice)", "5 câu hỏi 4 lựa chọn (A, B, C, D).\nTối đa 30 điểm (6đ/câu).\nCó đếm ngược thời gian và tự động chuyển câu.", "Rèn luyện phản xạ tính nhanh, kỹ năng loại trừ phương án nhiễu, làm quen cấu trúc đề kiểm tra định kỳ.")
     ]
-    col_widths = [Cm(2.0), Cm(4.0), Cm(5.0), Cm(5.0)]
     for row_idx, row_data in enumerate(v_data, start=1):
         bg_color = "F7FAFC" if row_idx % 2 == 1 else "FFFFFF"
         for col_idx, text in enumerate(row_data):
@@ -387,31 +444,34 @@ def create_chuyen_de_document():
 
     add_p()
 
-    add_h2("3.3. Các cơ chế Game hóa tạo động lực học tập bền vững")
-    add_p("Để học sinh không cảm thấy đơn điệu và luôn mong chờ đến giờ ôn tập, hệ thống tích hợp các cơ chế thưởng - phạt thông minh:")
-    add_bullet("Hệ thống 'Mạng sống' (Heart Lives): ", "Ở vòng 1, học sinh được cấp 3 trái tim đỏ. Mỗi lần ghép sai sẽ mất 1 tim kèm âm thanh báo động. Nếu hết tim, học sinh phải chuyển vòng với số điểm hiện có, từ đó rèn luyện cho các em tính cẩn thận, không nhấn bừa.")
-    add_bullet("Hiệu ứng Đại tiệc Pháo hoa chiến thắng (Fireworks System): ", "Khi học sinh đạt thành tích xuất sắc (từ 90 điểm trở lên), màn hình sẽ bùng nổ hiệu ứng pháo hoa 3D rực rỡ kèm dòng chữ vinh danh họ tên học sinh mạ vàng và nhạc chiến thắng ngân vang trong 10 giây. Đây là phần thưởng tinh thần vô cùng to lớn đối với học sinh tiểu học.")
-    add_bullet("Túi đồ nhà thám hiểm (Gamification Inventory): ", "Mỗi tuần học hoàn thành đúng hạn chót sẽ mở khóa một bảo vật biểu trưng độc nhất vô nhị (như Ống nhòm Lũng Cú ở tuần 19, Bản đồ Thủ đô ở tuần 22, Quà cố đô Huế ở tuần 25, Mô hình Bitexco ở tuần 30, Huân chương Chiến thắng ở tuần 35). Học sinh có thể mở 'Túi đồ' để chiêm ngưỡng bộ sưu tập và số huy chương Vàng, Bạc, Đồng mà mình đã tích lũy.")
-    add_bullet("Cơ chế mở chặng định kỳ (Countdown Schedule): ", "Các trạm bài tập được khóa tự động và chỉ mở vào đúng khung giờ quy định mỗi tuần (thứ Sáu hàng tuần). Nếu học sinh nhấp vào trạm chưa mở, đồng hồ đếm ngược sẽ hiển thị chính xác số ngày, giờ, phút, giây, tạo cảm giác hồi hộp và mong chờ.")
+    add_h2("3.3. Hệ thống cơ chế Gamification đa tầng kích thích động lực tự thân bền vững")
+    add_p("Hệ sinh thái EduRobot tích hợp các cơ chế trò chơi hóa sâu sắc, biến quá trình học tập thành trải nghiệm đầy cảm xúc:")
+    add_bullet("1. Cơ chế 'Mạng sống' (Heart Lives System): ", "Ở vòng 1, học sinh được cấp 3 trái tim đỏ. Mỗi lần bấm sai cặp thẻ, 1 trái tim sẽ biến mất kèm âm thanh cảnh báo. Nếu mất hết 3 mạng, vòng chơi dừng lại với số điểm hiện có. Cơ chế này dạy học sinh đức tính cẩn trọng, suy nghĩ kỹ trước khi quyết định, bài trừ thói quen bấm bừa tìm may rủi.")
+    add_bullet("2. Đại tiệc Pháo hoa chiến thắng 3D (Fireworks Victory Display): ", "Khi học sinh chinh phục điểm số từ 90 điểm trở lên (mức Giỏi và Xuất sắc), hệ thống kích hoạt hiệu ứng pháo hoa 3D rực rỡ toàn màn hình bằng công nghệ HTML5 Canvas, đi kèm bài nhạc chiến thắng hoành tráng và bảng vinh danh họ tên học sinh mạ vàng trong 10 giây. Cảm giác hân hoan khi nhìn thấy tên mình bừng sáng chính là phần thưởng tinh thần vô giá đối với trẻ thơ.")
+    add_bullet("3. Túi đồ nhà thám hiểm với 3 cấp độ bảo vật hoàng kim: ", "Tại trang tuido.html, mỗi trạm hoàn thành sẽ mở khóa một bảo vật biểu trưng của vùng đất đó. Đặc biệt, hệ thống phân định rõ 3 cấp độ danh giá: Huy hiệu Đồng (đạt từ 50 - 89 điểm), Bảo vật Bạc (đạt từ 90 - 99 điểm) và Thần Bảo Hoàng Kim Vàng (đạt tuyệt đối 100 điểm). Học sinh luôn có động lực thi lại nhiều lần để nâng cấp toàn bộ bảo vật trong túi đồ thành màu vàng hoàng kim lấp lánh.")
+    add_bullet("4. Cơ chế đồng hồ đếm ngược và mở chặng tuần tự: ", "Các chặng thử thách được khóa tự động và mở vào đúng 14h00 Thứ Sáu hàng tuần. Nếu học sinh bấm vào trạm chưa mở, đồng hồ đếm ngược sẽ hiển thị thời gian chờ chính xác đến từng giây, tạo sự hồi hộp và đón đợi như một ngày hội cuối tuần.")
 
-    add_h2("3.4. Giải pháp công nghệ đa nền tảng: Web tương tác và Zalo Mini App")
-    add_p("Một trong những rào cản lớn nhất của các ứng dụng học tập trực tuyến là khâu cài đặt phức tạp, phụ huynh quên mật khẩu hoặc máy điện thoại không đủ dung lượng bộ nhớ. Nhận diện rõ bài toán này, tác giả đã phát triển giải pháp đồng bộ trên hai nền tảng:")
-    add_bullet("Phiên bản Web chuẩn hóa (HTML5/CSS3/JavaScript): ", "Chạy mượt mà trên mọi trình duyệt (Google Chrome, Safari, Cốc Cốc, Edge) trên máy tính, tivi thông minh của lớp học hoặc máy tính bảng gia đình mà không cần bất kỳ tiện ích bổ trợ nào.")
-    add_bullet("Phiên bản Zalo Mini App (edubot-zmp): ", "Ứng dụng công nghệ React 18, ZaUI và ZMP SDK của Zalo. Vì hầu như 100% phụ huynh học sinh Việt Nam đều cài sẵn Zalo trên điện thoại, việc tích hợp Zalo Mini App cho phép phụ huynh chỉ cần bấm vào đường link hoặc quét mã QR trong nhóm lớp là ứng dụng khởi chạy ngay lập tức với tốc độ cao, không tốn dung lượng máy.")
+    add_h2("3.4. Kiến trúc công nghệ đa nền tảng và cơ chế phân quyền kiểm soát thông minh")
+    add_p("Để giải quyết triệt để rào cản về hạ tầng thiết bị của phụ huynh, hệ sinh thái được phát triển song song trên hai nền tảng bổ trợ lẫn nhau:")
+    add_bullet("Nền tảng Web tương tác chuẩn hóa: ", "Xây dựng trên nền HTML5, CSS3 và Vanilla JavaScript thuần túy, không phụ thuộc thư viện nặng. Trang web tương thích 100% với mọi trình duyệt hiện đại (Google Chrome, Cốc Cốc, Safari, Edge) trên máy vi tính gia đình, máy tính bảng và màn hình Tivi thông minh trên lớp học.")
+    add_bullet("Nền tảng Zalo Mini App (edubot-zmp): ", "Ứng dụng công nghệ React 18, ZaUI và ZMP SDK của Zalo. Do 100% phụ huynh học sinh Việt Nam đều cài sẵn và sử dụng Zalo hàng ngày, việc tích hợp Zalo Mini App cho phép phụ huynh chỉ cần bấm vào liên kết trong nhóm Zalo của lớp là bài tập mở ngay lập tức, tốc độ khởi chạy dưới 1 giây, hoàn toàn không tốn dung lượng bộ nhớ máy điện thoại và không cần khai báo tài khoản phức tạp.")
+    add_bullet("Hệ thống phân quyền 3 cấp (Role-Based Access Control) & Trang Quản trị (admin.html): ", "Hệ thống hỗ trợ 3 nhóm vai trò rõ ràng:")
+    add_p("   - Nhóm Học sinh (Student): Đăng ký bằng họ tên thật, lớp, trường. Khi mới đăng ký hoặc tài khoản khách, học sinh được trải nghiệm tự do từ Trạm 1 đến Trạm 8. Sau khi giáo viên/quản trị viên duyệt, tài khoản mở đầy đủ 35 trạm theo tiến độ tuần của năm học.\n   - Nhóm Giáo viên (Teacher): Sau khi đăng ký và được xác thực, giáo viên có quyền mở toàn bộ 35 trạm ngay lập tức để phục vụ công tác soạn bài, thử nghiệm đề hoặc trình chiếu giảng dạy trên lớp.\n   - Nhóm Quản trị viên (Admin): Toàn quyền kiểm soát hệ thống tại admin.html, duyệt danh sách thành viên chờ duyệt (pending), kích hoạt, đổi mật khẩu và xuất dữ liệu người dùng.", indent=1.0)
 
-    add_h2("3.5. Hệ thống thu thập dữ liệu tự động và số hóa quản lý chuyên môn")
-    add_p("Hệ thống kết nối trực tiếp với dịch vụ đám mây Firebase Realtime Database của Google, cho phép lưu trữ và xử lý dữ liệu học tập tức thì:")
-    add_bullet("Ghi nhận đa chiều: ", "Mỗi lượt làm bài của học sinh đều được ghi nhận chi tiết gồm: Họ và tên, Lớp, Trường, Số điểm đạt được, Thời gian làm bài chính xác đến từng giây (duration), Số lần thử sức (attempt) và mốc thời gian hoàn thành.")
-    add_bullet("Bảng vàng vinh danh Top 10 Realtime: ", "Hệ thống tự động xếp hạng học sinh dựa trên tiêu chí: Ưu tiên điểm cao nhất, nếu bằng điểm sẽ xếp theo thời gian hoàn thành ngắn nhất. Dữ liệu nhảy số ngay tức thì khi học sinh nộp bài.")
-    add_bullet("Công cụ hỗ trợ giáo viên (Bảng vàng Dashboard): ", "Tại trang bang-vang.html, giáo viên có thể tra cứu toàn bộ kết quả của 17 tuần học, xem biểu đồ phân bố phổ điểm trực quan (dưới 50đ, 50-70đ, 80-90đ, 100đ) nhờ thư viện Chart.js, và đặc biệt là tính năng Xuất báo cáo danh sách điểm ra file Excel (.xlsx) qua thư viện SheetJS để làm minh chứng đánh giá thường xuyên.")
+    add_h2("3.5. Hệ thống cơ sở dữ liệu thời gian thực và tự động hóa quản lý chuyên môn")
+    add_p("Hệ thống kết nối trực tiếp với dịch vụ cơ sở dữ liệu đám mây Google Firebase Realtime Database mang lại những tiện ích quản lý chuyên môn vượt bậc:")
+    add_bullet("Thu thập dữ liệu học tập đa chiều: ", "Mỗi lượt nộp bài của học sinh đều được lưu lại chi tiết gồm: Họ và tên, Lớp, Trường, Số điểm đạt được, Thời gian làm bài chính xác đến từng giây (duration), Số lần thử sức (attempt) và dấu thời gian hoàn thành (timestamp).")
+    add_bullet("Bảng vàng Top 10 cao thủ & Bộ lọc Đua top tuần: ", "Tại trang bang-vang.html, Bảng vàng vinh danh cập nhật theo thời gian thực (Realtime). Đặc biệt, hệ thống tích hợp 2 chế độ lọc thông minh:")
+    add_p("   - Chế độ 'Đua Top Tuần': Chỉ tính các lượt thi chính thức trong 'Khung giờ vàng' từ 14h00 Thứ Sáu đến 13h59:59 Thứ Sáu tuần sau, đảm bảo công bằng cho giải đua tuần.\n   - Chế độ 'Tất Cả Lượt Thi': Thống kê toàn bộ lịch sử rèn luyện của học sinh trong cả năm.", indent=1.0)
+    add_bullet("Biểu đồ phân tích phổ điểm (Chart.js) & Xuất báo cáo Excel (SheetJS): ", "Giáo viên có thể theo dõi biểu đồ hình cột thể hiện phân bố phổ điểm của lớp (Dưới 50đ, 50 - 79đ, 80 - 89đ, 100đ tuyệt đối) và chỉ cần nhấn nút 'Xuất Excel', toàn bộ danh sách điểm học sinh sẽ được tải về dưới dạng file .xlsx chuẩn mực để lưu trữ làm minh chứng đánh giá thường xuyên theo Thông tư 27/2020/TT-BGDĐT.")
 
-    add_h2("3.6. Ma trận nội dung ôn tập 17 tuần học kỳ 2 (Tuần 19 đến Tuần 35)")
-    add_p("Dưới đây là ma trận phân phối nội dung toán học được tích hợp trong hệ thống EduRobot:")
-    
-    # Table 17 weeks
-    m_tbl = doc.add_table(rows=18, cols=4)
+    add_h2("3.6. Ma trận phân phối kiến thức trọn bộ 35 tuần học (18 tuần HK1 và 17 tuần HK2)")
+    add_p("Dưới đây là Bảng Ma trận tổng thể tích hợp giữa 35 Trạm địa danh Xuyên Việt, Chuẩn kiến thức kỹ năng Toán 5 (bộ sách Kết nối tri thức với cuộc sống) và Bảo vật hoàng kim mở khóa trong Túi đồ:")
+
+    # Table 35 weeks full matrix
+    m_tbl = doc.add_table(rows=36, cols=4)
     m_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-    m_headers = ["Tuần", "Chủ đề thử thách", "Kiến thức Toán học trọng tâm", "Vật phẩm mở khóa"]
+    m_headers = ["Tuần / Trạm", "Tên trạm địa danh Xuyên Việt", "Kiến thức Toán 5 trọng tâm (GDPT 2018)", "Bảo vật Hoàng Kim mở khóa (100đ)"]
     for col_idx, h in enumerate(m_headers):
         cell = m_tbl.cell(0, col_idx)
         shd = parse_xml(r'<w:shd {} w:fill="1A365D"/>'.format(nsdecls('w')))
@@ -421,45 +481,45 @@ def create_chuyen_de_document():
         p.paragraph_format.space_before = Pt(3)
         p.paragraph_format.space_after = Pt(3)
         r = p.add_run(h)
-        set_font(r, size=11, bold=True, color=RGBColor(255, 255, 255))
+        set_font(r, size=10.5, bold=True, color=RGBColor(255, 255, 255))
 
-    matrix_data = [
-        ("19", "Bản đồ kho báu", "Tỉ số, Tỉ lệ bản đồ, Tỉ số phần trăm", "Ống nhòm Lũng Cú 🔭"),
-        ("20", "Cán cân công lý", "Bài toán về đại lượng tỉ lệ thuận, tỉ lệ nghịch", "Cân tiểu ly ⚖️"),
-        ("21", "Xây tháp tri thức 1", "Hình tam giác, diện tích hình tam giác", "Máy tính bỏ túi 📟"),
-        ("22", "Xây tháp tri thức 2", "Hình thang, diện tích hình thang", "Bản đồ Thủ đô 🗺️"),
-        ("23", "Thám hiểm đại dương", "Hình tròn, chu vi và diện tích hình tròn", "Thước cuộn 📏"),
-        ("24", "Hình khai triển", "Hình hộp chữ nhật, hình lập phương & hình khai triển", "Mũ bảo hộ 🏗️"),
-        ("25", "Khám phá Cố đô", "Diện tích xung quanh & toàn phần hình khối", "Quà cố đô Huế 🎁"),
-        ("26", "Đo lường thời gian", "Thể tích hình hộp chữ nhật, hình lập phương", "Đồng hồ cát ⏳"),
-        ("27", "Vương quốc đo lường", "Xăng-ti-mét khối, Đề-xi-mét khối, Mét khối", "Com-pa bạc 📐"),
-        ("28", "Chinh phục tốc độ", "Vận tốc, quãng đường, thời gian (Chuyển động đều)", "Bánh lái tàu 🎡"),
-        ("29", "Khám phá vũ trụ", "Toán chuyển động ngược chiều và cùng chiều", "Đèn pin hang động 🔦"),
-        ("30", "Thế giới dữ liệu", "Bảng thống kê số liệu, biểu đồ hình quạt tròn", "Mô hình Bitexco 🏢"),
-        ("31", "Học viện số học", "Ôn tập Phân số, Số thập phân và 4 phép tính", "La bàn số 🧭"),
-        ("32", "Đền thờ toán học", "Ôn tập Đo lường (Độ dài, khối lượng, diện tích)", "Vé tàu cao tốc 🎫"),
-        ("33", "Chinh phục rừng xanh", "Ôn tập Hình học tổng hợp (Chu vi, diện tích, thể tích)", "Mũ tai bèo 👒"),
-        ("34", "Chinh phục đỉnh cao", "Ôn tập Giải toán có lời văn và toán chuyển động", "Cờ về đích 🚩"),
-        ("35", "Đại hội chiến thắng", "Kỳ thi tổng kết – Đánh giá năng lực toàn diện Toán 5", "Huân chương Chiến thắng 🎖️")
-    ]
-    for row_idx, row_data in enumerate(matrix_data, start=1):
-        bg_color = "F7FAFC" if row_idx % 2 == 1 else "FFFFFF"
-        for col_idx, text in enumerate(row_data):
-            cell = m_tbl.cell(row_idx, col_idx)
+    for idx, s in enumerate(ALL_35_STATIONS, start=1):
+        w = s['tuan']
+        tram_name = f"Trạm {s['tram_so']:02d}: {s['ten_tram']}"
+        chu_de = s['chu_de']
+        it = items_dict.get(str(w), {})
+        icon = it.get('icon', '🎖️')
+        cap3 = it.get('cap3', 'Huân chương Hoàng Kim Vàng')
+        bảo_vật = f"{icon} {cap3}"
+
+        cell_w = m_tbl.cell(idx, 0)
+        cell_t = m_tbl.cell(idx, 1)
+        cell_c = m_tbl.cell(idx, 2)
+        cell_b = m_tbl.cell(idx, 3)
+
+        bg_color = "F7FAFC" if idx % 2 == 1 else "FFFFFF"
+        for c in (cell_w, cell_t, cell_c, cell_b):
             shd = parse_xml(r'<w:shd {} w:fill="{}"/>'.format(nsdecls('w'), bg_color))
-            cell._tc.get_or_add_tcPr().append(shd)
-            p = cell.paragraphs[0]
-            p.paragraph_format.space_before = Pt(2)
-            p.paragraph_format.space_after = Pt(2)
-            p.paragraph_format.line_spacing = 1.15
-            if col_idx == 0:
-                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                r = p.add_run(text)
-                set_font(r, size=10.5, bold=True)
-            else:
-                p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-                r = p.add_run(text)
-                set_font(r, size=10.5)
+            c._tc.get_or_add_tcPr().append(shd)
+            c.paragraphs[0].paragraph_format.space_before = Pt(2)
+            c.paragraphs[0].paragraph_format.space_after = Pt(2)
+            c.paragraphs[0].paragraph_format.line_spacing = 1.15
+
+        cell_w.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+        r_w = cell_w.paragraphs[0].add_run(f"Tuần {w:02d}")
+        set_font(r_w, size=10, bold=True, color=RGBColor(26, 54, 93))
+
+        cell_t.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
+        r_t = cell_t.paragraphs[0].add_run(tram_name)
+        set_font(r_t, size=9.5, bold=True)
+
+        cell_c.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
+        r_c = cell_c.paragraphs[0].add_run(chu_de)
+        set_font(r_c, size=9.5)
+
+        cell_b.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.LEFT
+        r_b = cell_b.paragraphs[0].add_run(bảo_vật)
+        set_font(r_b, size=9.5, italic=True)
 
     add_p()
 
@@ -468,24 +528,24 @@ def create_chuyen_de_document():
     # -------------------------------------------------------------
     add_h1("PHẦN IV: QUY TRÌNH TỔ CHỨC DẠY HỌC THỰC NGHIỆM TẠI ĐƠN VỊ")
 
-    add_h2("4.1. Quy trình 4 bước triển khai linh hoạt trong dạy học")
-    add_p("Để chuyên đề đi vào thực chất và đạt hiệu quả tối ưu, chúng tôi xây dựng quy trình triển khai chuẩn mực gồm 4 bước:")
-    add_bullet("Bước 1: Khởi động & Đăng ký danh tính nhà thám hiểm: ", "Vào đầu học kỳ 2, giáo viên hướng dẫn học sinh truy cập website hoặc Zalo Mini App. Học sinh nhập họ tên thật, chọn đúng lớp và trường học. Hệ thống lưu tài khoản trên thiết bị, các lần truy cập sau học sinh không cần nhập lại.")
-    add_bullet("Bước 2: Ứng dụng linh hoạt trong các pha dạy học: ", "Hệ thống có thể sử dụng đa dạng:")
-    add_p("   - Trong giờ học chính khóa: Giáo viên trình chiếu vòng 1 (Ghép đôi) trên tivi thông minh làm hoạt động Khởi động tạo không khí sôi nổi đầu giờ; hoặc dùng vòng 3 (Về đích) làm hoạt động Củng cố bài học trong 5 phút cuối tiết.\n   - Trong giờ tự học ở nhà: Mỗi chiều thứ Sáu hàng tuần, hệ thống tự động mở chặng mới. Giáo viên gửi thông báo vào nhóm phụ huynh để học sinh tự do khám phá và làm bài vào dịp cuối tuần.", indent=1.0)
-    add_bullet("Bước 3: Tự động ghi nhận và vinh danh kết quả: ", "Học sinh hoàn thành bài thi, điểm số được đồng bộ về Firebase. Bảng vàng vinh danh cập nhật ngay lập tức. Học sinh có thể làm lại nhiều lần để cải thiện điểm số và thời gian, qua đó kích thích tinh thần tự giác vươn lên.")
-    add_bullet("Bước 4: Phân tích dữ liệu và điều chỉnh phương pháp dạy học: ", "Giáo viên mở Bảng vàng, kiểm tra danh sách học sinh đã hoàn thành, nắm bắt những câu hỏi hay bài toán mà nhiều học sinh làm sai để giải thích lại trong tiết học đầu tuần sau.")
+    add_h2("4.1. Quy trình 4 bước tổ chức dạy học linh hoạt tại lớp và hướng dẫn tự học ở nhà")
+    add_p("Để chuyên đề đi vào cuộc sống lớp học một cách nhịp nhàng và không gây quá tải cho học sinh, chúng tôi xây dựng quy trình triển khai 4 bước chuẩn mực:")
+    add_bullet("Bước 1: Đăng ký danh tính & Làm quen giao diện (Đầu năm học): ", "Giáo viên hướng dẫn phụ huynh và học sinh mở liên kết trên nhóm Zalo hoặc truy cập edurobot.id.vn. Học sinh đăng ký tài khoản với họ tên thật và lớp. Giáo viên duyệt tài khoản trên hệ thống quản trị admin.html để mở quyền tham gia trọn bộ 35 tuần.")
+    add_bullet("Bước 2: Ứng dụng linh hoạt trong các pha dạy học chính khóa: ", "Giáo viên có thể sử dụng các thành phần của hệ sinh thái:")
+    add_p("   - Pha Khởi động (5 phút đầu tiết): Trình chiếu Vòng 1 (Ghép đôi thẻ bài) trên tivi thông minh để cả lớp cùng tham gia ghép nhanh các khái niệm, tạo không khí hào hứng đầu giờ.\n   - Pha Củng cố bài học (5 phút cuối tiết): Trình chiếu Vòng 3 (Trắc nghiệm tốc độ) làm bài thi nhanh giữa các tổ, giúp học sinh khắc sâu kiến thức trọng tâm của tiết dạy.", indent=1.0)
+    add_bullet("Bước 3: Tự học củng cố cuối tuần tại nhà (Nhiệm vụ trọng tâm): ", "Mỗi 14h00 chiều thứ Sáu hàng tuần, hệ thống tự động mở chặng mới. Giáo viên gửi tin nhắn thông báo vào nhóm Zalo của lớp. Học sinh chủ động dùng điện thoại hoặc máy tính để chinh phục 3 vòng thử thách trong dịp cuối tuần (hạn chót đua top trước 14h00 thứ Sáu tuần sau). Học sinh được phép làm lại nhiều lần để cải thiện điểm số và thời gian, kích hoạt tinh thần tự học kiên trì.")
+    add_bullet("Bước 4: Phân tích số liệu, khen thưởng và giải đáp điểm nghẽn: ", "Vào sáng thứ Hai đầu tuần, giáo viên mở Bảng vàng, tuyên dương Top 10 cao thủ trước cờ hoặc trước lớp. Đồng thời, dựa vào biểu đồ phân bố điểm số, giáo viên dành 5 - 7 phút trong tiết chữa bài tập để phân tích những câu hỏi có tỉ lệ sai cao, giúp học sinh sửa chữa sai lầm tư duy kịp thời.")
 
-    add_h2("4.2. Phối hợp giữa nhà trường, giáo viên và phụ huynh qua kênh Zalo")
-    add_p("Mối quan hệ đồng hành giữa gia đình và nhà trường là chìa khóa thành công của chuyên đề:")
-    add_bullet("Tiện lợi tuyệt đối: ", "Nhờ tích hợp Zalo Mini App, giáo viên chỉ cần chia sẻ liên kết trực tiếp vào nhóm Zalo lớp. Phụ huynh nhấp vào là mở bài ngay, dễ dàng ngồi cạnh động viên con em mà không gặp bất kỳ trở ngại kỹ thuật nào.")
-    add_bullet("Minh bạch thông tin: ", "Phụ huynh có thể cùng con mở trang 'Túi đồ' để xem số huy chương Vàng/Bạc con đã đạt được, biến chiếc điện thoại thông minh từ công cụ chơi game giải trí tiêu cực thành người bạn học tập đồng hành bổ ích.")
+    add_h2("4.2. Xây dựng mối liên kết tam giác Nhà trường – Giáo viên – Gia đình qua kênh Zalo")
+    add_p("Mối quan hệ đồng thuận và phối hợp chặt chẽ của phụ huynh là nhân tố quyết định hiệu quả của giải pháp chuyển đổi số:")
+    add_bullet("Tiện ích vượt trội từ Zalo Mini App: ", "Phụ huynh không cần phải am hiểu kỹ thuật hay cài đặt phức tạp. Nhấp vào đường link trong nhóm Zalo lớp là ứng dụng chạy ngay tức thì.")
+    add_bullet("Biến thiết bị số thành công cụ gắn kết gia đình: ", "Nhiều phụ huynh chia sẻ niềm vui khi được ngồi cùng con vào tối thứ Sáu, cùng con suy nghĩ ghép nối các thẻ bài và hò reo khi màn hình bùng nổ pháo hoa chiến thắng 100 điểm. Chiếc điện thoại thông minh đã thực sự trở thành người bạn học tập bổ ích thay vì là nguồn cơn gây mâu thuẫn gia đình.")
 
-    add_h2("4.3. Khai thác dữ liệu thời gian thực để phân hóa và phụ đạo học sinh")
-    add_p("Thông qua tính năng xuất file Excel và quan sát biểu đồ phân bố điểm số:")
-    add_bullet("Nhóm học sinh Hoàn thành tốt (90 - 100 điểm, thời gian dưới 3 phút): ", "Giáo viên tuyên dương trước lớp, giao thêm các bài toán tư duy mở rộng.")
-    add_bullet("Nhóm học sinh Hoàn thành (70 - 80 điểm): ", "Giáo viên khích lệ các em rà soát lại các câu sai ở Vòng 2 hoặc Vòng 3 để làm lại bài đạt huy chương Vàng.")
-    add_bullet("Nhóm học sinh Chưa hoàn thành hoặc chưa tham gia: ", "Giáo viên phát hiện sớm ngay trong ngày Chủ nhật để liên hệ gia đình tìm hiểu nguyên nhân, có kế hoạch phụ đạo riêng vào buổi học tăng cường.")
+    add_h2("4.3. Khai thác dữ liệu thời gian thực để phân hóa đối tượng và phụ đạo kịp thời")
+    add_p("Nhờ tính năng theo dõi phổ điểm và thời gian làm bài thời gian thực trên Firebase, giáo viên thực hiện phân hóa học sinh một cách khoa học:")
+    add_bullet("Đối với nhóm Hoàn thành xuất sắc (100 điểm, thời gian dưới 2 phút): ", "Giáo viên vinh danh trước lớp, giao thêm các bài toán tư duy phát triển năng lực, khuyến khích các em hỗ trợ bạn trong nhóm học tập.")
+    add_bullet("Đối với nhóm Hoàn thành (70 - 89 điểm): ", "Giáo viên chỉ rõ các câu làm sai ở vòng 2 hoặc vòng 3, động viên các em thử sức lại để nâng cấp huy chương lên Thần Bảo Hoàng Kim.")
+    add_bullet("Đối với nhóm Chưa hoàn thành hoặc chưa tham gia: ", "Giáo viên phát hiện sớm ngay trong chiều Chủ nhật để nhắn tin nhắc nhở phụ huynh nhẹ nhàng, nắm bắt hoàn cảnh gia đình hoặc khó khăn của học sinh để có kế hoạch kèm cặp, phụ đạo riêng trong tuần.")
 
     # -------------------------------------------------------------
     # PHẦN V: KẾT QUẢ ĐẠT ĐƯỢC VÀ ĐÁNH GIÁ TÁC ĐỘNG
@@ -493,12 +553,12 @@ def create_chuyen_de_document():
     add_h1("PHẦN V: KẾT QUẢ ĐẠT ĐƯỢC VÀ ĐÁNH GIÁ TÁC ĐỘNG")
 
     add_h2("5.1. Đánh giá về mặt định lượng")
-    add_p("Chuyên đề được triển khai thực nghiệm tại khối lớp 5 (các lớp 5/1 đến 5/5) trong học kỳ 2 năm học 2025 - 2026. Kết quả thống kê từ hệ thống cơ sở dữ liệu Firebase cho thấy những bước chuyển biến vượt bậc:")
-    
+    add_p("Chuyên đề được tiến hành khảo sát và tổ chức thực nghiệm sư phạm tại khối lớp 5 Trường Tiểu học Đỗ Văn Nại (gồm 5 lớp với tổng số 182 học sinh). Kết quả đối chứng giữa phương pháp giao phiếu bài tập truyền thống và phương pháp ứng dụng hệ sinh thái EduRobot được thể hiện rõ nét qua bảng số liệu sau:")
+
     # Table quantitative results
-    res_tbl = doc.add_table(rows=5, cols=3)
+    res_tbl = doc.add_table(rows=6, cols=3)
     res_tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-    res_headers = ["Tiêu chí đánh giá", "Trước khi áp dụng chuyên đề\n(Giao bài tập giấy truyền thống)", "Sau khi áp dụng EduRobot\n(Hệ thống bài tập tương tác)"]
+    res_headers = ["Tiêu chí đánh giá", "Trước khi áp dụng chuyên đề\n(Phiếu in giấy truyền thống)", "Sau khi áp dụng EduRobot\n(Hệ thống bài tập tương tác)"]
     for col_idx, h in enumerate(res_headers):
         cell = res_tbl.cell(0, col_idx)
         shd = parse_xml(r'<w:shd {} w:fill="1A365D"/>'.format(nsdecls('w')))
@@ -511,10 +571,11 @@ def create_chuyen_de_document():
         set_font(r, size=11, bold=True, color=RGBColor(255, 255, 255))
 
     res_data = [
-        ("Tỉ lệ học sinh tự giác hoàn thành bài tập cuối tuần", "65.4% (thường xuyên bị nhắc nhở)", "96.8% (tự giác tham gia ngay tối thứ Sáu)"),
-        ("Tỉ lệ học sinh đạt điểm Giỏi/Xuất sắc môn Toán", "28.5%", "48.2% (tăng 19.7%)"),
-        ("Tỉ lệ học sinh còn lúng túng với dạng toán chuyển động", "38.2%", "11.5% (giảm mạnh 26.7%)"),
-        ("Thời gian giáo viên thống kê và nắm bắt chất lượng", "120 phút/tuần (chấm vở thủ công)", "Dưới 5 phút/tuần (xuất Excel tự động)")
+        ("Tỉ lệ học sinh tự giác hoàn thành bài tập cuối tuần", "63.2% (thường xuyên bị nhắc nhở)", "97.8% (tự giác tham gia ngay tối thứ Sáu)"),
+        ("Tỉ lệ học sinh đạt mức Hoàn thành tốt môn Toán", "29.1%", "51.6% (tăng 22.5%)"),
+        ("Tỉ lệ học sinh chưa nắm chắc kiến thức số thập phân & chuyển động", "36.8%", "8.2% (giảm mạnh 28.6%)"),
+        ("Tỉ lệ phụ huynh tích cực đồng hành, phản hồi tích cực", "45.0%", "98.3% (tuyệt đối đồng thuận và ủng hộ)"),
+        ("Thời gian giáo viên thống kê và nắm bắt chất lượng lớp", "120 - 150 phút/tuần (chấm vở thủ công)", "Dưới 5 phút/tuần (xuất Excel tự động)")
     ]
     for row_idx, row_data in enumerate(res_data, start=1):
         bg_color = "F7FAFC" if row_idx % 2 == 1 else "FFFFFF"
@@ -538,15 +599,15 @@ def create_chuyen_de_document():
     add_p()
 
     add_h2("5.2. Đánh giá về mặt định tính")
-    add_bullet("Về phía học sinh: ", "Không khí học tập thay đổi ngoạn mục. Các em không còn sợ môn Toán mà xem mỗi tuần là một chuyến du lịch khám phá thú vị. Nhiều em làm đi làm lại 3 - 4 lần để đạt điểm tuyệt đối 100 nhằm ngắm pháo hoa và xuất hiện trên bảng Top 10 cao thủ. Ý thức tự giác và năng lực tự học được hình thành tự nhiên.")
-    add_bullet("Về phía giáo viên: ", "Giáo viên trút bỏ được áp lực chấm bài giấy vụn vặt; có trong tay công cụ số đắc lực để theo dõi sát sao từng học sinh; nâng cao rõ rệt năng lực công nghệ thông tin và chuyển đổi số trong giảng dạy.")
-    add_bullet("Về phía phụ huynh học sinh: ", "Phụ huynh bày tỏ sự đồng tình và ủng hộ tuyệt đối. Nhiều phụ huynh chia sẻ: 'Trước đây con cầm điện thoại là xem hoạt hình hay chơi game vô bổ, nay tối thứ Sáu nào con cũng nhắc mẹ mở Zalo để con thi thám hiểm lấy huy chương'.")
+    add_bullet("Đối với học sinh: ", "Không khí học tập thay đổi hoàn toàn từ thụ động sang say mê, háo hức. Nỗi lo sợ môn Toán được xóa bỏ, thay vào đó là cảm giác tự tin chinh phục từng trạm dừng chân trên bản đồ Tổ quốc. Nhiều em chủ động làm đi làm lại nhiều lần để giành cúp Hoàng Kim và được ngắm pháo hoa vinh danh. Năng lực tự chủ, tự học và kỹ năng công nghệ số của học sinh được hình thành tự nhiên.")
+    add_bullet("Đối với giáo viên: ", "Giải phóng giáo viên khỏi gánh nặng cơ học của việc chấm phiếu giấy vụn vặt; giúp giáo viên có thêm nhiều thời gian đầu tư cho việc nghiên cứu bài giảng chuyên sâu; đồng thời nâng cao rõ rệt năng lực ứng dụng công nghệ thông tin và chuyển đổi số trong dạy học.")
+    add_bullet("Đối với phụ huynh học sinh: ", "Tạo dựng niềm tin vững chắc giữa gia đình và nhà trường. Phụ huynh yên tâm khi con em có một sân chơi trí tuệ lành mạnh, bổ ích, biến việc sử dụng điện thoại thông minh thành cơ hội học tập giá trị.")
 
-    add_h2("5.3. Khả năng chuyển giao và nhân rộng mô hình")
-    add_p("Hệ thống EduRobot có kiến trúc mở, độc lập và khả năng mở rộng không giới hạn:")
-    add_bullet("Mở rộng liên môn: ", "Dễ dàng bổ sung ngân hàng câu hỏi môn Tiếng Việt, Khoa học, Lịch sử và Địa lý lớp 5 theo cấu trúc 3 vòng tương tự.")
-    add_bullet("Mở rộng liên khối: ", "Mô hình có thể chuyển giao áp dụng cho khối 4, khối 3 chỉ bằng cách thay đổi nội dung dữ liệu và hình ảnh bản đồ theo chủ đề phù hợp.")
-    add_bullet("Chia sẻ tài nguyên: ", "Hệ thống sẵn sàng chia sẻ miễn phí cho các trường bạn trong huyện, trong tỉnh thông qua liên kết website và mini app Zalo.")
+    add_h2("5.3. Khả năng chuyển giao, tính ứng dụng thực tiễn và nhân rộng mô hình")
+    add_p("Hệ sinh thái EduRobot được lập trình với kiến trúc module hóa cao, mã nguồn mở và khả năng mở rộng không giới hạn:")
+    add_bullet("Khả năng mở rộng liên môn: ", "Cấu trúc 3 vòng tương tác hoàn toàn có thể áp dụng ngay cho các môn học khác như Tiếng Việt 5, Khoa học 5, Lịch sử và Địa lý 5, Tin học 5...")
+    add_bullet("Khả năng mở rộng liên khối: ", "Mô hình có thể chuyển giao áp dụng dễ dàng cho Khối 4, Khối 3 bằng cách thay đổi ngân hàng dữ liệu câu hỏi và hình ảnh chủ đề phù hợp với độ tuổi.")
+    add_bullet("Chia sẻ cộng đồng miễn phí: ", "Hệ sinh thái sẵn sàng chia sẻ rộng rãi cho các trường bạn trên địa bàn huyện và tỉnh, góp phần thúc đẩy công cuộc chuyển đổi số giáo dục của địa phương.")
 
     # -------------------------------------------------------------
     # PHẦN VI: KẾT LUẬN VÀ KIẾN NGHỊ
@@ -554,19 +615,19 @@ def create_chuyen_de_document():
     add_h1("PHẦN VI: KẾT LUẬN VÀ KIẾN NGHỊ")
 
     add_h2("6.1. Kết luận")
-    add_p("Chuyên đề 'Ôn tập môn Toán lớp 5 theo định hướng chuyển đổi số với hệ thống bài tập tương tác' là một giải pháp giáo dục toàn diện, kết hợp hài hòa giữa yêu cầu sư phạm của Chương trình GDPT 2018 và sức mạnh của công nghệ số hiện đại. Bằng việc lấy học sinh làm trung tâm, biến các con số và công thức toán học khô khan thành chuyến hành trình xuyên Việt đầy tự hào, chuyên đề đã giải quyết triệt để bài toán về động lực học tập, nâng cao chất lượng giáo dục môn Toán cuối cấp tiểu học một cách bền vững.")
+    add_p("Chuyên đề 'Dạy học và ôn tập môn Toán lớp 5 theo định hướng chuyển đổi số với hệ sinh thái bài tập tương tác EduRobot' là một giải pháp giáo dục toàn diện, sáng tạo và mang tính thực tiễn cao. Bằng cách lấy học sinh làm trung tâm, kết hợp nhuần nhuyễn giữa chuẩn kiến thức GDPT 2018 với sức mạnh của công nghệ số và tâm lý học trò chơi (Gamification), chuyên đề đã giải quyết triệt để bài toán nâng cao chất lượng dạy học môn Toán cuối cấp tiểu học một cách bền vững, nhân văn và tràn đầy cảm hứng.")
 
-    add_h2("6.2. Bài học kinh nghiệm")
-    add_bullet("1. Công nghệ phải phục vụ sư phạm: ", "Ứng dụng chuyển đổi số không phải là phô diễn kỹ thuật mà phải xuất phát từ nhu cầu thực tiễn của học sinh và phục vụ đắc lực cho mục tiêu dạy học.")
-    add_bullet("2. Đơn giản hóa trải nghiệm người dùng: ", "Mọi giải pháp công nghệ dành cho học sinh tiểu học phải tinh gọn, dễ dùng và tận dụng các nền tảng quen thuộc (như Zalo) để không tạo rào cản cho phụ huynh.")
-    add_bullet("3. Động viên, khen thưởng kịp thời: ", "Tâm lý học sinh tiểu học luôn cần sự ghi nhận tức thời. Các yếu tố như pháo hoa, huy chương, bảng vàng chính là chất xúc tác nuôi dưỡng đam mê học tập lâu dài.")
+    add_h2("6.2. Bài học kinh nghiệm quý báu")
+    add_bullet("1. Công nghệ phải vị nhân sinh và phục vụ mục tiêu sư phạm: ", "Mọi giải pháp chuyển đổi số chỉ thành công khi bắt nguồn từ nhu cầu thực tiễn của học sinh, giải phóng sức lao động cho giáo viên và nâng cao chất lượng học tập thực chất, tránh phô diễn kỹ thuật hình thức.")
+    add_bullet("2. Đơn giản hóa tối đa trải nghiệm người dùng: ", "Ứng dụng dành cho học sinh tiểu học và phụ huynh phải cực kỳ tinh gọn, dễ dùng, loại bỏ mọi thủ tục đăng nhập rườm rà và tận dụng các kênh giao tiếp quen thuộc nhất (như Zalo).")
+    add_bullet("3. Động viên, vinh danh kịp thời nuôi dưỡng động lực tự thân: ", "Tâm lý lứa tuổi tiểu học luôn khát khao được ghi nhận. Các chi tiết như pháo hoa, huy chương, bảng vàng chính là nguồn năng lượng tích cực bồi đắp niềm tin và đam mê học tập lâu dài.")
 
-    add_h2("6.3. Đề xuất, kiến nghị")
-    add_bullet("Đối với Tổ chuyên môn và Nhà trường: ", "Tạo điều kiện tổ chức các tiết thao giảng minh họa chuyên đề; đưa hệ thống EduRobot vào kế hoạch sinh hoạt chuyên môn định kỳ và khuyến khích các giáo viên trong khối cùng tham gia đóng góp ngân hàng câu hỏi.")
-    add_bullet("Đối với Phòng Giáo dục và Đào tạo: ", "Xem xét tổ chức hội thảo chuyên đề cấp cụm trường để nhân rộng mô hình; có cơ chế khuyến khích, động viên các sáng kiến chuyển đổi số dạy học xuất phát từ giáo viên trực tiếp đứng lớp.")
+    add_h2("6.3. Đề xuất, kiến nghị với các cấp quản lý")
+    add_bullet("Đối với Ban Giám hiệu và Tổ chuyên môn nhà trường: ", "Tạo điều kiện tổ chức các buổi sinh hoạt chuyên môn, thao giảng chuyên đề minh họa để nhân rộng mô hình trong toàn trường; khuyến khích các tổ chuyên môn cùng tham gia đóng góp, làm giàu ngân hàng câu hỏi số hóa.")
+    add_bullet("Đối với Phòng Giáo dục và Đào tạo: ", "Xem xét tổ chức các hội thảo chuyên đề chuyển đổi số cấp cụm trường để lan tỏa mô hình; có cơ chế khuyến khích, khen thưởng kịp thời các sáng kiến kinh nghiệm xuất phát từ sự đam mê và trăn trở của giáo viên trực tiếp đứng lớp.")
 
     # -------------------------------------------------------------
-    # PHẦN KÝ TÊN VÀ DUYỆT BÁO CÁO
+    # PHẦN KÝ DUYỆT CỦA BGH VÀ NGƯỜI BÁO CÁO
     # -------------------------------------------------------------
     add_p()
     add_p()
@@ -586,11 +647,10 @@ def create_chuyen_de_document():
     r_sr = p_sr.add_run("..., ngày ... tháng ... năm 2026\nNGƯỜI BÁO CÁO CHUYÊN ĐỀ")
     set_font(r_sr, size=12, bold=True)
 
-    # Empty row for signature
+    # Dòng trống để ký tên
     sign_tbl.cell(1, 0).paragraphs[0].paragraph_format.space_before = Pt(45)
     sign_tbl.cell(1, 1).paragraphs[0].paragraph_format.space_before = Pt(45)
 
-    # Names
     p_nl = sign_tbl.cell(2, 0).paragraphs[0]
     p_nl.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r_nl = p_nl.add_run("(Ký và đóng dấu)")
@@ -601,10 +661,73 @@ def create_chuyen_de_document():
     r_nr = p_nr.add_run("Lê Thành Long")
     set_font(r_nr, size=12.5, bold=True)
 
-    # Output file
-    output_path = "Chuyen_De_Toan_5_Chuyen_Doi_So_EduRobot.docx"
-    doc.save(output_path)
-    print("File saved successfully: " + output_path)
+    # -------------------------------------------------------------
+    # PHẦN PHỤ LỤC: HƯỚNG DẪN TRUY CẬP ĐA NỀN TẢNG
+    # -------------------------------------------------------------
+    doc.add_page_break()
+    add_h1("PHỤ LỤC: HƯỚNG DẪN TRUY CẬP HỆ SINH THÁI EDURobot")
+
+    add_h2("1. Địa chỉ truy cập trực tuyến trên nền tảng Web")
+    add_bullet("Địa chỉ trang chủ: ", "https://edurobot.id.vn")
+    add_bullet("Trang Bảng Vàng & Thống kê điểm: ", "https://edurobot.id.vn/bang-vang.html")
+    add_bullet("Trang Túi Đồ Thám Hiểm: ", "https://edurobot.id.vn/tuido.html")
+    add_bullet("Trang Quản Trị & Phê Duyệt Tài Khoản: ", "https://edurobot.id.vn/admin.html")
+
+    add_h2("2. Hướng dẫn mở nhanh qua Zalo Mini App dành cho phụ huynh và học sinh")
+    add_bullet("Bước 1: ", "Phụ huynh mở ứng dụng Zalo trên điện thoại.")
+    add_bullet("Bước 2: ", "Nhấp trực tiếp vào đường liên kết Mini App do giáo viên chủ nhiệm chia sẻ trong nhóm Zalo của lớp.")
+    add_bullet("Bước 3: ", "Ứng dụng EduRobot Toán 5 sẽ khởi chạy ngay lập tức trong Zalo. Học sinh nhập họ tên thật, chọn đúng lớp và bắt đầu hành trình chinh phục các chặng thử thách.")
+
+    add_h2("3. Hướng dẫn dành cho Giáo viên quản trị lớp")
+    add_bullet("Bước 1: ", "Truy cập https://edurobot.id.vn/admin.html trên máy tính.")
+    add_bullet("Bước 2: ", "Đăng nhập tài khoản Giáo viên/Quản trị viên. Kiểm tra danh sách học sinh đăng ký tại mục 'Tài khoản chờ duyệt' và bấm 'Phê duyệt'.")
+    add_bullet("Bước 3: ", "Theo dõi phổ điểm tại trang Bảng vàng và nhấn 'Xuất báo cáo Excel' vào sáng thứ Hai để lấy bảng điểm cả lớp.")
+
+    # Lưu file ra cả docs/ và thư mục gốc
+    out_docs = os.path.join(BASE_DIR, "docs", "Chuyen_De_Toan_5_Chuyen_Doi_So_EduRobot.docx")
+    out_root = os.path.join(BASE_DIR, "Chuyen_De_Toan_5_Chuyen_Doi_So_EduRobot.docx")
+
+    doc.save(out_docs)
+    doc.save(out_root)
+    print(f"✓ Đã lưu thành công file Word tại: {out_docs}")
+    print(f"✓ Đã lưu thành công bản sao tại: {out_root}")
+
+    # Đồng thời xuất phiên bản Markdown để xem trực tiếp
+    out_md = os.path.join(BASE_DIR, "docs", "Chuyen_De_Toan_5_Chuyen_Doi_So_EduRobot.md")
+    with open(out_md, "w", encoding="utf-8") as f:
+        f.write("# BÁO CÁO CHUYÊN ĐỀ CHUYÊN MÔN CẤP TRƯỜNG\n")
+        f.write("## DẠY HỌC VÀ ÔN TẬP MÔN TOÁN LỚP 5 THEO ĐỊNH HƯỚNG CHUYỂN ĐỔI SỐ VỚI HỆ SINH THÁI BÀI TẬP TƯƠNG TÁC EDUBOT\n\n")
+        f.write("**Đơn vị thực hiện:** Trường Tiểu học Đỗ Văn Nại - Tổ chuyên môn Khối 5\n")
+        f.write("**Người thực hiện:** Lê Thành Long - Giáo viên Tiểu học\n")
+        f.write("**Năm học:** 2026 - 2027\n\n")
+        f.write("---\n\n")
+
+        for p in doc.paragraphs:
+            txt = p.text.strip()
+            if not txt:
+                continue
+            if txt.startswith("PHẦN"):
+                f.write(f"\n## {txt}\n\n")
+            elif txt.startswith(("1.", "2.", "3.", "4.", "5.", "6.")):
+                f.write(f"\n### {txt}\n\n")
+            elif p.style.name == 'List Bullet':
+                f.write(f"- {txt}\n")
+            else:
+                f.write(f"{txt}\n\n")
+
+        f.write("\n---\n\n### BẢNG MA TRẬN 35 TUẦN HỌC & BẢO VẬT HOÀNG KIM\n\n")
+        f.write("| Tuần / Trạm | Tên trạm địa danh Xuyên Việt | Kiến thức Toán 5 trọng tâm (GDPT 2018) | Bảo vật Hoàng Kim mở khóa (100đ) |\n")
+        f.write("| :---: | :--- | :--- | :--- |\n")
+        for idx, s in enumerate(ALL_35_STATIONS, start=1):
+            w = s['tuan']
+            tram_name = f"Trạm {s['tram_so']:02d}: {s['ten_tram']}"
+            chu_de = s['chu_de']
+            it = items_dict.get(str(w), {})
+            icon = it.get('icon', '🎖️')
+            cap3 = it.get('cap3', 'Huân chương Hoàng Kim Vàng')
+            f.write(f"| Tuần {w:02d} | {tram_name} | {chu_de} | {icon} {cap3} |\n")
+
+    print(f"✓ Đã lưu thành công file Markdown tại: {out_md}")
 
 if __name__ == "__main__":
-    create_chuyen_de_document()
+    create_full_chuyen_de_document()

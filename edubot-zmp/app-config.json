@@ -1,6 +1,7 @@
 {
   "app": {
-    "title": "Học toán 5 cùng Robot",
+    "appId": "636911928251914640",
+    "title": "Ôn tập toán lớp 5",
     "textColor": {
       "light": "black",
       "dark": "white"

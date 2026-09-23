@@ -9,6 +9,15 @@ let fwSound = new Audio(fwAudioURL);
 fwSound.loop = true;
 
 function startFireworks() {
+    if (window.EduAntigravity) {
+        try {
+            fwSound.currentTime = 0;
+            fwSound.play().catch(() => {});
+        } catch (e) {}
+        window.EduAntigravity.burst({ count: 90, duration: 9000 });
+        return;
+    }
+
     // 1. Create Canvas
     const canvas = document.createElement('canvas');
     canvas.id = 'fwCanvas';
