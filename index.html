@@ -85,6 +85,61 @@
             border-radius: 15px;
             padding: 10px;
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* KHUNG ĐIỀU KHIỂN BẢN ĐỒ THÔNG MINH (ZOOM & PAN) */
+        .map-viewport {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            border-radius: 10px;
+            cursor: grab;
+        }
+
+        .map-viewport.is-dragging {
+            cursor: grabbing;
+        }
+
+        .map-controls {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: rgba(15, 23, 42, 0.88);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1.5px solid #334155;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        }
+
+        .btn-map-ctrl {
+            width: 34px;
+            height: 34px;
+            background: #1e293b;
+            color: #fff;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-map-ctrl:hover {
+            background: var(--p);
+            color: #000;
+            border-color: var(--p);
+            transform: scale(1.08);
         }
 
         .map-relative-box {
@@ -92,6 +147,8 @@
             width: 100%;
             aspect-ratio: 683 / 1024;
             border-radius: 10px;
+            transform-origin: center center;
+            transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
         }
 
         .map-image {
@@ -100,10 +157,10 @@
             object-fit: cover;
             display: block;
             border-radius: 10px;
+            pointer-events: none;
         }
 
-        /* ĐỊA DANH NỔI BẬT */
-                        /* ĐỊA DANH NỔI BẬT TRÊN BẢN ĐỒ */
+        /* ĐỊA DANH NỔI BẬT TRÊN BẢN ĐỒ */
         .landmark {
             position: absolute;
             font-size: clamp(7px, 1.25vw, 11px);
@@ -143,22 +200,35 @@
             z-index: 5;
         }
 
+        /* HIỆU ỨNG LUỒNG NĂNG LƯỢNG RỰC RỠ TRÊN ĐƯỜNG SVG (ANIMATED DASH-OFFSET) */
+        @keyframes energyFlowRoad {
+            from { stroke-dashoffset: 48; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes energyFlowSea {
+            from { stroke-dashoffset: 64; }
+            to { stroke-dashoffset: 0; }
+        }
+
         .road-line {
             stroke: var(--road);
-            stroke-width: 3.2;
-            stroke-dasharray: 6, 4;
+            stroke-width: 3.6;
+            stroke-dasharray: 8, 5;
             fill: none;
-            opacity: 0.92;
-            filter: drop-shadow(0 0 4px var(--road));
+            opacity: 0.95;
+            filter: drop-shadow(0 0 6px var(--road));
+            animation: energyFlowRoad 1.4s linear infinite;
         }
 
         .sea-line {
             stroke: var(--sea);
-            stroke-width: 4.2;
-            stroke-dasharray: 9, 5;
+            stroke-width: 4.8;
+            stroke-dasharray: 10, 6;
             fill: none;
             opacity: 1;
-            filter: drop-shadow(0 0 6px var(--sea));
+            filter: drop-shadow(0 0 8px var(--sea));
+            animation: energyFlowSea 1.2s linear infinite;
         }
 
         /* NÚT TRẠM */
@@ -189,6 +259,58 @@
             border-color: #000;
             z-index: 25;
             box-shadow: 0 0 16px var(--gold);
+        }
+
+        /* ROBOT MASCOT PIN TRÊN BẢN ĐỒ */
+        .robot-map-pin {
+            position: absolute;
+            z-index: 30;
+            pointer-events: none;
+            transform: translate(-50%, -100%);
+            transition: top 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), left 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .robot-pin-bubble {
+            background: linear-gradient(135deg, var(--p), #ea580c);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+            margin-bottom: 2px;
+            border: 1px solid #ffd700;
+            animation: bouncePin 1.6s infinite ease-in-out;
+        }
+
+        .robot-pin-img {
+            width: clamp(28px, 4.5vw, 42px);
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+            animation: floatRobotPin 2s infinite ease-in-out;
+        }
+
+        .robot-pin-glow {
+            width: 14px;
+            height: 5px;
+            background: rgba(255, 152, 0, 0.8);
+            border-radius: 50%;
+            filter: blur(2px);
+            margin-top: -2px;
+        }
+
+        @keyframes bouncePin {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @keyframes floatRobotPin {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-3px) rotate(3deg); }
         }
 
         /* TRẠM ĐẠI THỬ THÁCH MỐC (GK1, CK1, GK2, CK2) */
@@ -237,12 +359,23 @@
             pointer-events: none;
         }
 
-        /* TRẠM ĐÃ HOÀN THÀNH (ĐẠT TỪ 50 ĐIỂM TRỞ LÊN) */
+        /* TRẠM ĐÃ HOÀN THÀNH - SPARKLE LẤP LÁNH */
+        @keyframes passedSparklePulse {
+            0%, 100% {
+                box-shadow: 0 0 12px rgba(16, 185, 129, 0.9), 0 2px 6px rgba(0, 0, 0, 0.4);
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                box-shadow: 0 0 22px rgba(52, 211, 153, 1), 0 0 35px rgba(16, 185, 129, 0.6);
+                transform: translate(-50%, -50%) scale(1.08);
+            }
+        }
+
         .station.passed {
             background: linear-gradient(135deg, #10b981, #059669) !important;
             border-color: #34d399 !important;
             color: #ffffff !important;
-            box-shadow: 0 0 14px rgba(16, 185, 129, 0.85), 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+            animation: passedSparklePulse 3s infinite ease-in-out;
         }
 
         .station.passed::after {
@@ -369,8 +502,126 @@
             color: var(--gold);
             text-align: center;
             font-family: 'Bungee', cursive;
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             margin-bottom: 10px;
+        }
+
+        /* 3D PODIUM TOP 3 TRÊN BẢNG XẾP HẠNG */
+        .lb-podium-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 8px;
+            margin: 10px 0 14px;
+            padding: 12px 6px 0;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.5), rgba(30, 41, 59, 0.7));
+            border-radius: 14px;
+            border: 1px solid #334155;
+        }
+
+        .podium-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .podium-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .podium-rank-1 .podium-avatar {
+            width: 44px;
+            height: 44px;
+            border: 2.5px solid var(--gold);
+            background: linear-gradient(135deg, #ffd700, #b45309);
+            color: #000;
+            box-shadow: 0 0 16px rgba(255, 215, 0, 0.6);
+        }
+
+        .podium-crown {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.1rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            animation: bouncePin 2s infinite ease-in-out;
+        }
+
+        .podium-rank-2 .podium-avatar {
+            border: 2px solid #cbd5e1;
+            background: linear-gradient(135deg, #e2e8f0, #64748b);
+            color: #000;
+        }
+
+        .podium-rank-3 .podium-avatar {
+            border: 2px solid #d97706;
+            background: linear-gradient(135deg, #fed7aa, #92400e);
+            color: #000;
+        }
+
+        .podium-name {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #fff;
+            max-width: 75px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 2px;
+        }
+
+        .podium-score {
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 4px;
+        }
+
+        .podium-pillar {
+            width: 100%;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bungee', cursive;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.9);
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .podium-rank-1 .podium-pillar {
+            height: 52px;
+            background: linear-gradient(180deg, #f59e0b 0%, #b45309 100%);
+            border: 1px solid #fde047;
+            border-bottom: none;
+        }
+
+        .podium-rank-2 .podium-pillar {
+            height: 38px;
+            background: linear-gradient(180deg, #94a3b8 0%, #475569 100%);
+            border: 1px solid #cbd5e1;
+            border-bottom: none;
+        }
+
+        .podium-rank-3 .podium-pillar {
+            height: 28px;
+            background: linear-gradient(180deg, #b45309 0%, #78350f 100%);
+            border: 1px solid #f97316;
+            border-bottom: none;
         }
 
         table {
@@ -391,76 +642,213 @@
             text-align: center;
         }
 
-        /* FOOTER CỐ ĐỊNH */
-        .game-footer {
-            background: #0f172a;
-            padding: 10px 0;
-            border-top: 2px solid var(--p);
+        /* BOTTOM TAB BAR KIỂU NATIVE APP HIỆN ĐẠI */
+        .bottom-tab-bar {
             position: fixed;
-            bottom: 0;
-            width: 100%;
-            z-index: 10000;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.8);
-        }
-
-        .footer-buttons {
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(95%, 580px);
+            background: rgba(15, 23, 42, 0.94);
+            border: 1.5px solid rgba(255, 152, 0, 0.5);
+            border-radius: 26px;
+            padding: 6px 12px;
             display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            justify-content: space-evenly;
+            justify-content: space-around;
             align-items: center;
-            gap: 5px;
-            max-width: 100%;
-            margin: 0 auto 6px;
-            padding: 0 5px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            z-index: 10000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), 0 0 16px rgba(255, 152, 0, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
-        .btn-nav {
+        .tab-item {
             flex: 1;
-            min-width: 75px;
-            background: #1e293b;
-            border: 1.5px solid var(--p);
-            color: var(--p);
-            padding: 8px 2px;
-            border-radius: 8px;
-            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 2px;
+            color: #94a3b8;
             text-decoration: none;
-            text-align: center;
-            font-size: 0.68rem;
+            border: none;
+            background: transparent;
             cursor: pointer;
-            transition: 0.2s;
+            border-radius: 14px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            outline: none;
+        }
+
+        .tab-icon {
+            font-size: 1.25rem;
+            line-height: 1.2;
+            transition: transform 0.2s;
+        }
+
+        .tab-label {
+            font-size: 0.65rem;
+            font-weight: 700;
             font-family: 'Lexend', sans-serif;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
             white-space: nowrap;
         }
 
-        .btn-nav:hover, .btn-nav:active {
-            background: var(--p);
-            color: white;
+        .tab-indicator {
+            width: 4px;
+            height: 4px;
+            background: transparent;
+            border-radius: 50%;
+            margin-top: 2px;
+            transition: all 0.2s;
         }
 
-        .btn-share {
-            color: var(--sea);
-            border-color: var(--sea);
+        .tab-item:hover, .tab-item:active {
+            color: #fff;
         }
 
-        .copyright-box {
-            border-top: 1px solid #1e293b;
-            padding-top: 6px;
-            text-align: center;
+        .tab-item:hover .tab-icon {
+            transform: scale(1.15) translateY(-2px);
         }
 
-        .copyright-text {
-            font-size: 0.6rem;
-            color: #cbd5e1;
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        .copyright-text b {
+        .tab-item.active {
             color: var(--p);
         }
+
+        .tab-item.active .tab-icon {
+            transform: scale(1.18) translateY(-2px);
+            filter: drop-shadow(0 0 8px var(--p));
+        }
+
+        .tab-item.active .tab-indicator {
+            width: 14px;
+            height: 3px;
+            border-radius: 3px;
+            background: var(--p);
+            box-shadow: 0 0 8px var(--p);
+        }
+
+        .tab-item-admin {
+            color: #f43f5e;
+        }
+        .tab-item-admin.active {
+            color: #f43f5e;
+        }
+        .tab-item-admin.active .tab-indicator {
+            background: #f43f5e;
+            box-shadow: 0 0 8px #f43f5e;
+        }
+
+        .tab-badge-dot {
+            position: absolute;
+            top: 4px;
+            right: calc(50% - 14px);
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border: 2px solid #0f172a;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #10b981;
+        }
+
+        /* TOAST NOTIFICATION SYSTEM */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 90vw;
+            width: 360px;
+            pointer-events: none;
+        }
+
+        .toast-item {
+            pointer-events: auto;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1.5px solid #334155;
+            border-radius: 14px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            transform: translateX(110%);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .toast-item.toast-show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            font-size: 1.3rem;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        .toast-body {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        .toast-msg {
+            font-size: 0.78rem;
+            color: #cbd5e1;
+            line-height: 1.35;
+        }
+
+        .toast-close {
+            background: transparent;
+            border: none;
+            color: #64748b;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 4px;
+            line-height: 1;
+        }
+
+        .toast-close:hover {
+            color: #fff;
+        }
+
+        .toast-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: var(--p);
+            animation: toastProgress 3.5s linear forwards;
+        }
+
+        @keyframes toastProgress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        .toast-success { border-color: #10b981; }
+        .toast-success .toast-bar { background: #10b981; }
+        .toast-error { border-color: #ef4444; }
+        .toast-error .toast-bar { background: #ef4444; }
+        .toast-warning { border-color: #f59e0b; }
+        .toast-warning .toast-bar { background: #f59e0b; }
+        .toast-robot { border-color: var(--p); }
+        .toast-robot .toast-bar { background: var(--p); }
 
                         /* MODAL & AUTH FORM */
         #countdown-overlay,
@@ -892,30 +1280,48 @@
 
     <!-- KHÔNG GIAN BẢN ĐỒ & BẢNG XẾP HẠNG -->
     <main class="game-content-wrapper">
-        <div class="map-container">
-            <div class="map-relative-box" id="map-box">
-                <img src="Bandogame.jpg" alt="Bản đồ" class="map-image" id="map-img">
+        <div class="map-container" id="map-container-wrap">
+            <!-- NÚT ĐIỀU KHIỂN BẢN ĐỒ TƯƠNG TÁC (ZOOM & PAN) -->
+            <div class="map-controls">
+                <button type="button" class="btn-map-ctrl" onclick="zoomMap(0.25)" title="Phóng to bản đồ">➕</button>
+                <button type="button" class="btn-map-ctrl" onclick="zoomMap(-0.25)" title="Thu nhỏ bản đồ">➖</button>
+                <button type="button" class="btn-map-ctrl" onclick="resetMapZoom()" title="Đặt lại góc nhìn">🎯</button>
+                <button type="button" class="btn-map-ctrl" onclick="focusCurrentStation()" title="Đến vị trí Robot">🤖</button>
+            </div>
 
-                                                <!-- ĐỊA DANH NỔI BẬT TRÊN BẢN ĐỒ -->
-                <div class="landmark" id="lm-lungcu">Lũng Cú (T.1)</div>
-                <div class="landmark" id="lm-hanoi">Hà Nội (T.7)</div>
-                <div class="landmark" id="lm-trangan">Tràng An 🌟 (T.9 GK1)</div>
-                <div class="landmark" id="lm-hue">Cố đô Huế (T.15)</div>
-                <div class="landmark" id="lm-danang">Đà Nẵng (T.16)</div>
-                <div class="landmark" id="lm-lyson">Lý Sơn 🏆 (T.18 CK1)</div>
-                <div class="landmark" id="lm-taynguyen">Tây Nguyên (T.21)</div>
-                <div class="landmark" id="lm-dalat">Đà Lạt 🌟 (T.27 GK2)</div>
-                <div class="landmark" id="lm-tphcm">TP.HCM (T.30)</div>
-                <div class="landmark" id="lm-camau">Đất Mũi Cà Mau (T.32)</div>
-                <div class="landmark" id="lm-phuquoc">Phú Quốc (T.33)</div>
-                <div class="landmark" id="lm-truongsa">Trường Sa (T.34)</div>
-                <div class="landmark" id="lm-hoangsa">Hoàng Sa 🏆 (T.35 CK2)</div>
+            <!-- VIEWPORT CHO PHÉP ZOOM & KÉO RÊ TRÊN CẢ MOBILE LẪN MÁY TÍNH -->
+            <div class="map-viewport" id="map-viewport">
+                <div class="map-relative-box" id="map-box">
+                    <img src="Bandogame.jpg" alt="Bản đồ" class="map-image" id="map-img">
 
-<!-- ĐƯỜNG NỐI SVG -->
-                <svg id="path-svg"></svg>
+                    <!-- ĐỊA DANH NỔI BẬT TRÊN BẢN ĐỒ -->
+                    <div class="landmark" id="lm-lungcu">Lũng Cú (T.1)</div>
+                    <div class="landmark" id="lm-hanoi">Hà Nội (T.7)</div>
+                    <div class="landmark" id="lm-trangan">Tràng An 🌟 (T.9 GK1)</div>
+                    <div class="landmark" id="lm-hue">Cố đô Huế (T.15)</div>
+                    <div class="landmark" id="lm-danang">Đà Nẵng (T.16)</div>
+                    <div class="landmark" id="lm-lyson">Lý Sơn 🏆 (T.18 CK1)</div>
+                    <div class="landmark" id="lm-taynguyen">Tây Nguyên (T.21)</div>
+                    <div class="landmark" id="lm-dalat">Đà Lạt 🌟 (T.27 GK2)</div>
+                    <div class="landmark" id="lm-tphcm">TP.HCM (T.30)</div>
+                    <div class="landmark" id="lm-camau">Đất Mũi Cà Mau (T.32)</div>
+                    <div class="landmark" id="lm-phuquoc">Phú Quốc (T.33)</div>
+                    <div class="landmark" id="lm-truongsa">Trường Sa (T.34)</div>
+                    <div class="landmark" id="lm-hoangsa">Hoàng Sa 🏆 (T.35 CK2)</div>
 
-                <!-- KHU VỰC CHỨA CÁC NÚT TRẠM -->
-                <div id="stations-holder"></div>
+                    <!-- ĐƯỜNG NỐI SVG HIỆU ỨNG DÒNG NĂNG LƯỢNG CHẠY -->
+                    <svg id="path-svg"></svg>
+
+                    <!-- ROBOT MASCOT PIN ĐỘNG TRÊN BẢN ĐỒ -->
+                    <div id="robot-mascot-marker" class="robot-map-pin" style="display:none;">
+                        <div class="robot-pin-bubble" id="robot-pin-bubble">Trạm 1: Lũng Cú</div>
+                        <img src="assets/robot-head.png" class="robot-pin-img" alt="Robot Mascot">
+                        <div class="robot-pin-glow"></div>
+                    </div>
+
+                    <!-- KHU VỰC CHỨA CÁC NÚT TRẠM -->
+                    <div id="stations-holder"></div>
+                </div>
             </div>
         </div>
 
@@ -931,6 +1337,10 @@
                 <button id="btn-lb-all" onclick="setLbFilterMode('all')" style="flex: 1; padding: 5px 8px; font-size: 0.7rem; font-weight: 600; border-radius: 8px; border: 1px solid var(--p); background: var(--p); color: #000; cursor: pointer; transition: 0.2s;">🌟 Tất cả</button>
             </div>
             <div id="lb-window-info" style="font-size: 0.65rem; color: #38bdf8; text-align: center; margin-bottom: 10px; line-height: 1.3;"></div>
+
+            <!-- BỤC VINH QUANG 3D TOP 3 -->
+            <div id="lb-podium" class="lb-podium-container" style="display:none;"></div>
+
             <table>
                 <thead>
                     <tr>
@@ -945,19 +1355,61 @@
         </section>
     </main>
 
-            <!-- FOOTER ĐIỀU HƯỚNG -->
-    <footer class="game-footer">
-        <div class="footer-buttons">
-            <a href="tuido.html" class="btn-nav">🎒 TÚI ĐỒ</a>
-            <a href="bang-vang.html" class="btn-nav" style="color:var(--gold); border-color:var(--gold);">🏆 BẢNG VÀNG</a>
-            <button class="btn-nav btn-share" onclick="shareGame()">📤 CHIA SẺ</button>
-            <button id="btn-auth-action" class="btn-nav" onclick="handleAuthAction()"></button>
-            <button id="btn-footer-register" class="btn-nav" onclick="showRegisterModal()" style="border-color:#10b981; color:#10b981; font-weight:700;">✨ ĐĂNG KÝ</button>
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- MODAL THÔNG TIN HỒ SƠ CÁ NHÂN (USER PROFILE SHEET) -->
+    <div id="user-profile-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(10,15,30,0.92); z-index:35000; justify-content:center; align-items:center; backdrop-filter:blur(8px); padding:16px;">
+        <div class="auth-card" style="max-width:380px; width:95%; text-align:center;">
+            <button class="btn-close-modal" onclick="closeUserProfileModal()">&times;</button>
+            <div style="font-size:2.4rem; margin-bottom:4px;">🤖</div>
+            <h2 id="sheet-user-name" style="font-family:'Bungee'; color:var(--gold); font-size:1.15rem; margin:0 0 2px;">THÍ SINH</h2>
+            <div id="sheet-user-role-badge" style="margin-bottom:12px;"></div>
+
+            <div style="background:#091122; border:1px solid #233554; border-radius:12px; padding:12px; text-align:left; font-size:0.82rem; line-height:1.6; margin-bottom:14px;">
+                <div style="color:#94a3b8;">• Tên tài khoản: <b id="sheet-username" style="color:#fff;">---</b></div>
+                <div style="color:#94a3b8;">• Lớp: <b id="sheet-class" style="color:#fff;">---</b></div>
+                <div style="color:#94a3b8;">• Trường: <b id="sheet-school" style="color:#fff;">---</b></div>
+                <div style="color:#94a3b8;">• Trạng thái: <b id="sheet-status" style="color:#2ecc71;">---</b></div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <button class="btn-nav btn-share" onclick="shareGame()" style="padding:10px; width:100%; font-size:0.82rem;">📤 CHIA SẺ VỚI BẠN BÈ</button>
+                <button class="btn-nav" id="sheet-btn-admin" onclick="window.location.href='admin.html'" style="display:none; background:#e11d48; color:#fff; border-color:#e11d48; padding:10px; width:100%; font-size:0.82rem;">🛡️ TRANG PHÊ DUYỆT (ADMIN)</button>
+                <button class="btn-nav" onclick="handleAuthAction()" style="background:transparent; border-color:#ff5252; color:#ff5252; padding:10px; width:100%; font-size:0.82rem;">🚪 ĐĂNG XUẤT</button>
+            </div>
         </div>
-        <div class="copyright-box">
-            <p class="copyright-text">@Học toán 5 cùng RoBot - Phát triển bởi: <b>LÊ THÀNH LONG</b></p>
-        </div>
-    </footer>
+    </div>
+
+    <!-- BOTTOM NAVIGATION TAB BAR (NATIVE APP STYLE) -->
+    <nav class="bottom-tab-bar" id="main-bottom-nav">
+        <a href="#map-container-wrap" class="tab-item active" id="tab-nav-map" onclick="setActiveNavTab('map')">
+            <span class="tab-icon">🗺️</span>
+            <span class="tab-label">BẢN ĐỒ</span>
+            <span class="tab-indicator"></span>
+        </a>
+        <a href="tuido.html" class="tab-item" id="tab-nav-bag" onclick="setActiveNavTab('bag')">
+            <span class="tab-icon">🎒</span>
+            <span class="tab-label">TÚI ĐỒ</span>
+            <span class="tab-indicator"></span>
+        </a>
+        <a href="bang-vang.html" class="tab-item" id="tab-nav-lb" onclick="setActiveNavTab('lb')">
+            <span class="tab-icon">🏆</span>
+            <span class="tab-label">BẢNG VÀNG</span>
+            <span class="tab-indicator"></span>
+        </a>
+        <button type="button" class="tab-item" id="tab-nav-account" onclick="handleAccountTabClick()">
+            <span class="tab-icon" id="tab-account-icon">👤</span>
+            <span class="tab-label" id="tab-account-label">TÀI KHOẢN</span>
+            <span class="tab-badge-dot" id="tab-account-badge" style="display:none;"></span>
+            <span class="tab-indicator"></span>
+        </button>
+        <a href="admin.html" class="tab-item tab-item-admin" id="tab-nav-admin" style="display:none;">
+            <span class="tab-icon">🛡️</span>
+            <span class="tab-label">QUẢN TRỊ</span>
+            <span class="tab-indicator"></span>
+        </a>
+    </nav>
 
     <script>
         const firebaseConfig = { databaseURL: "https://gamhoctap-default-rtdb.asia-southeast1.firebasedatabase.app" };
@@ -1317,6 +1769,220 @@
             return latest;
         }
 
+        // HỆ THỐNG TOAST NOTIFICATION CHUYÊN NGHIỆP
+        function showToast(message, type = 'info', title = '') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️',
+                robot: '🤖'
+            };
+            const toast = document.createElement('div');
+            toast.className = `toast-item toast-${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || '🔔'}</div>
+                <div class="toast-body">
+                    ${title ? `<div class="toast-title">${title}</div>` : ''}
+                    <div class="toast-msg">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+                <div class="toast-bar"></div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.add('toast-show'); }, 10);
+            setTimeout(() => {
+                toast.classList.remove('toast-show');
+                setTimeout(() => toast.remove(), 320);
+            }, 3600);
+        }
+
+        // ĐIỀU KHIỂN BẢN ĐỒ TƯƠNG TÁC (ZOOM & PAN)
+        let mapScale = 1.0;
+        let mapPanX = 0;
+        let mapPanY = 0;
+        let isMapDragging = false;
+        let mapStartX = 0;
+        let mapStartY = 0;
+
+        function applyMapTransform() {
+            const box = document.getElementById('map-box');
+            if (box) {
+                box.style.transform = `translate(${mapPanX}px, ${mapPanY}px) scale(${mapScale})`;
+            }
+        }
+
+        function zoomMap(delta) {
+            mapScale = Math.min(2.5, Math.max(0.85, parseFloat((mapScale + delta).toFixed(2))));
+            applyMapTransform();
+            showToast(`Mức phóng đại: ${Math.round(mapScale * 100)}%`, 'info', 'Bản đồ');
+        }
+
+        function resetMapZoom() {
+            mapScale = 1.0;
+            mapPanX = 0;
+            mapPanY = 0;
+            applyMapTransform();
+            showToast('Đã đặt lại góc nhìn chuẩn 100%', 'success', 'Bản đồ');
+        }
+
+        function focusCurrentStation() {
+            moveRobotMarkerToStation(currentSelectedWeek);
+            const stEl = document.getElementById(`st-${currentSelectedWeek}`);
+            if (stEl) {
+                stEl.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                showToast(`Robot đang ở Trạm ${currentSelectedWeek}: ${STATION_NAMES[currentSelectedWeek] || ''}`, 'robot', 'Robot EduBot');
+            }
+        }
+
+        function moveRobotMarkerToStation(weekNum) {
+            const pin = document.getElementById('robot-mascot-marker');
+            const stEl = document.getElementById(`st-${weekNum}`);
+            if (!pin || !stEl) return;
+            pin.style.display = 'flex';
+            pin.style.top = stEl.style.top || `${stEl.offsetTop}px`;
+            pin.style.left = stEl.style.left || `${stEl.offsetLeft}px`;
+            const bubble = document.getElementById('robot-pin-bubble');
+            if (bubble) {
+                const cleanName = (STATION_NAMES[weekNum] || `Trạm ${weekNum}`).split('(')[0].replace(/Trạm \d+:\s*/i, '').trim();
+                bubble.innerText = `Trạm ${weekNum}: ${cleanName}`;
+            }
+        }
+
+        function initMapInteractions() {
+            const viewport = document.getElementById('map-viewport');
+            if (!viewport || viewport._initialized) return;
+            viewport._initialized = true;
+
+            viewport.addEventListener('mousedown', (e) => {
+                if (e.target.closest('.station') || e.target.closest('.map-controls')) return;
+                isMapDragging = true;
+                mapStartX = e.clientX - mapPanX;
+                mapStartY = e.clientY - mapPanY;
+                viewport.classList.add('is-dragging');
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isMapDragging) return;
+                mapPanX = e.clientX - mapStartX;
+                mapPanY = e.clientY - mapStartY;
+                applyMapTransform();
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isMapDragging) {
+                    isMapDragging = false;
+                    viewport.classList.remove('is-dragging');
+                }
+            });
+
+            // Hỗ trợ cảm ứng đa điểm: 1 ngón kéo rê, 2 ngón phóng to/thu nhỏ
+            let initialTouchDist = 0;
+            viewport.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    if (e.target.closest('.station') || e.target.closest('.map-controls')) return;
+                    isMapDragging = true;
+                    mapStartX = e.touches[0].clientX - mapPanX;
+                    mapStartY = e.touches[0].clientY - mapPanY;
+                } else if (e.touches.length === 2) {
+                    isMapDragging = false;
+                    initialTouchDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                }
+            }, { passive: true });
+
+            viewport.addEventListener('touchmove', (e) => {
+                if (isMapDragging && e.touches.length === 1) {
+                    mapPanX = e.touches[0].clientX - mapStartX;
+                    mapPanY = e.touches[0].clientY - mapStartY;
+                    applyMapTransform();
+                } else if (e.touches.length === 2) {
+                    const currentDist = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    if (initialTouchDist > 0) {
+                        const diff = (currentDist - initialTouchDist) * 0.005;
+                        mapScale = Math.min(2.5, Math.max(0.85, mapScale + diff));
+                        applyMapTransform();
+                        initialTouchDist = currentDist;
+                    }
+                }
+            }, { passive: true });
+
+            viewport.addEventListener('touchend', () => {
+                isMapDragging = false;
+                initialTouchDist = 0;
+            });
+        }
+
+        // ĐIỀU HƯỚNG BOTTOM TAB BAR VÀ MODAL TÀI KHOẢN
+        function setActiveNavTab(tab) {
+            document.querySelectorAll('.bottom-tab-bar .tab-item').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(`tab-nav-${tab}`);
+            if (target) target.classList.add('active');
+        }
+
+        function handleAccountTabClick() {
+            setActiveNavTab('account');
+            if (currentUsername) {
+                openUserProfileModal();
+            } else {
+                showLoginModal();
+            }
+        }
+
+        function openUserProfileModal() {
+            const modal = document.getElementById('user-profile-overlay');
+            if (!modal) return;
+            document.getElementById('sheet-user-name').innerText = currentName || "Khách Thám Hiểm";
+            document.getElementById('sheet-username').innerText = `@${currentUsername || 'khach'}`;
+            document.getElementById('sheet-class').innerText = currentClass || "5";
+            document.getElementById('sheet-school').innerText = currentSchool || "---";
+
+            let roleText = '⭐ HỌC SINH';
+            let statusText = 'ĐÃ PHÊ DUYỆT';
+            let statusColor = '#2ecc71';
+            if (currentUserRole === 'admin') {
+                roleText = '👑 QUẢN TRỊ VIÊN';
+            } else if (currentUserRole === 'teacher') {
+                roleText = '🎓 GIÁO VIÊN';
+            }
+            if (currentUserStatus === 'pending') {
+                statusText = 'CHỜ PHÊ DUYỆT';
+                statusColor = '#f59e0b';
+            }
+            const stEl = document.getElementById('sheet-status');
+            if (stEl) {
+                stEl.innerText = statusText;
+                stEl.style.color = statusColor;
+            }
+            const badgeEl = document.getElementById('sheet-user-role-badge');
+            if (badgeEl) {
+                badgeEl.innerHTML = `<span style="background:rgba(255,152,0,0.15); color:var(--p); border:1px solid var(--p); padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:700;">${roleText}</span>`;
+            }
+
+            const adminBtn = document.getElementById('sheet-btn-admin');
+            if (adminBtn) {
+                adminBtn.style.display = (currentUserRole === 'admin' || currentUserRole === 'teacher') ? 'block' : 'none';
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeUserProfileModal() {
+            const modal = document.getElementById('user-profile-overlay');
+            if (modal) modal.style.display = 'none';
+        }
+
         let currentUsername = localStorage.getItem('studentUsername');
         let currentName = localStorage.getItem('studentName');
         let currentClass = localStorage.getItem('studentClass');
@@ -1337,7 +2003,10 @@
             // 1. Khởi tạo danh sách chọn tuần trên BXH
             initWeekSelectOptions();
 
-            // 2. Tự động đồng bộ tài khoản từ Firebase
+            // 2. Tương tác bản đồ cảm ứng & zoom pan
+            initMapInteractions();
+
+            // 3. Tự động đồng bộ tài khoản từ Firebase
             if (currentUsername) {
                 db.ref('users/' + currentUsername).once('value', (snap) => {
                     const u = snap.val();
@@ -1371,6 +2040,7 @@
                         renderStations();
                         loadLeaderboard(currentSelectedWeek);
                     }
+                    setTimeout(() => moveRobotMarkerToStation(currentSelectedWeek), 300);
                 });
             } else {
                 currentUserRole = 'guest';
@@ -1378,6 +2048,7 @@
                 updateUI();
                 renderStations();
                 loadLeaderboard(currentSelectedWeek);
+                setTimeout(() => moveRobotMarkerToStation(currentSelectedWeek), 300);
             }
 
             const mapImg = document.getElementById('map-img');
@@ -1797,10 +2468,10 @@
                         localStorage.setItem('adminUsername', user.username || uInput);
                     }
 
-                    alert(`🎉 Chào mừng ${user.fullName} đã quay trở lại!`);
-                    location.reload();
+                    showToast(`Chào mừng ${user.fullName} đã quay trở lại!`, 'success', 'Đăng nhập thành công');
+                    setTimeout(() => location.reload(), 900);
                 } else {
-                    alert("Tài khoản chưa tồn tại! Em hãy nhấn 'Đăng ký tài khoản mới' nhé.");
+                    showToast("Tài khoản chưa tồn tại! Em hãy nhấn 'Đăng ký tài khoản mới' nhé.", 'warning', 'Chưa có tài khoản');
                 }
             });
         }
@@ -1821,36 +2492,36 @@
             }
 
             if (!u || u.length < 3) {
-                alert("1. Tên đăng nhập phải từ 3 ký tự trở lên (viết liền không dấu)!");
+                showToast("Tên đăng nhập phải từ 3 ký tự trở lên (viết liền không dấu)!", 'warning', 'Lưu ý');
                 return;
             }
             if (/[\s\W]/.test(u)) {
-                alert("1. Tên đăng nhập chỉ gồm chữ cái và số (ví dụ: nam5a1 hoặc lan_5b)!");
+                showToast("Tên đăng nhập chỉ gồm chữ cái và số (ví dụ: nam5a1 hoặc lan_5b)!", 'warning', 'Lưu ý');
                 return;
             }
             if (!p || p.length < 4) {
-                alert("2. Mật khẩu phải có ít nhất 4 ký tự!");
+                showToast("Mật khẩu phải có ít nhất 4 ký tự!", 'warning', 'Lưu ý');
                 return;
             }
             const draftKeywords = ['test', 'abc', 'nhap', 'nháp', '123', 'demo', 'đemo', 'xxx', 'utc', 'bts'];
             const nameLower = n.toLowerCase();
             const words = n.split(/\s+/).filter(w => w.length > 0);
             if (draftKeywords.some(k => nameLower.includes(k)) || words.length < 2) {
-                alert("3. Vui lòng nhập đầy đủ Họ và Tên thật (ít nhất 2 từ)!");
+                showToast("Vui lòng nhập đầy đủ Họ và Tên thật (ít nhất 2 từ)!", 'warning', 'Lưu ý');
                 return;
             }
             if (!s) {
-                alert("4. Vui lòng chọn hoặc nhập tên Trường của em!");
+                showToast("Vui lòng chọn hoặc nhập tên Trường của em!", 'warning', 'Lưu ý');
                 return;
             }
             if (!c) {
-                alert("5. Vui lòng chọn Lớp!");
+                showToast("Vui lòng chọn Lớp!", 'warning', 'Lưu ý');
                 return;
             }
 
             db.ref('users/' + u).once('value', (snap) => {
                 if (snap.exists()) {
-                    alert(`⚠️ Tên đăng nhập "${u}" đã có người sử dụng rồi! Em hãy chọn tên khác nhé.`);
+                    showToast(`Tên đăng nhập "${u}" đã có người sử dụng! Em hãy chọn tên khác nhé.`, 'warning', 'Trùng tài khoản');
                     return;
                 }
 
@@ -1867,7 +2538,7 @@
 
                 db.ref('users/' + u).set(userData, (err) => {
                     if (err) {
-                        alert("Lỗi khi kết nối máy chủ, vui lòng thử lại!");
+                        showToast("Lỗi khi kết nối máy chủ, vui lòng thử lại!", 'error', 'Lỗi');
                         return;
                     }
                     localStorage.setItem('studentUsername', u);
@@ -1877,19 +2548,18 @@
                     localStorage.setItem('userRole', selectedRole);
                     localStorage.setItem('userStatus', userData.status);
 
-                    alert(`✨ Đăng ký thành công!
-
-Tài khoản của ${selectedRole === 'teacher' ? 'Thầy/Cô' : 'em'} đang ở trạng thái CHỜ PHÊ DUYỆT.
-${selectedRole === 'teacher' ? 'Thầy/Cô' : 'Em'} có thể trải nghiệm trước từ Vòng 1 đến 8!`);
-                    location.reload();
+                    showToast(`Đăng ký thành công hồ sơ thám hiểm! Chào mừng ${n}!`, 'success', 'Chúc mừng');
+                    setTimeout(() => location.reload(), 1100);
                 });
             });
         }
 
         function updateUI() {
-            const authBtn = document.getElementById('btn-auth-action');
-            const regBtn = document.getElementById('btn-footer-register');
             const infoBox = document.getElementById('user-info-box');
+            const tabAccountLabel = document.getElementById('tab-account-label');
+            const tabAccountIcon = document.getElementById('tab-account-icon');
+            const tabAccountBadge = document.getElementById('tab-account-badge');
+            const tabAdmin = document.getElementById('tab-nav-admin');
 
             if (currentName) {
                 let roleBadge = '';
@@ -1906,42 +2576,38 @@ ${selectedRole === 'teacher' ? 'Thầy/Cô' : 'Em'} có thể trải nghiệm tr
                 }
 
                 infoBox.innerHTML = `
-                    <div style="display:flex; align-items:center; flex-wrap:wrap;">
+                    <div style="display:flex; align-items:center; flex-wrap:wrap; cursor:pointer;" onclick="openUserProfileModal()">
                         <span style="font-size:0.95rem; font-weight:bold; color:var(--gold);">${currentName}</span>
                         ${roleBadge}
                     </div>
                     <span style="font-size:0.75rem; color:var(--text-sec);">${currentClass} • @${currentUsername || ''}</span>
                     <span style="font-size:0.65rem; color:#94a3b8;">${currentSchool || ''}</span>
                 `;
-                authBtn.innerHTML = "⚙️ ĐĂNG XUẤT";
-                authBtn.style.color = "#ff5252";
-                authBtn.style.borderColor = "#ff5252";
-                if (regBtn) regBtn.style.display = "none";
 
-                // If Admin or Teacher, inject Admin Portal button in footer if not existing
-                if ((currentUserRole === 'admin' || currentUserRole === 'teacher') && currentUserStatus === 'approved') {
-                    if (!document.getElementById('btn-admin-portal-nav')) {
-                        const footerBtns = document.querySelector('.footer-buttons');
-                        if (footerBtns) {
-                            const aAdmin = document.createElement('a');
-                            aAdmin.id = 'btn-admin-portal-nav';
-                            aAdmin.href = 'admin.html';
-                            aAdmin.className = 'btn-nav';
-                            aAdmin.style.cssText = 'color:#fff; background:#e11d48; border-color:#e11d48; font-weight:bold;';
-                            aAdmin.innerHTML = '🛡️ PHÊ DUYỆT';
-                            footerBtns.insertBefore(aAdmin, authBtn);
-                        }
-                    }
+                // Cập nhật Bottom Tab Bar
+                if (tabAccountLabel) {
+                    const shortName = currentName.trim().split(/\s+/).pop();
+                    tabAccountLabel.innerText = shortName.toUpperCase();
+                }
+                if (tabAccountIcon) {
+                    tabAccountIcon.innerText = (currentUserRole === 'admin' ? '👑' : (currentUserRole === 'teacher' ? '🎓' : '⭐'));
+                }
+                if (tabAccountBadge) {
+                    tabAccountBadge.style.display = 'block';
+                    tabAccountBadge.style.background = (currentUserStatus === 'approved' ? '#10b981' : '#f59e0b');
+                }
+                if (tabAdmin) {
+                    tabAdmin.style.display = ((currentUserRole === 'admin' || currentUserRole === 'teacher') && currentUserStatus === 'approved') ? 'flex' : 'none';
                 }
             } else {
                 infoBox.innerHTML = `
-                    <span style="font-size:0.95rem; font-weight:bold; color:var(--gold);">Khách</span>
+                    <span style="font-size:0.95rem; font-weight:bold; color:var(--gold); cursor:pointer;" onclick="showLoginModal()">Khách</span>
                     <span style="font-size:0.75rem; color:var(--text-sec);">Trải nghiệm Vòng 1-8</span>
                 `;
-                authBtn.innerHTML = "🚀 ĐĂNG NHẬP";
-                authBtn.style.color = "var(--p)";
-                authBtn.style.borderColor = "var(--p)";
-                if (regBtn) regBtn.style.display = "inline-flex";
+                if (tabAccountLabel) tabAccountLabel.innerText = "TÀI KHOẢN";
+                if (tabAccountIcon) tabAccountIcon.innerText = "👤";
+                if (tabAccountBadge) tabAccountBadge.style.display = 'none';
+                if (tabAdmin) tabAdmin.style.display = 'none';
             }
         }
 
@@ -1955,7 +2621,8 @@ ${selectedRole === 'teacher' ? 'Thầy/Cô' : 'Em'} có thể trải nghiệm tr
                     localStorage.removeItem('userRole');
                     localStorage.removeItem('userStatus');
                     localStorage.removeItem('adminUsername');
-                    location.reload();
+                    showToast('Đã đăng xuất tài khoản!', 'info', 'Đăng xuất');
+                    setTimeout(() => location.reload(), 600);
                 }
             } else {
                 showLoginModal();
@@ -2082,10 +2749,73 @@ ${selectedRole === 'teacher' ? 'Thầy/Cô' : 'Em'} có thể trải nghiệm tr
                     if (top10.length >= 10) break;
                 }
 
+                // Cập nhật vị trí Robot Mascot tương ứng với tuần đang xem
+                moveRobotMarkerToStation(weekNum);
+
+                const podiumEl = document.getElementById('lb-podium');
+
                 if (top10.length === 0) {
+                    if (podiumEl) podiumEl.style.display = 'none';
                     listUI.innerHTML = '<tr><td colspan="4" style="color:#94a3b8; padding:12px;">Chưa có bài nộp hợp lệ trong chế độ này</td></tr>';
                     document.getElementById('high-score').innerText = '0';
                     return;
+                }
+
+                // HIỂN THỊ BỤC VINH QUANG 3D TOP 3
+                if (podiumEl) {
+                    podiumEl.style.display = 'flex';
+                    const first = top10[0];
+                    const second = top10.length > 1 ? top10[1] : null;
+                    const third = top10.length > 2 ? top10[2] : null;
+
+                    let pHTML = '';
+                    // Bục Hạng 2 (Bên trái)
+                    if (second) {
+                        const sName = second.fullName || second.name || second.username;
+                        pHTML += `
+                            <div class="podium-step podium-rank-2">
+                                <div class="podium-avatar">🥈</div>
+                                <div class="podium-name" title="${sName}">${sName}</div>
+                                <div class="podium-score">${second.score}đ</div>
+                                <div class="podium-pillar">2</div>
+                            </div>
+                        `;
+                    } else {
+                        pHTML += `<div class="podium-step podium-rank-2" style="opacity:0.25;"><div class="podium-avatar">🥈</div><div class="podium-pillar">2</div></div>`;
+                    }
+
+                    // Bục Hạng 1 (Chính giữa, vương miện)
+                    if (first) {
+                        const fName = first.fullName || first.name || first.username;
+                        pHTML += `
+                            <div class="podium-step podium-rank-1">
+                                <div class="podium-avatar">
+                                    <span class="podium-crown">👑</span>
+                                    🥇
+                                </div>
+                                <div class="podium-name" title="${fName}">${fName}</div>
+                                <div class="podium-score">${first.score}đ</div>
+                                <div class="podium-pillar">1</div>
+                            </div>
+                        `;
+                    }
+
+                    // Bục Hạng 3 (Bên phải)
+                    if (third) {
+                        const tName = third.fullName || third.name || third.username;
+                        pHTML += `
+                            <div class="podium-step podium-rank-3">
+                                <div class="podium-avatar">🥉</div>
+                                <div class="podium-name" title="${tName}">${tName}</div>
+                                <div class="podium-score">${third.score}đ</div>
+                                <div class="podium-pillar">3</div>
+                            </div>
+                        `;
+                    } else {
+                        pHTML += `<div class="podium-step podium-rank-3" style="opacity:0.25;"><div class="podium-avatar">🥉</div><div class="podium-pillar">3</div></div>`;
+                    }
+
+                    podiumEl.innerHTML = pHTML;
                 }
 
                 const isAdmin = (currentUserRole === 'admin' || currentUsername === 'admin');
@@ -2146,8 +2876,8 @@ ${selectedRole === 'teacher' ? 'Thầy/Cô' : 'Em'} có thể trải nghiệm tr
                             const myScoreEl = document.getElementById('my-score-val');
                             if (myScoreEl) myScoreEl.innerText = '0đ';
                         }
-                        alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở TOÀN BỘ 35 TUẦN trên Bảng Vàng!`);
-                    }).catch(err => alert(`⚠️ Lỗi khi xóa: ${err.message}`));
+                        showToast(`Đã xóa triệt để ${count} lượt thi của "${name}" ở TOÀN BỘ 35 TUẦN!`, 'success', 'Quản trị');
+                    }).catch(err => showToast(`Lỗi khi xóa: ${err.message}`, 'error', 'Lỗi'));
                 });
             } else {
                 if (!confirm(`Xác nhận CHỈ XÓA các lượt thi của thí sinh "${name}" ở Tuần ${weekNum}?`)) {
@@ -2184,9 +2914,9 @@ ${selectedRole === 'teacher' ? 'Thầy/Cô' : 'Em'} có thể trải nghiệm tr
                             const myScoreEl = document.getElementById('my-score-val');
                             if (myScoreEl) myScoreEl.innerText = '0đ';
                         }
-                        alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở Tuần ${weekNum}!`);
+                        showToast(`Đã xóa ${count} lượt thi của "${name}" ở Tuần ${weekNum}!`, 'success', 'Quản trị');
                     }).catch((err) => {
-                        alert(`⚠️ Lỗi khi xóa: ${err.message}`);
+                        showToast(`Lỗi khi xóa: ${err.message}`, 'error', 'Lỗi');
                     });
                 });
             }
@@ -2194,7 +2924,12 @@ ${selectedRole === 'teacher' ? 'Thầy/Cô' : 'Em'} có thể trải nghiệm tr
 
         function shareGame() {
             const data = { title: 'Thám hiểm Việt Nam cùng Robot', text: 'Thách đấu bạn giải toán thám hiểm!', url: window.location.href };
-            if (navigator.share) navigator.share(data); else { navigator.clipboard.writeText(window.location.href); alert('Đã sao chép link!'); }
+            if (navigator.share) {
+                navigator.share(data).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                showToast('Đã sao chép liên kết trò chơi vào bộ nhớ tạm!', 'success', 'Chia sẻ');
+            }
         }
     </script>
     <script src="js/antigravity.js"></script>

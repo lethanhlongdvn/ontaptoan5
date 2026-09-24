@@ -288,6 +288,208 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
+
+        /* 3D PODIUM TOP 3 TRÊN BẢNG VÀNG */
+        .lb-podium-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 12px;
+            margin: 12px 15px;
+            padding: 16px 12px 0;
+            background: linear-gradient(180deg, #f8fafc, #edf2f7);
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .podium-step {
+            flex: 1;
+            max-width: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .podium-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        .podium-rank-1 .podium-avatar {
+            width: 52px;
+            height: 52px;
+            border: 2.5px solid #eab308;
+            background: linear-gradient(135deg, #fde047, #ca8a04);
+            box-shadow: 0 0 16px rgba(234, 179, 8, 0.45);
+        }
+
+        .podium-crown {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.3rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            animation: bounceCrown 2s infinite ease-in-out;
+        }
+
+        @keyframes bounceCrown {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .podium-rank-2 .podium-avatar {
+            border: 2px solid #94a3b8;
+            background: linear-gradient(135deg, #f1f5f9, #94a3b8);
+        }
+
+        .podium-rank-3 .podium-avatar {
+            border: 2px solid #d97706;
+            background: linear-gradient(135deg, #ffedd5, #c2410c);
+        }
+
+        .podium-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #1e293b;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 2px;
+        }
+
+        .podium-class {
+            font-size: 0.72rem;
+            color: #64748b;
+            margin-bottom: 2px;
+        }
+
+        .podium-score {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #d97706;
+            margin-bottom: 4px;
+        }
+
+        .podium-pillar {
+            width: 100%;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bungee', cursive;
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.95);
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .podium-rank-1 .podium-pillar {
+            height: 60px;
+            background: linear-gradient(180deg, #eab308 0%, #a16207 100%);
+            border: 1.5px solid #fde047;
+            border-bottom: none;
+        }
+
+        .podium-rank-2 .podium-pillar {
+            height: 45px;
+            background: linear-gradient(180deg, #94a3b8 0%, #475569 100%);
+            border: 1.5px solid #cbd5e1;
+            border-bottom: none;
+        }
+
+        .podium-rank-3 .podium-pillar {
+            height: 32px;
+            background: linear-gradient(180deg, #c2410c 0%, #7c2d12 100%);
+            border: 1.5px solid #fb923c;
+            border-bottom: none;
+        }
+
+        /* MEDAL SUMMARY RIBBON */
+        .medal-summary-ribbon {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #fff;
+            padding: 10px 15px;
+            margin: 10px 15px 4px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+        }
+
+        .medal-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .medal-badge-count {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            color: #0f172a;
+        }
+
+        /* TOAST NOTIFICATION */
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            pointer-events: auto;
+            min-width: 260px;
+            max-width: 360px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            color: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.84rem;
+            font-family: 'Lexend', sans-serif;
+            animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: all 0.3s;
+        }
+
+        .toast.toast-success { border-left: 4px solid #10b981; }
+        .toast.toast-error { border-left: 4px solid #ef4444; }
+        .toast.toast-info { border-left: 4px solid #38bdf8; }
+        .toast.toast-warning { border-left: 4px solid #f59e0b; }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
     </style>
 </head>
 
@@ -335,6 +537,31 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+
+        function showToast(msg, type = 'info', title = '') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : (type === 'warning' ? '⚠️' : 'ℹ️'));
+            toast.innerHTML = `
+                <span style="font-size:1.1rem;">${icon}</span>
+                <div style="flex:1;">
+                    ${title ? `<div style="font-weight:700; margin-bottom:2px; font-size:0.86rem;">${title}</div>` : ''}
+                    <div>${msg}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px) scale(0.95)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
 
         const SCHEDULE = {
             "1": {
@@ -739,6 +966,8 @@
                         <span id="icon-${i}">▼</span>
                     </div>
                     <div class="week-content" id="content-${i}">
+                        <div id="medals-${i}" class="medal-summary-ribbon" style="display:none;"></div>
+                        <div id="podium-${i}" class="lb-podium-container" style="display:none;"></div>
                         <div class="chart-section" id="chart-section-${i}" style="display:none;">
                             <div class="chart-title">Phân bổ khoảng điểm (Tuần ${i}: ${landmark})</div>
                             <div class="chart-container"><canvas id="chart-canvas-${i}"></canvas></div>
@@ -909,6 +1138,10 @@
                     tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:15px; color:#999; font-size:0.8rem;">Chưa có dữ liệu lượt thi nào.</td></tr>`;
                     countBadge.innerText = `0 bạn`;
                     chartSection.style.display = 'none';
+                    const mEl = document.getElementById(`medals-${i}`);
+                    if (mEl) mEl.style.display = 'none';
+                    const pEl = document.getElementById(`podium-${i}`);
+                    if (pEl) pEl.style.display = 'none';
                     continue;
                 }
 
@@ -962,11 +1195,95 @@
                     else dist[4]++;
                 });
 
+                const medalsEl = document.getElementById(`medals-${i}`);
+                const podiumEl = document.getElementById(`podium-${i}`);
+
                 countBadge.innerText = `${sorted.length} bạn`;
                 if (sorted.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:15px; color:#999; font-size:0.8rem;">Chưa có bạn nào đạt từ 50 điểm trở lên.</td></tr>`;
                     chartSection.style.display = 'none';
+                    if (medalsEl) medalsEl.style.display = 'none';
+                    if (podiumEl) podiumEl.style.display = 'none';
                 } else {
+                    // 1. Thống kê huy chương
+                    let goldCount = 0;
+                    let silverCount = 0;
+                    let bronzeCount = 0;
+                    sorted.forEach(s => {
+                        const sc = s.score || 0;
+                        if (sc === 100) goldCount++;
+                        else if (sc >= 90) silverCount++;
+                        else if (sc >= 50) bronzeCount++;
+                    });
+
+                    if (medalsEl) {
+                        medalsEl.innerHTML = `
+                            <div class="medal-item">🥇 <span style="color:#ca8a04; font-weight:700;">Huy chương Vàng (100đ):</span> <span class="medal-badge-count">${goldCount}</span></div>
+                            <div class="medal-item">🥈 <span style="color:#64748b; font-weight:700;">Huy chương Bạc (90-95đ):</span> <span class="medal-badge-count">${silverCount}</span></div>
+                            <div class="medal-item">🥉 <span style="color:#c2410c; font-weight:700;">Huy chương Đồng (50-85đ):</span> <span class="medal-badge-count">${bronzeCount}</span></div>
+                            <div class="medal-item">👥 <span style="font-weight:700;">Tổng thí sinh:</span> <span class="medal-badge-count">${sorted.length} bạn</span></div>
+                        `;
+                        medalsEl.style.display = 'flex';
+                    }
+
+                    // 2. Render 3D Podium Top 3
+                    if (podiumEl) {
+                        const first = sorted[0];
+                        const second = sorted[1] || null;
+                        const third = sorted[2] || null;
+                        let pHTML = '';
+
+                        // Hạng 2 (Bạc)
+                        if (second) {
+                            const sName = second.fullName || second.name || second.username;
+                            pHTML += `
+                                <div class="podium-step podium-rank-2">
+                                    <div class="podium-avatar">🥈</div>
+                                    <div class="podium-name" title="${sName}">${sName}</div>
+                                    <div class="podium-class">${second.className || second.class || ''}</div>
+                                    <div class="podium-score">${second.score}đ • ⏱${formatTime(second.duration)}</div>
+                                    <div class="podium-pillar">2</div>
+                                </div>
+                            `;
+                        } else {
+                            pHTML += `<div class="podium-step podium-rank-2" style="opacity:0.25;"><div class="podium-avatar">🥈</div><div class="podium-pillar">2</div></div>`;
+                        }
+
+                        // Hạng 1 (Vàng)
+                        const fName = first.fullName || first.name || first.username;
+                        pHTML += `
+                            <div class="podium-step podium-rank-1">
+                                <div class="podium-avatar">
+                                    <span class="podium-crown">👑</span>
+                                    🥇
+                                </div>
+                                <div class="podium-name" title="${fName}">${fName}</div>
+                                <div class="podium-class">${first.className || first.class || ''}</div>
+                                <div class="podium-score">${first.score}đ • ⏱${formatTime(first.duration)}</div>
+                                <div class="podium-pillar">1</div>
+                            </div>
+                        `;
+
+                        // Hạng 3 (Đồng)
+                        if (third) {
+                            const tName = third.fullName || third.name || third.username;
+                            pHTML += `
+                                <div class="podium-step podium-rank-3">
+                                    <div class="podium-avatar">🥉</div>
+                                    <div class="podium-name" title="${tName}">${tName}</div>
+                                    <div class="podium-class">${third.className || third.class || ''}</div>
+                                    <div class="podium-score">${third.score}đ • ⏱${formatTime(third.duration)}</div>
+                                    <div class="podium-pillar">3</div>
+                                </div>
+                            `;
+                        } else {
+                            pHTML += `<div class="podium-step podium-rank-3" style="opacity:0.25;"><div class="podium-avatar">🥉</div><div class="podium-pillar">3</div></div>`;
+                        }
+
+                        podiumEl.innerHTML = pHTML;
+                        podiumEl.style.display = 'flex';
+                    }
+
                     tbody.innerHTML = sorted.map((s, idx) => `
                         <tr>
                             <td><div class="rank">${idx + 1}</div></td>
@@ -1009,9 +1326,9 @@
                 localStorage.setItem('adminUsername', 'admin');
                 localStorage.setItem('userRole', 'admin');
                 applyAdminModeBV();
-                alert("✅ Đã bật Chế độ Quản trị! Bạn có thể xóa điểm từng thí sinh hoặc dọn dẹp hàng loạt.");
+                showToast("Đã bật Chế độ Quản trị! Bạn có thể xóa điểm từng thí sinh hoặc dọn dẹp hàng loạt.", "success", "Chế độ Quản trị");
             } else if (pwd !== null) {
-                alert("❌ Sai mật khẩu quản trị!");
+                showToast("Sai mật khẩu quản trị!", "error", "Xác thực thất bại");
             }
         }
 
@@ -1082,8 +1399,8 @@
                     }
                     db.ref().update(updates).then(() => {
                         cleanLocalIfMatch(username, name, true);
-                        alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở TOÀN BỘ 35 TUẦN trên Bảng Vàng!`);
-                    }).catch(err => alert(`⚠️ Lỗi khi xóa: ${err.message}`));
+                        showToast(`Đã xóa triệt để ${count} lượt thi của "${name}" ở TOÀN BỘ 35 TUẦN!`, "success", "Xóa thành công");
+                    }).catch(err => showToast(`Lỗi khi xóa: ${err.message}`, "error", "Lỗi"));
                 });
             } else {
                 // CHỈ XÓA Ở TUẦN HIỆN TẠI
@@ -1114,9 +1431,9 @@
 
                     db.ref(`scores/Tuan_${week}`).update(updates).then(() => {
                         cleanLocalIfMatch(username, name, false, week);
-                        alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở Tuần ${week}!`);
+                        showToast(`Đã xóa triệt để ${count} lượt thi của "${name}" ở Tuần ${week}!`, "success", "Xóa thành công");
                     }).catch((err) => {
-                        alert(`⚠️ Lỗi khi xóa: ${err.message}`);
+                        showToast(`Lỗi khi xóa: ${err.message}`, "error", "Lỗi");
                     });
                 });
             }
@@ -1155,7 +1472,7 @@
                 }
 
                 if (count === 0) {
-                    alert("✨ Bảng Vàng hoàn toàn sạch sẽ! Tất cả điểm số đều thuộc về các tài khoản đang tồn tại.");
+                    showToast("Bảng Vàng hoàn toàn sạch sẽ! Tất cả điểm số đều thuộc về các tài khoản đang tồn tại.", "info", "Bảng Vàng sạch");
                     return;
                 }
 
@@ -1167,20 +1484,20 @@
 
                 if (confirm(`Quản trị viên: Phát hiện ${count} lượt thi trên Bảng Vàng của ${Object.keys(orphanStudents).length} tài khoản ĐÃ BỊ XÓA khỏi hệ thống:\n\n${detailList}${moreText}\n\nXác nhận XÓA TRIỆT ĐỂ toàn bộ ${count} lượt thi này khỏi Bảng Vàng?`)) {
                     db.ref().update(updates).then(() => {
-                        alert(`✨ Đã dọn dẹp sạch sẽ ${count} lượt thi mồ côi trên Bảng Vàng!`);
+                        showToast(`Đã dọn dẹp sạch sẽ ${count} lượt thi mồ côi trên Bảng Vàng!`, "success", "Dọn dẹp hoàn tất");
                     }).catch((err) => {
-                        alert(`⚠️ Lỗi khi dọn dẹp: ${err.message}`);
+                        showToast(`Lỗi khi dọn dẹp: ${err.message}`, "error", "Lỗi");
                     });
                 }
             }).catch(err => {
-                alert(`⚠️ Lỗi khi kiểm tra dữ liệu: ${err.message}`);
+                showToast(`Lỗi khi kiểm tra dữ liệu: ${err.message}`, "error", "Lỗi");
             });
         }
 
         function cleanTestScoresWeek(week) {
             const weekData = cachedAllScores[`Tuan_${week}`] || cachedAllScores[`tuan${week}`];
             if (!weekData) {
-                alert(`Tuần ${week} chưa có lượt thi nào!`);
+                showToast(`Tuần ${week} chưa có lượt thi nào!`, "info", "Thông báo");
                 return;
             }
             const draftKeywords = ['test', 'abc', 'nhap', 'nháp', '123', 'demo', 'đemo', 'xxx', '...', '---', 'admin'];
@@ -1195,7 +1512,7 @@
                 }
             }
             if (toDelete.length === 0) {
-                alert(`Tuần ${week}: Không tìm thấy lượt thi nháp / tài khoản test nào!`);
+                showToast(`Tuần ${week}: Không tìm thấy lượt thi nháp / tài khoản test nào!`, "info", "Thông báo");
                 return;
             }
             const preview = toDelete.map((x, i) => `${i + 1}. ${x.name} - ${x.score}đ (${x.date || '---'})`).join('\n');
@@ -1205,9 +1522,9 @@
                     updates[`scores/Tuan_${week}/${x.key}`] = null;
                 });
                 db.ref().update(updates).then(() => {
-                    alert(`✅ Đã dọn dẹp thành công ${toDelete.length} lượt thi test ở Tuần ${week}!`);
+                    showToast(`Đã dọn dẹp thành công ${toDelete.length} lượt thi test ở Tuần ${week}!`, "success", "Dọn dẹp thành công");
                 }).catch(err => {
-                    alert(`⚠️ Lỗi: ${err.message}`);
+                    showToast(`Lỗi: ${err.message}`, "error", "Lỗi");
                 });
             }
         }
@@ -1216,18 +1533,18 @@
             const weekData = cachedAllScores[`Tuan_${week}`] || cachedAllScores[`tuan${week}`];
             const count = weekData ? Object.keys(weekData).length : 0;
             if (count === 0) {
-                alert(`Tuần ${week} không có dữ liệu để xóa!`);
+                showToast(`Tuần ${week} không có dữ liệu để xóa!`, "info", "Thông báo");
                 return;
             }
             const check = prompt(`⚠️ CẢNH BÁO: Thao tác này sẽ xóa vĩnh viễn TOÀN BỘ ${count} lượt thi của Tuần ${week}!\nNhập chữ 'XOA' để xác nhận:`);
             if (check === 'XOA') {
                 db.ref(`scores/Tuan_${week}`).remove().then(() => {
-                    alert(`✅ Đã xóa toàn bộ điểm số của Tuần ${week}!`);
+                    showToast(`Đã xóa toàn bộ điểm số của Tuần ${week}!`, "success", "Xóa thành công");
                 }).catch(err => {
-                    alert(`⚠️ Lỗi: ${err.message}`);
+                    showToast(`Lỗi: ${err.message}`, "error", "Lỗi");
                 });
             } else if (check !== null) {
-                alert("Đã hủy thao tác xóa.");
+                showToast("Đã hủy thao tác xóa.", "info", "Đã hủy");
             }
         }
 

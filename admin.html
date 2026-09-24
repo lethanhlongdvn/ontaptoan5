@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
     <style>
         :root {
             --p: #FF9800;
@@ -338,6 +340,147 @@
             margin-top: 15px;
         }
 
+        /* ADMIN TABS */
+        .admin-tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab-btn {
+            background: var(--card-bg);
+            border: 1.5px solid var(--border);
+            color: #cbd5e1;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: 'Lexend', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-tab-btn:hover {
+            border-color: var(--p);
+            color: #fff;
+        }
+
+        .admin-tab-btn.active {
+            background: linear-gradient(135deg, #ea580c, #f59e0b);
+            border-color: #f59e0b;
+            color: #000;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+        }
+
+        /* ANALYTICS CHARTS GRID */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .chart-box-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin: 0 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 260px;
+            width: 100%;
+        }
+
+        /* EARLY WARNING BADGE */
+        .badge-warning-level {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .badge-pedagogical-advice {
+            background: rgba(56, 189, 248, 0.12);
+            color: #7dd3fc;
+            border: 1px solid #0284c7;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            display: inline-block;
+        }
+
+        /* TOAST NOTIFICATION */
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            pointer-events: auto;
+            min-width: 260px;
+            max-width: 360px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            color: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.84rem;
+            font-family: 'Lexend', sans-serif;
+            animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transition: all 0.3s;
+        }
+
+        .toast.toast-success { border-left: 4px solid #10b981; }
+        .toast.toast-error { border-left: 4px solid #ef4444; }
+        .toast.toast-info { border-left: 4px solid #38bdf8; }
+        .toast.toast-warning { border-left: 4px solid #f59e0b; }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
         footer {
             background: #1e293b;
             padding: 12px;
@@ -372,76 +515,175 @@
 
     <!-- MAIN DASHBOARD -->
     <main>
-        <!-- STATS -->
-        <div class="stats-grid">
-            <div class="stat-card" style="border-left: 4px solid var(--gold);">
-                <div class="stat-label">Tổng Tài Khoản</div>
-                <div class="stat-val" id="stat-total" style="color:var(--gold);">0</div>
+        <!-- TAB NAVIGATION -->
+        <div class="admin-tab-nav">
+            <button class="admin-tab-btn active" id="btn-tab-users" onclick="switchAdminTab('users')">👥 Quản lý Tài khoản & Phê duyệt</button>
+            <button class="admin-tab-btn" id="btn-tab-analytics" onclick="switchAdminTab('analytics')">📊 Báo cáo Sư phạm & Phân tích Học tập</button>
+        </div>
+
+        <!-- TAB 1: QUẢN LÝ TÀI KHOẢN -->
+        <div id="section-users">
+            <!-- STATS -->
+            <div class="stats-grid">
+                <div class="stat-card" style="border-left: 4px solid var(--gold);">
+                    <div class="stat-label">Tổng Tài Khoản</div>
+                    <div class="stat-val" id="stat-total" style="color:var(--gold);">0</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid var(--p);">
+                    <div class="stat-label">⏳ Chờ Phê Duyệt</div>
+                    <div class="stat-val" id="stat-pending" style="color:var(--p);">0</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid var(--green);">
+                    <div class="stat-label">✅ Đã Phê Duyệt</div>
+                    <div class="stat-val" id="stat-approved" style="color:var(--green);">0</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid var(--cyan);">
+                    <div class="stat-label">🎓 Giáo Viên</div>
+                    <div class="stat-val" id="stat-teachers" style="color:var(--cyan);">0</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid var(--red);">
+                    <div class="stat-label">🚫 Đã Khóa</div>
+                    <div class="stat-val" id="stat-blocked" style="color:var(--red);">0</div>
+                </div>
             </div>
-            <div class="stat-card" style="border-left: 4px solid var(--p);">
-                <div class="stat-label">⏳ Chờ Phê Duyệt</div>
-                <div class="stat-val" id="stat-pending" style="color:var(--p);">0</div>
+
+            <!-- CONTROLS & FILTER -->
+            <div class="control-panel">
+                <div class="filter-group">
+                    <input type="text" id="filter-search" class="input-search" placeholder="🔍 Tìm theo Họ tên, Username..." oninput="renderTable()">
+                    <select id="filter-status" class="select-filter" onchange="renderTable()">
+                        <option value="all">-- Tất cả Trạng thái --</option>
+                        <option value="pending" selected>⏳ Chờ phê duyệt</option>
+                        <option value="approved">✅ Đã phê duyệt</option>
+                        <option value="blocked">🚫 Bị khóa</option>
+                    </select>
+                    <select id="filter-role" class="select-filter" onchange="renderTable()">
+                        <option value="all">-- Tất cả Vai trò --</option>
+                        <option value="student">⭐ Học sinh</option>
+                        <option value="teacher">🎓 Giáo viên</option>
+                        <option value="admin">👑 Quản trị viên</option>
+                    </select>
+                    <select id="filter-class" class="select-filter" onchange="renderTable()">
+                        <option value="all">-- Tất cả Lớp --</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn-action btn-p" onclick="approveAllPending()">
+                        ⚡ Duyệt tất cả đang chờ (<span id="batch-pending-count">0</span>)
+                    </button>
+                </div>
             </div>
-            <div class="stat-card" style="border-left: 4px solid var(--green);">
-                <div class="stat-label">✅ Đã Phê Duyệt</div>
-                <div class="stat-val" id="stat-approved" style="color:var(--green);">0</div>
-            </div>
-            <div class="stat-card" style="border-left: 4px solid var(--cyan);">
-                <div class="stat-label">🎓 Giáo Viên</div>
-                <div class="stat-val" id="stat-teachers" style="color:var(--cyan);">0</div>
-            </div>
-            <div class="stat-card" style="border-left: 4px solid var(--red);">
-                <div class="stat-label">🚫 Đã Khóa</div>
-                <div class="stat-val" id="stat-blocked" style="color:var(--red);">0</div>
+
+            <!-- TABLE -->
+            <div class="table-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:40px;">STT</th>
+                            <th>Tên Đăng Nhập</th>
+                            <th>Họ Và Tên</th>
+                            <th>Vai Trò</th>
+                            <th>Lớp / Trường</th>
+                            <th>Ngày Tạo</th>
+                            <th>Trạng Thái</th>
+                            <th style="text-align:center;">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-table-body">
+                        <tr><td colspan="8" style="text-align:center; padding:30px; color:#888;">Đang tải dữ liệu tài khoản...</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- CONTROLS & FILTER -->
-        <div class="control-panel">
-            <div class="filter-group">
-                <input type="text" id="filter-search" class="input-search" placeholder="🔍 Tìm theo Họ tên, Username..." oninput="renderTable()">
-                <select id="filter-status" class="select-filter" onchange="renderTable()">
-                    <option value="all">-- Tất cả Trạng thái --</option>
-                    <option value="pending" selected>⏳ Chờ phê duyệt</option>
-                    <option value="approved">✅ Đã phê duyệt</option>
-                    <option value="blocked">🚫 Bị khóa</option>
-                </select>
-                <select id="filter-role" class="select-filter" onchange="renderTable()">
-                    <option value="all">-- Tất cả Vai trò --</option>
-                    <option value="student">⭐ Học sinh</option>
-                    <option value="teacher">🎓 Giáo viên</option>
-                    <option value="admin">👑 Quản trị viên</option>
-                </select>
-                <select id="filter-class" class="select-filter" onchange="renderTable()">
-                    <option value="all">-- Tất cả Lớp --</option>
-                </select>
+        <!-- TAB 2: BÁO CÁO SƯ PHẠM & PHÂN TÍCH HỌC TẬP -->
+        <div id="section-analytics" style="display:none;">
+            <!-- ANALYTICS KPI CARDS -->
+            <div class="stats-grid">
+                <div class="stat-card" style="border-left: 4px solid var(--gold);">
+                    <div class="stat-label">👥 Tổng Thí Sinh Đã Thi</div>
+                    <div class="stat-val" id="analytics-total-students" style="color:var(--gold);">0</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #38bdf8;">
+                    <div class="stat-label">📈 Tổng Lượt Nộp Bài</div>
+                    <div class="stat-val" id="analytics-total-attempts" style="color:#38bdf8;">0</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid var(--green);">
+                    <div class="stat-label">🎯 Điểm Trung Bình Toàn Khối</div>
+                    <div class="stat-val" id="analytics-avg-score" style="color:var(--green);">0đ</div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid var(--red);">
+                    <div class="stat-label">🚨 Học Sinh Cần Hỗ Trợ (<50đ)</div>
+                    <div class="stat-val" id="analytics-need-help-count" style="color:var(--red);">0</div>
+                </div>
             </div>
-            <div>
-                <button class="btn-action btn-p" onclick="approveAllPending()">
-                    ⚡ Duyệt tất cả đang chờ (<span id="batch-pending-count">0</span>)
-                </button>
-            </div>
-        </div>
 
-        <!-- TABLE -->
-        <div class="table-box">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width:40px;">STT</th>
-                        <th>Tên Đăng Nhập</th>
-                        <th>Họ Và Tên</th>
-                        <th>Vai Trò</th>
-                        <th>Lớp / Trường</th>
-                        <th>Ngày Tạo</th>
-                        <th>Trạng Thái</th>
-                        <th style="text-align:center;">Thao Tác</th>
-                    </tr>
-                </thead>
-                <tbody id="user-table-body">
-                    <tr><td colspan="8" style="text-align:center; padding:30px; color:#888;">Đang tải dữ liệu tài khoản...</td></tr>
-                </tbody>
-            </table>
+            <!-- CHARTS GRID -->
+            <div class="charts-grid">
+                <!-- Biểu đồ 1: Phân bổ phổ điểm -->
+                <div class="chart-box">
+                    <div class="chart-box-title">📊 Phân Bổ Phổ Điểm Toàn Khối 5</div>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-score-dist"></canvas>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ 2: So sánh điểm trung bình giữa các lớp -->
+                <div class="chart-box">
+                    <div class="chart-box-title">🏫 So Sánh Điểm Trung Bình Giữa Các Lớp</div>
+                    <div class="chart-wrapper">
+                        <canvas id="chart-class-compare"></canvas>
+                    </div>
+                </div>
+
+                <!-- Biểu đồ 3: Tỷ lệ hoàn thành theo từng Trạm / Tuần -->
+                <div class="chart-box" style="grid-column: 1 / -1;">
+                    <div class="chart-box-title">📈 Xu Hướng Hoàn Thành Trạm Qua Từng Tuần (Tuần 1 - 35)</div>
+                    <div class="chart-wrapper" style="height:280px;">
+                        <canvas id="chart-week-trend"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EARLY WARNING SECTION -->
+            <div class="control-panel" style="margin-top:20px;">
+                <div class="filter-group">
+                    <div style="font-weight:700; color:var(--red); font-size:0.95rem; display:flex; align-items:center; gap:6px;">
+                        🚨 CẢNH BÁO SƯ PHẠM SỚM (HỌC SINH CẦN ÔN TẬP BỔ TRỢ)
+                    </div>
+                    <select id="warning-filter-class" class="select-filter" onchange="renderEarlyWarningTable()">
+                        <option value="all">-- Lọc theo Lớp: Tất cả --</option>
+                    </select>
+                    <select id="warning-filter-week" class="select-filter" onchange="renderEarlyWarningTable()">
+                        <option value="all">-- Lọc theo Tuần: Tất cả --</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn-action" onclick="exportEarlyWarningExcel()" style="background:#22c55e; border-color:#22c55e; color:#000; font-weight:700;">
+                        📄 Xuất Excel DS Cần Hỗ Trợ
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:40px;">STT</th>
+                            <th>Học Sinh</th>
+                            <th>Lớp</th>
+                            <th>Trạm / Tuần</th>
+                            <th>Điểm Cao Nhất</th>
+                            <th>Số Lần Làm</th>
+                            <th>Mức Độ Cảnh Báo</th>
+                            <th>Chẩn Đoán & Khuyến Nghị Sư Phạm</th>
+                        </tr>
+                    </thead>
+                    <tbody id="warning-table-body">
+                        <tr><td colspan="8" style="text-align:center; padding:25px; color:#888;">Đang phân tích dữ liệu sư phạm...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 
@@ -1004,6 +1246,444 @@
                     });
                 }
             });
+        }
+
+        // ==========================================
+        // BÁO CÁO SƯ PHẠM & PHÂN TÍCH HỌC TẬP (IDEA 6)
+        // ==========================================
+        function showToast(msg, type = 'info', title = '') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : (type === 'warning' ? '⚠️' : 'ℹ️'));
+            toast.innerHTML = `
+                <span style="font-size:1.1rem;">${icon}</span>
+                <div style="flex:1;">
+                    ${title ? `<div style="font-weight:700; margin-bottom:2px; font-size:0.86rem;">${title}</div>` : ''}
+                    <div>${msg}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px) scale(0.95)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function switchAdminTab(tab) {
+            const btnUsers = document.getElementById('btn-tab-users');
+            const btnAnalytics = document.getElementById('btn-tab-analytics');
+            const secUsers = document.getElementById('section-users');
+            const secAnalytics = document.getElementById('section-analytics');
+
+            if (tab === 'analytics') {
+                btnUsers.classList.remove('active');
+                btnAnalytics.classList.add('active');
+                secUsers.style.display = 'none';
+                secAnalytics.style.display = 'block';
+                loadPedagogicalAnalytics();
+            } else {
+                btnAnalytics.classList.remove('active');
+                btnUsers.classList.add('active');
+                secAnalytics.style.display = 'none';
+                secUsers.style.display = 'block';
+            }
+        }
+
+        let chartScoreDist = null;
+        let chartClassCompare = null;
+        let chartWeekTrend = null;
+        let earlyWarningData = [];
+
+        function loadPedagogicalAnalytics() {
+            Promise.all([
+                db.ref('scores').once('value'),
+                db.ref('users').once('value')
+            ]).then(([scoresSnap, usersSnap]) => {
+                const scoresData = scoresSnap.val() || {};
+                const usersData = usersSnap.val() || {};
+
+                let totalAttempts = 0;
+                let totalScoreSum = 0;
+                const studentSet = new Set();
+                const scoreDistribution = {
+                    excellent: 0, // 90-100
+                    good: 0,      // 80-89
+                    fair: 0,      // 70-79
+                    pass: 0,      // 50-69
+                    needHelp: 0   // < 50
+                };
+
+                const classScores = {}; // className -> { sum, count }
+                const weekPassCount = Array(36).fill(0); // week 1 to 35
+                const weekTotalCount = Array(36).fill(0);
+                earlyWarningData = [];
+
+                // Build list of valid classes
+                const classSet = new Set();
+                Object.values(usersData).forEach(u => {
+                    const c = (u.className || u.class || '').trim();
+                    if (c && c.length <= 10 && !c.includes('Quản Trị')) classSet.add(c);
+                });
+
+                // Scan all 35 weeks
+                for (let w = 1; w <= 35; w++) {
+                    const weekScores = scoresData[`Tuan_${w}`] || scoresData[`tuan${w}`];
+                    if (!weekScores) continue;
+
+                    const weekStudentMap = new Map();
+
+                    for (let pushId in weekScores) {
+                        const item = weekScores[pushId];
+                        const rawName = (item.fullName || item.name || item.username || '').trim();
+                        const uname = (item.username || '').toLowerCase().trim();
+                        const sClass = (item.className || item.class || 'Khác').trim();
+                        const sc = Number(item.score) || 0;
+
+                        if (uname.startsWith('guest_') || uname === 'admin') continue;
+                        if (['test', 'abc', 'nhap', 'demo'].some(k => rawName.toLowerCase().includes(k))) continue;
+
+                        totalAttempts++;
+                        totalScoreSum += sc;
+                        if (uname) studentSet.add(uname);
+
+                        // Distribution
+                        if (sc >= 90) scoreDistribution.excellent++;
+                        else if (sc >= 80) scoreDistribution.good++;
+                        else if (sc >= 70) scoreDistribution.fair++;
+                        else if (sc >= 50) scoreDistribution.pass++;
+                        else scoreDistribution.needHelp++;
+
+                        // Class scores
+                        if (sClass && sClass !== 'Khác' && sClass !== 'Ban Quản Trị') {
+                            classSet.add(sClass);
+                            if (!classScores[sClass]) classScores[sClass] = { sum: 0, count: 0 };
+                            classScores[sClass].sum += sc;
+                            classScores[sClass].count++;
+                        }
+
+                        // Week stats
+                        weekTotalCount[w]++;
+                        if (sc >= 50) weekPassCount[w]++;
+
+                        // Group by student for early warning
+                        const sKey = (uname || rawName).toLowerCase();
+                        if (!weekStudentMap.has(sKey)) {
+                            weekStudentMap.set(sKey, {
+                                name: rawName || uname,
+                                className: sClass,
+                                bestScore: sc,
+                                attempts: Number(item.attempt) || 1,
+                                week: w
+                            });
+                        } else {
+                            const existing = weekStudentMap.get(sKey);
+                            existing.bestScore = Math.max(existing.bestScore, sc);
+                            existing.attempts = Math.max(existing.attempts, Number(item.attempt) || 1);
+                        }
+                    }
+
+                    // Check for early warnings
+                    weekStudentMap.forEach(rec => {
+                        let warningLevel = '';
+                        let advice = '';
+
+                        if (rec.bestScore < 50) {
+                            warningLevel = 'CẦN BỔ TRỢ GẤP';
+                            if (w <= 5) {
+                                advice = 'Hổng kiến thức nền tảng (Phân số & Số thập phân). Cần giáo viên kèm riêng.';
+                            } else if (w <= 18) {
+                                advice = 'Chưa vững phép tính số thập phân, hình học. Đề xuất làm lại bài luyện tập.';
+                            } else {
+                                advice = 'Gặp khó khăn với toán chuyển động & hình khối. Cần hướng dẫn lại phương pháp.';
+                            }
+                        } else if (rec.attempts >= 3 && rec.bestScore < 70) {
+                            warningLevel = 'THI NHIỀU LẦN - ĐIỂM THẤP';
+                            advice = `Đã thi ${rec.attempts} lần nhưng điểm chỉ đạt ${rec.bestScore}đ. Cần động viên tâm lý & hướng dẫn đặt tính.`;
+                        }
+
+                        if (warningLevel) {
+                            earlyWarningData.push({
+                                name: rec.name,
+                                className: rec.className,
+                                week: rec.week,
+                                bestScore: rec.bestScore,
+                                attempts: rec.attempts,
+                                warningLevel: warningLevel,
+                                advice: advice
+                            });
+                        }
+                    });
+                }
+
+                // Update KPIs
+                const avgScore = totalAttempts > 0 ? (totalScoreSum / totalAttempts).toFixed(1) : 0;
+                document.getElementById('analytics-total-students').innerText = studentSet.size;
+                document.getElementById('analytics-total-attempts').innerText = totalAttempts;
+                document.getElementById('analytics-avg-score').innerText = `${avgScore}đ`;
+                document.getElementById('analytics-need-help-count').innerText = earlyWarningData.length;
+
+                // Render Chart 1: Phân bổ phổ điểm
+                renderScoreDistChart(scoreDistribution);
+
+                // Render Chart 2: So sánh lớp
+                renderClassCompareChart(classScores);
+
+                // Render Chart 3: Xu hướng tuần
+                renderWeekTrendChart(weekPassCount, weekTotalCount);
+
+                // Populate filters
+                populateWarningFilters(classSet);
+
+                // Render Early Warning Table
+                renderEarlyWarningTable();
+            }).catch(err => {
+                console.error('Error loading analytics:', err);
+                showToast('Lỗi khi tải dữ liệu phân tích: ' + err.message, 'error');
+            });
+        }
+
+        function renderScoreDistChart(dist) {
+            const ctx = document.getElementById('chart-score-dist');
+            if (!ctx) return;
+            if (chartScoreDist) chartScoreDist.destroy();
+
+            chartScoreDist = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Xuất sắc (90-100đ)', 'Giỏi (80-89đ)', 'Khá (70-79đ)', 'Đạt (50-69đ)', 'Cần cố gắng (<50đ)'],
+                    datasets: [{
+                        data: [dist.excellent, dist.good, dist.fair, dist.pass, dist.needHelp],
+                        backgroundColor: [
+                            '#ffd700',
+                            '#38bdf8',
+                            '#2ecc71',
+                            '#f59e0b',
+                            '#ef4444'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#1e293b'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { color: '#cbd5e1', font: { family: 'Lexend', size: 11 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderClassCompareChart(classScores) {
+            const ctx = document.getElementById('chart-class-compare');
+            if (!ctx) return;
+            if (chartClassCompare) chartClassCompare.destroy();
+
+            const classes = Object.keys(classScores).sort();
+            const averages = classes.map(c => (classScores[c].sum / classScores[c].count).toFixed(1));
+
+            chartClassCompare = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: classes.length > 0 ? classes : ['Chưa có dữ liệu'],
+                    datasets: [{
+                        label: 'Điểm TB',
+                        data: classes.length > 0 ? averages : [0],
+                        backgroundColor: 'rgba(56, 189, 248, 0.7)',
+                        borderColor: '#38bdf8',
+                        borderWidth: 1.5,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#94a3b8', font: { family: 'Lexend', size: 10 } },
+                            grid: { color: '#334155' }
+                        },
+                        x: {
+                            ticks: { color: '#cbd5e1', font: { family: 'Lexend', size: 11, weight: 'bold' } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderWeekTrendChart(passArr, totalArr) {
+            const ctx = document.getElementById('chart-week-trend');
+            if (!ctx) return;
+            if (chartWeekTrend) chartWeekTrend.destroy();
+
+            const labels = [];
+            const passData = [];
+            const totalData = [];
+            for (let w = 1; w <= 35; w++) {
+                labels.push(`T${w}`);
+                passData.push(passArr[w]);
+                totalData.push(totalArr[w]);
+            }
+
+            chartWeekTrend = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Lượt Đạt Chuẩn (≥50đ)',
+                            data: passData,
+                            borderColor: '#2ecc71',
+                            backgroundColor: 'rgba(46, 204, 113, 0.15)',
+                            fill: true,
+                            tension: 0.35
+                        },
+                        {
+                            label: 'Tổng Lượt Nộp',
+                            data: totalData,
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'transparent',
+                            borderDash: [5, 5],
+                            tension: 0.35
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#cbd5e1', font: { family: 'Lexend', size: 11 } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: '#94a3b8', font: { family: 'Lexend', size: 10 } },
+                            grid: { color: '#334155' }
+                        },
+                        x: {
+                            ticks: { color: '#94a3b8', font: { family: 'Lexend', size: 10 } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateWarningFilters(classSet) {
+            const selClass = document.getElementById('warning-filter-class');
+            const selWeek = document.getElementById('warning-filter-week');
+
+            if (selClass && selClass.options.length <= 1) {
+                const sortedClasses = Array.from(classSet).sort();
+                sortedClasses.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c;
+                    opt.innerText = `Lớp ${c}`;
+                    selClass.appendChild(opt);
+                });
+            }
+
+            if (selWeek && selWeek.options.length <= 1) {
+                for (let w = 1; w <= 35; w++) {
+                    const opt = document.createElement('option');
+                    opt.value = w;
+                    opt.innerText = `Tuần ${w}`;
+                    selWeek.appendChild(opt);
+                }
+            }
+        }
+
+        function renderEarlyWarningTable() {
+            const tbody = document.getElementById('warning-table-body');
+            if (!tbody) return;
+
+            const classVal = document.getElementById('warning-filter-class')?.value || 'all';
+            const weekVal = document.getElementById('warning-filter-week')?.value || 'all';
+
+            const filtered = earlyWarningData.filter(item => {
+                if (classVal !== 'all' && item.className !== classVal) return false;
+                if (weekVal !== 'all' && String(item.week) !== String(weekVal)) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#22c55e; font-weight:600;">🎉 Tuyệt vời! Không có học sinh nào nằm trong danh sách cần hỗ trợ theo bộ lọc này.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((row, idx) => `
+                <tr>
+                    <td style="text-align:center;">${idx + 1}</td>
+                    <td><b>${row.name}</b></td>
+                    <td><span class="badge" style="background:#334155; color:#fff;">Lớp ${row.className}</span></td>
+                    <td><span style="color:var(--gold); font-weight:700;">Tuần ${row.week}</span></td>
+                    <td><span style="color:#ef4444; font-weight:800; font-size:0.95rem;">${row.bestScore}/100</span></td>
+                    <td style="text-align:center;"><span style="color:#f59e0b; font-weight:600;">${row.attempts} lần</span></td>
+                    <td><span class="badge-warning-level">${row.warningLevel}</span></td>
+                    <td><span class="badge-pedagogical-advice">${row.advice}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function exportEarlyWarningExcel() {
+            if (typeof XLSX === 'undefined') {
+                showToast('Thư viện Excel đang tải, vui lòng thử lại sau giây lát!', 'warning');
+                return;
+            }
+            const classVal = document.getElementById('warning-filter-class')?.value || 'all';
+            const weekVal = document.getElementById('warning-filter-week')?.value || 'all';
+
+            const filtered = earlyWarningData.filter(item => {
+                if (classVal !== 'all' && item.className !== classVal) return false;
+                if (weekVal !== 'all' && String(item.week) !== String(weekVal)) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                showToast('Không có dữ liệu để xuất Excel!', 'info');
+                return;
+            }
+
+            const data = [
+                ['STT', 'HỌC SINH', 'LỚP', 'TUẦN / TRẠM', 'ĐIỂM CAO NHẤT', 'SỐ LẦN THI', 'MỨC ĐỘ CẢNH BÁO', 'CHẨN ĐOÁN & KHUYẾN NGHỊ SƯ PHẠM']
+            ];
+
+            filtered.forEach((r, idx) => {
+                data.push([
+                    idx + 1,
+                    r.name,
+                    r.className,
+                    `Tuần ${r.week}`,
+                    r.bestScore,
+                    r.attempts,
+                    r.warningLevel,
+                    r.advice
+                ]);
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Can_Ho_Tro_Su_Pham");
+            XLSX.writeFile(wb, `DanhSach_CanHoTro_SuPham_${Date.now()}.xlsx`);
+            showToast('Đã xuất file Excel thành công!', 'success');
         }
     </script>
 </body>

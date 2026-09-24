@@ -6,6 +6,7 @@ desktop.ini
 *.bak
 *.swp
 *~
+~$*
 
 # Python cache & môi trường
 __pycache__/

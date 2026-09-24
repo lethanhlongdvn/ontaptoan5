@@ -22,6 +22,15 @@
                 <div id="u-class" style="font-size:0.75rem; color:var(--text-muted);">Lớp ...</div>
             </div>
         </div>
+
+        <!-- THANH TIẾN ĐỘ TỔNG QUAN 100% TOÀN BUỔI THI -->
+        <div class="overall-progress-bar-wrap" title="Tiến độ toàn buổi thi">
+            <div class="overall-progress-track">
+                <div class="overall-progress-fill" id="overall-progress-fill" style="width: 0%;"></div>
+            </div>
+            <span class="overall-progress-label" id="overall-progress-label">TIẾN ĐỘ: 0%</span>
+        </div>
+
         <div class="score-board">
             <div class="score-box">ĐIỂM: <span id="current-score">0</span>/100</div>
             <div class="lives-box" id="lives-display">❤️❤️❤️</div>
@@ -53,6 +62,39 @@
             <div id="attempt-info" style="font-size:0.82rem; color:var(--gold); margin:8px 0 16px; font-weight:600;">Đang xác định lượt thi...</div>
             <button class="btn-next-step" onclick="handleStartGame()" style="width:100%;">BẮT ĐẦU VƯỢT ẢI 🚀</button>
             <button onclick="window.location.href='index.html'" style="width:100%; margin-top:10px; background:none; border:1px solid #475569; color:#94a3b8; padding:10px; border-radius:10px; cursor:pointer; font-family:inherit; font-size:0.85rem; transition:0.2s;">⬅ Trở về Bản đồ</button>
+        </div>
+    </div>
+
+    <!-- 1. CINEMATIC CUTSCENE MỞ ĐẦU CHẶNG THÁM HIỂM -->
+    <div id="cinematic-overlay" class="fullscreen-overlay hidden">
+        <div class="cinematic-card">
+            <div class="cinematic-icon">🏍️💨</div>
+            <div style="font-size:2.8rem; margin:6px 0;">🤖</div>
+            <h2 class="cinematic-title" id="cinematic-title">HÀNH TRÌNH XUYÊN VIỆT</h2>
+            <h3 class="cinematic-landmark" id="cinematic-landmark">ĐÍCH ĐẾN: CỘT CỜ LŨNG CÚ</h3>
+            <div class="cinematic-countdown" id="cinematic-countdown">SẴN SÀNG... 🚀</div>
+        </div>
+    </div>
+
+    <!-- 2. TRANSITION CHUYỂN TIẾP MƯỢT MÀ GIỮA CÁC VÒNG -->
+    <div id="stage-trans-overlay" class="fullscreen-overlay hidden">
+        <div class="trans-card">
+            <div class="trans-icon" id="trans-icon">🎉</div>
+            <h2 class="trans-title" id="trans-title">VƯỢT ẢI THÀNH CÔNG!</h2>
+            <p class="trans-desc" id="trans-desc">Bạn đã hoàn thành Vòng 1 với điểm số xuất sắc.</p>
+            <div class="trans-next-pill" id="trans-next-pill" onclick="proceedNextStage()">TIẾP TỤC HÀNH TRÌNH ➔</div>
+        </div>
+    </div>
+
+    <!-- 3. BOSS INTRO WARNING BANNER & SCREEN SHAKE -->
+    <div id="boss-intro-overlay" class="fullscreen-overlay hidden">
+        <div class="boss-intro-card">
+            <div class="boss-warning-siren">🚨 BÁO ĐỘNG CẤP CAO 🚨</div>
+            <div class="boss-intro-avatar" id="boss-intro-avatar">👾</div>
+            <h2 class="boss-intro-title" id="boss-intro-title">THỦ LĨNH XUẤT HIỆN!</h2>
+            <p class="boss-intro-subtitle">Vận dụng toàn bộ sức mạnh tư duy toán học để hạ gục Boss!</p>
+            <div class="boss-hp-preview">100 HP • ĐÒN ĐÁNH QUYẾT ĐỊNH</div>
+            <button class="btn-next-step" onclick="proceedToBossFight()" style="margin-top:16px; width:100%;">VÀO TRẬN CHIẾN NGAY ⚔️</button>
         </div>
     </div>
 
@@ -212,10 +254,18 @@
                     <span>BẢNG NHÁP ĐẶT TÍNH</span>
                 </div>
                 <div class="scratchpad-actions">
+                    <div class="scratch-colors">
+                        <button type="button" class="color-dot active" id="cdot-yellow" style="background:#facc15;" onclick="setScratchColor('#facc15')" title="Vàng neon"></button>
+                        <button type="button" class="color-dot" id="cdot-blue" style="background:#38bdf8;" onclick="setScratchColor('#38bdf8')" title="Xanh dương"></button>
+                        <button type="button" class="color-dot" id="cdot-red" style="background:#ef4444;" onclick="setScratchColor('#ef4444')" title="Đỏ"></button>
+                        <button type="button" class="color-dot" id="cdot-white" style="background:#ffffff;" onclick="setScratchColor('#ffffff')" title="Trắng"></button>
+                    </div>
+                    <button id="tool-size-btn" class="tool-btn" onclick="toggleScratchSize()" title="Đổi cỡ nét">Nét: <span id="scratch-size-label">Vừa</span></button>
+                    <button class="tool-btn" onclick="undoScratchpad()" title="Hoàn tác nét vẽ">↩️ Lùi</button>
                     <button id="tool-pen" class="tool-btn active" onclick="setScratchTool('pen')" title="Bút vẽ">✏️ Bút</button>
                     <button id="tool-eraser" class="tool-btn" onclick="setScratchTool('eraser')" title="Tẩy">🧹 Tẩy</button>
                     <button class="tool-btn danger" onclick="clearScratchpad()" title="Xóa sạch bảng nháp">🗑️ Xóa hết</button>
-                    <button class="tool-btn close" onclick="toggleScratchpad()" title="Thu nhỏ nháp">✖ Thu nhỏ</button>
+                    <button class="tool-btn close" onclick="toggleScratchpad()" title="Thu nhỏ nháp">✖</button>
                 </div>
             </div>
             <div class="scratchpad-canvas-wrapper" id="scratchpad-canvas-wrap">

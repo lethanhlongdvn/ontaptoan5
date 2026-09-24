@@ -88,6 +88,41 @@ body {
     50% { transform: scale(1.06); }
 }
 
+.overall-progress-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    min-width: 140px;
+    max-width: 220px;
+    flex: 1;
+    margin: 0 12px;
+}
+
+.overall-progress-track {
+    width: 100%;
+    height: 8px;
+    background: #1e293b;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    overflow: hidden;
+}
+
+.overall-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #00e5ff);
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+.overall-progress-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+}
+
 .score-board {
     display: flex;
     align-items: center;
@@ -1413,4 +1448,208 @@ footer {
     height: 100%;
     pointer-events: none;
     z-index: 10000;
+}
+
+/* ==========================================
+   15. CINEMATIC CUTSCENE & STAGE TRANSITIONS
+   ========================================== */
+.cinematic-card, .trans-card, .boss-intro-card {
+    background: rgba(15, 23, 42, 0.95);
+    border: 2px solid var(--primary);
+    border-radius: 20px;
+    padding: 24px 20px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 30px var(--primary-glow);
+    backdrop-filter: blur(16px);
+    animation: cinematicZoomIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cinematicZoomIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.cinematic-icon {
+    font-size: 2.8rem;
+    animation: driveBike 1.2s infinite ease-in-out;
+}
+
+@keyframes driveBike {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(4deg); }
+}
+
+.cinematic-title {
+    font-family: 'Bungee', cursive;
+    color: var(--primary);
+    font-size: 1.25rem;
+    margin: 8px 0 4px;
+}
+
+.cinematic-landmark {
+    color: var(--secondary);
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 4px 0 12px;
+}
+
+.cinematic-countdown {
+    display: inline-block;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    font-family: 'Bungee', cursive;
+    font-size: 0.95rem;
+    padding: 8px 18px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+}
+
+/* STAGE TRANSITION CARD */
+.trans-card {
+    border-color: #10b981;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 30px rgba(16, 185, 129, 0.45);
+}
+
+.trans-icon {
+    font-size: 3rem;
+    animation: bouncePin 1.5s infinite ease-in-out;
+}
+
+.trans-title {
+    font-family: 'Bungee', cursive;
+    color: #10b981;
+    font-size: 1.25rem;
+    margin: 8px 0;
+}
+
+.trans-desc {
+    color: #cbd5e1;
+    font-size: 0.88rem;
+    margin-bottom: 14px;
+}
+
+.trans-next-pill {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), #ea580c);
+    color: #fff;
+    font-family: 'Bungee', cursive;
+    font-size: 0.95rem;
+    padding: 10px 20px;
+    border-radius: 24px;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.5);
+    animation: pulseButton 1.5s infinite;
+    cursor: pointer;
+}
+
+/* BOSS INTRO SCREEN SHAKE & SIREN */
+.boss-intro-card {
+    border-color: #ef4444;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 35px rgba(239, 68, 68, 0.6);
+}
+
+.boss-warning-siren {
+    display: inline-block;
+    background: #ef4444;
+    color: #fff;
+    font-family: 'Bungee', cursive;
+    font-size: 0.82rem;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    animation: flashSiren 0.8s infinite;
+}
+
+@keyframes flashSiren {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+.boss-intro-avatar {
+    font-size: 4rem;
+    animation: bossDrop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 0 20px #ef4444);
+}
+
+@keyframes bossDrop {
+    from { transform: translateY(-80px) scale(0.3); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.boss-intro-title {
+    font-family: 'Bungee', cursive;
+    color: #ef4444;
+    font-size: 1.35rem;
+    margin: 8px 0 4px;
+}
+
+.boss-intro-subtitle {
+    color: #cbd5e1;
+    font-size: 0.88rem;
+    margin: 4px 0 12px;
+}
+
+.boss-hp-preview {
+    font-family: 'Bungee', cursive;
+    font-size: 0.82rem;
+    color: var(--gold);
+    background: rgba(0,0,0,0.4);
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* HIỆU ỨNG RUNG MÀN HÌNH KHI BOSS XUẤT HIỆN */
+.screen-shake {
+    animation: screenShakeAnim 0.5s ease-in-out;
+}
+
+@keyframes screenShakeAnim {
+    0%, 100% { transform: translateX(0); }
+    15% { transform: translateX(-8px) translateY(4px); }
+    30% { transform: translateX(8px) translateY(-4px); }
+    45% { transform: translateX(-6px) translateY(2px); }
+    60% { transform: translateX(6px) translateY(-2px); }
+    75% { transform: translateX(-3px); }
+}
+
+/* BẢNG NHÁP NÂNG CẤP: CHỌN MÀU & CỠ NÉT */
+.scratch-colors {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(15, 23, 42, 0.8);
+    padding: 3px 6px;
+    border-radius: 20px;
+    border: 1px solid #334155;
+}
+
+.color-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.color-dot:hover {
+    transform: scale(1.2);
+}
+
+.color-dot.active {
+    border-color: #fff;
+    transform: scale(1.25);
+    box-shadow: 0 0 8px currentColor;
+}
+
+/* HIỆU ỨNG NHẮC NHỞ HỌC SINH MỞ BẢNG NHÁP SƯ PHẠM */
+@keyframes pulseAttention {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
+    50% { transform: scale(1.2) rotate(-5deg); box-shadow: 0 0 25px rgba(245, 158, 11, 0.95); }
+}
+
+.pulse-attention {
+    animation: pulseAttention 0.8s ease-in-out infinite !important;
 }

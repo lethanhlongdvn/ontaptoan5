@@ -55,10 +55,14 @@ let examFinished = false;
 
 // Nhật ký câu sai & ôn tập sư phạm
 let wrongQuestionsLog = [];
+let consecutiveErrors = 0;
 
-// Trạng thái Bảng nháp ảo (Virtual Scratchpad)
+// Trạng thái Bảng nháp ảo nâng cấp (Virtual Scratchpad)
 let isScratchpadOpen = false;
 let scratchTool = 'pen'; // 'pen' | 'eraser'
+let scratchColor = '#facc15';
+let scratchSize = 3.5;
+let scratchHistory = [];
 let scratchCanvas = null;
 let scratchCtx = null;
 let isDrawing = false;
@@ -115,7 +119,7 @@ function setMascotEmotion(emotion) {
     }
 }
 
-// 5.1. BẢNG NHÁP ẢO VẼ TAY (VIRTUAL SCRATCHPAD)
+// 5.1. BẢNG NHÁP ẢO VẼ TAY NÂNG CẤP (VIRTUAL SCRATCHPAD)
 function toggleScratchpad() {
     const overlay = document.getElementById('scratchpad-overlay');
     if (!overlay) return;
@@ -126,6 +130,46 @@ function toggleScratchpad() {
         playAudioTone('scratch');
     } else {
         overlay.classList.add('hidden');
+    }
+}
+
+function pushScratchHistory() {
+    if (!scratchCanvas || !scratchCtx) return;
+    try {
+        if (scratchHistory.length >= 15) scratchHistory.shift();
+        scratchHistory.push(scratchCtx.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height));
+    } catch(e) {}
+}
+
+function undoScratchpad() {
+    if (!scratchCanvas || !scratchCtx || scratchHistory.length === 0) return;
+    const prev = scratchHistory.pop();
+    if (prev) {
+        scratchCtx.putImageData(prev, 0, 0);
+        playAudioTone('scratch');
+    }
+}
+
+function setScratchColor(color) {
+    scratchColor = color;
+    scratchTool = 'pen';
+    document.querySelectorAll('.scratch-colors .color-dot').forEach(d => {
+        d.classList.toggle('active', d.getAttribute('onclick')?.includes(color));
+    });
+    setScratchTool('pen');
+}
+
+function toggleScratchSize() {
+    const label = document.getElementById('scratch-size-label');
+    if (scratchSize < 3) {
+        scratchSize = 4.5;
+        if (label) label.innerText = 'Vừa';
+    } else if (scratchSize < 6) {
+        scratchSize = 7.0;
+        if (label) label.innerText = 'Đậm';
+    } else {
+        scratchSize = 2.0;
+        if (label) label.innerText = 'Mảnh';
     }
 }
 
@@ -164,6 +208,7 @@ function initScratchpadCanvas() {
 
         const startDraw = (e) => {
             e.preventDefault();
+            pushScratchHistory();
             isDrawing = true;
             const pos = getPos(e);
             lastScratchX = pos.x;
@@ -183,11 +228,11 @@ function initScratchpadCanvas() {
 
             if (scratchTool === 'eraser') {
                 scratchCtx.globalCompositeOperation = 'destination-out';
-                scratchCtx.lineWidth = 26;
+                scratchCtx.lineWidth = 28;
             } else {
                 scratchCtx.globalCompositeOperation = 'source-over';
-                scratchCtx.strokeStyle = '#facc15';
-                scratchCtx.lineWidth = 3.5;
+                scratchCtx.strokeStyle = scratchColor;
+                scratchCtx.lineWidth = scratchSize;
             }
             scratchCtx.stroke();
 
@@ -220,6 +265,7 @@ function setScratchTool(tool) {
 
 function clearScratchpad() {
     if (scratchCanvas && scratchCtx) {
+        pushScratchHistory();
         scratchCtx.clearRect(0, 0, scratchCanvas.width, scratchCanvas.height);
         playAudioTone('scratch');
     }
@@ -422,12 +468,38 @@ window.onload = async function () {
     }
 };
 
-// 9. BẮT ĐẦU VÀO CHƠI
+// 9. BẮT ĐẦU VÀO CHƠI (CÓ CUTSCENE ĐIỆN ẢNH KHỞI HÀNH)
 function handleStartGame() {
+    document.getElementById('start-overlay').classList.add('hidden');
+
+    const cinematic = document.getElementById('cinematic-overlay');
+    if (cinematic && WEEK_DATA) {
+        cinematic.classList.remove('hidden');
+        const lmEl = document.getElementById('cinematic-landmark');
+        if (lmEl) lmEl.innerText = `ĐÍCH ĐẾN: ${WEEK_DATA.stationName.toUpperCase()}`;
+        const countEl = document.getElementById('cinematic-countdown');
+        if (countEl) countEl.innerText = "CHUẨN BỊ... 🏍️";
+        playAudioTone('step');
+
+        setTimeout(() => {
+            if (countEl) countEl.innerText = "3... 2... 1... XUẤT PHÁT! 🚀";
+            playAudioTone('combo');
+        }, 500);
+
+        setTimeout(() => {
+            cinematic.classList.add('hidden');
+            startGameReal();
+        }, 1300);
+    } else {
+        startGameReal();
+    }
+}
+
+function startGameReal() {
     isPlaying = true;
     startTime = Date.now();
     wrongQuestionsLog = [];
-    document.getElementById('start-overlay').classList.add('hidden');
+    consecutiveErrors = 0;
     document.getElementById('game-playground').classList.remove('hidden');
 
     const fab = document.getElementById('scratchpad-fab');
@@ -436,6 +508,25 @@ function handleStartGame() {
     setMascotEmotion('normal');
     setMascotSpeech("Vòng 1: Hãy chọn đáp án chính xác để tiếp sức năng lượng cho RoBot nhé!");
     initStage1();
+    updateOverallProgress();
+}
+
+function updateOverallProgress() {
+    const fill = document.getElementById('overall-progress-fill');
+    const label = document.getElementById('overall-progress-label');
+    const percent = Math.min(100, Math.max(0, score));
+    if (fill) fill.style.width = `${percent}%`;
+    if (label) label.innerText = `TIẾN ĐỘ: ${percent}%`;
+}
+
+function proceedNextStage() {
+    const transOverlay = document.getElementById('stage-trans-overlay');
+    if (transOverlay) transOverlay.classList.add('hidden');
+    if (typeof window._pendingNextStage === 'function') {
+        const fn = window._pendingNextStage;
+        window._pendingNextStage = null;
+        fn();
+    }
 }
 
 // 10. VÒNG 1: ĐẤU TRÍ THẦN TỐC (10 CÂU X 5Đ = 50Đ)
@@ -936,8 +1027,23 @@ function renderV1Question() {
     if (v1Index >= currentV1Pool.length || v1Index >= 10) {
         comboCount = 0;
         updateComboUI();
+        setMascotEmotion('cheer');
         setMascotSpeech("🎉 Hoàn thành xuất sắc Vòng 1! Cùng tiến vào Vòng 2 nào!");
-        setTimeout(initStage2, 700);
+        
+        const transOverlay = document.getElementById('stage-trans-overlay');
+        if (transOverlay) {
+            const transTitle = document.getElementById('trans-title');
+            const transDesc = document.getElementById('trans-desc');
+            const transIcon = document.getElementById('trans-icon');
+            if (transIcon) transIcon.innerText = "🏆";
+            if (transTitle) transTitle.innerText = "VƯỢT ẢI VÒNG 1 THÀNH CÔNG!";
+            if (transDesc) transDesc.innerHTML = `Bạn đã hoàn thành 10 thử thách Đấu Trí Thần Tốc.<br>Điểm số hiện tại: <b style="color:var(--gold); font-size:1.15rem;">${score}đ</b>.<br>Sẵn sàng cho <b>Vòng 2: Chinh Phục Đỉnh Cao</b> (+40đ)!`;
+            transOverlay.classList.remove('hidden');
+            window._pendingNextStage = initStage2;
+            playAudioTone('combo');
+        } else {
+            setTimeout(initStage2, 700);
+        }
         return;
     }
 
@@ -985,10 +1091,15 @@ function handleV1OptionClick(chosenVal, correctVal, orbEl, event, questionItem) 
         const currentItem = questionItem || (currentV1Pool && currentV1Pool[v1Index]) || { q: '', a: correctVal };
 
         if (isMatch) {
+            consecutiveErrors = 0;
             orbEl.classList.add('correct');
             if (cardEl) cardEl.classList.add('flash-correct');
             comboCount++;
-            if (comboCount >= 2) {
+            if (comboCount >= 3) {
+                playAudioTone('combo');
+                setMascotEmotion('cheer');
+                setMascotSpeech(`🌟 Không thể ngăn cản! Combo x${comboCount} liên tiếp rồi! Bạn quá xuất sắc!`);
+            } else if (comboCount >= 2) {
                 playAudioTone('combo');
                 setMascotEmotion('cheer');
                 setMascotSpeech(`🔥 Tuyệt đỉnh! Combo x${comboCount} liên tiếp rồi!`);
@@ -1015,6 +1126,7 @@ function handleV1OptionClick(chosenVal, correctVal, orbEl, event, questionItem) 
                 renderV1Question();
             }, 380);
         } else {
+            consecutiveErrors++;
             orbEl.classList.add('wrong');
             if (cardEl) cardEl.classList.add('shake');
             comboCount = 0;
@@ -1040,7 +1152,14 @@ function handleV1OptionClick(chosenVal, correctVal, orbEl, event, questionItem) 
                 }
             });
 
-            if (lives === 1) {
+            if (consecutiveErrors >= 2) {
+                setMascotSpeech("💡 RoBot thấy 2 câu liền bạn chưa tính ra. Đừng vội! Hãy mở [📝 Nháp] ở góc dưới để đặt tính nhé!");
+                const fab = document.getElementById('scratchpad-fab');
+                if (fab) {
+                    fab.classList.add('pulse-attention');
+                    setTimeout(() => fab.classList.remove('pulse-attention'), 3500);
+                }
+            } else if (lives === 1) {
                 setMascotSpeech("⚠️ Cẩn thận nhé, bạn chỉ còn 1 trái tim cuối cùng thôi! Mở [📝 Nháp] để tính cẩn thận nhé.");
             } else {
                 setMascotSpeech("Chưa đúng rồi! Hãy quan sát kỹ đáp án đúng hoặc mở [📝 Nháp] để đặt tính nhé.");
@@ -1049,9 +1168,23 @@ function handleV1OptionClick(chosenVal, correctVal, orbEl, event, questionItem) 
             setTimeout(() => {
                 if (cardEl) cardEl.classList.remove('shake');
                 if (lives <= 0) {
-                    alert("⚠️ Em đã hết 3 mạng! Chuyển thẳng sang Vòng 2.");
-                    isProcessingV1 = false;
-                    initStage2();
+                    const transOverlay = document.getElementById('stage-trans-overlay');
+                    if (transOverlay) {
+                        const transTitle = document.getElementById('trans-title');
+                        const transDesc = document.getElementById('trans-desc');
+                        const transIcon = document.getElementById('trans-icon');
+                        if (transIcon) transIcon.innerText = "⚡";
+                        if (transTitle) transTitle.innerText = "TIẾP TỤC HÀNH TRÌNH VÒNG 2";
+                        if (transDesc) transDesc.innerHTML = `Bạn đã hết 3 lượt ở Vòng 1 (Điểm hiện tại: <b style="color:var(--gold);">${score}đ</b>).<br>RoBot sẽ nạp năng lượng để bạn tiếp tục thử sức ở <b>Vòng 2: Chinh Phục Đỉnh Cao</b>!`;
+                        transOverlay.classList.remove('hidden');
+                        window._pendingNextStage = () => {
+                            isProcessingV1 = false;
+                            initStage2();
+                        };
+                    } else {
+                        isProcessingV1 = false;
+                        initStage2();
+                    }
                 } else {
                     v1Index++;
                     isProcessingV1 = false;
@@ -1107,8 +1240,8 @@ function renderV2Mission() {
         const progFill = document.getElementById('stage-progress-fill');
         if (progFill) progFill.style.width = '66%';
         playAudioTone('combo');
-        setMascotSpeech("🎉 Xuất sắc! Bạn đã chinh phục toàn bộ các chặng! Chuẩn bị Đấu Boss nào!");
-        setTimeout(initStage3, 800);
+        setMascotSpeech("🎉 Xuất sắc! Bạn đã chinh phục toàn bộ 4 chặng! Chuẩn bị Đấu Boss nào!");
+        triggerBossIntro(false);
         return;
     }
 
@@ -1191,6 +1324,7 @@ function handleV2ChipClick(chosenVal, correctVal, chipEl, event, questionItem) {
         const currentQ = questionItem || (currentV2Questions && currentV2Questions[v2Index]) || { q: '', a: correctVal };
 
         if (isMatch) {
+            consecutiveErrors = 0;
             chipEl.classList.add('chosen-correct');
             if (slotEl) {
                 slotEl.innerText = `✓ ${chosenVal}`;
@@ -1212,6 +1346,7 @@ function handleV2ChipClick(chosenVal, correctVal, chipEl, event, questionItem) {
                 renderV2Mission();
             }, 600);
         } else {
+            consecutiveErrors++;
             chipEl.classList.add('shake-wrong');
             playAudioTone('error');
             lives = Math.max(0, lives - 1);
@@ -1226,7 +1361,14 @@ function handleV2ChipClick(chosenVal, correctVal, chipEl, event, questionItem) {
             });
             setMascotEmotion('comfort');
 
-            if (lives === 1) {
+            if (consecutiveErrors >= 2) {
+                setMascotSpeech("💡 Bình tĩnh nào! Dùng [📝 Nháp] để nhẩm hoặc tính cẩn thận trước khi chọn chip nhé!");
+                const fab = document.getElementById('scratchpad-fab');
+                if (fab) {
+                    fab.classList.add('pulse-attention');
+                    setTimeout(() => fab.classList.remove('pulse-attention'), 3500);
+                }
+            } else if (lives === 1) {
                 setMascotSpeech("⚠️ Cẩn thận nhé! Chỉ còn 1 trái tim cuối cùng! Nhớ mở [📝 Nháp] để tính.");
             } else {
                 setMascotSpeech("Chưa đúng rồi bạn ơi! Hãy mở bảng [📝 Nháp] góc màn hình để đặt tính cẩn thận nhé.");
@@ -1235,9 +1377,8 @@ function handleV2ChipClick(chosenVal, correctVal, chipEl, event, questionItem) {
             setTimeout(() => {
                 chipEl.classList.remove('shake-wrong');
                 if (lives <= 0) {
-                    alert("⚠️ Em đã hết 3 mạng! Chuyển thẳng sang Đấu Boss.");
                     isProcessingV2 = false;
-                    initStage3();
+                    triggerBossIntro(true);
                 } else {
                     isProcessingV2 = false;
                 }
@@ -1250,6 +1391,38 @@ function handleV2ChipClick(chosenVal, correctVal, chipEl, event, questionItem) {
 }
 
 // 12. VÒNG 3: ĐẠI CHIẾN BOSS (2 CÂU X 5Đ = 10Đ)
+function triggerBossIntro(isFromOutOfLives = false) {
+    const bossOverlay = document.getElementById('boss-intro-overlay');
+    const bossTitle = document.getElementById('boss-intro-title');
+    const bossSub = document.querySelector('.boss-intro-subtitle');
+    
+    if (bossOverlay) {
+        if (bossTitle && WEEK_DATA) {
+            bossTitle.innerText = `THỦ LĨNH: ${WEEK_DATA.stationName.toUpperCase()}!`;
+        }
+        if (bossSub && WEEK_DATA) {
+            bossSub.innerText = isFromOutOfLives 
+                ? `Hết lượt ở Vòng 2! Dồn toàn lực chiến đấu trận quyết định để hạ gục Boss!`
+                : `Chào mừng bạn đến ải quyết định của ${WEEK_DATA.stationName}. Hãy sẵn sàng giải toán hạ Boss!`;
+        }
+        bossOverlay.classList.remove('hidden');
+        document.body.classList.add('screen-shake');
+        setTimeout(() => document.body.classList.remove('screen-shake'), 1200);
+        playAudioTone('boss');
+        
+        window._bossTimer = setTimeout(proceedToBossFight, 4500);
+    } else {
+        setTimeout(initStage3, 800);
+    }
+}
+
+function proceedToBossFight() {
+    if (window._bossTimer) clearTimeout(window._bossTimer);
+    const bossOverlay = document.getElementById('boss-intro-overlay');
+    if (bossOverlay) bossOverlay.classList.add('hidden');
+    document.body.classList.remove('screen-shake');
+    initStage3();
+}
 function initStage3() {
     document.getElementById('stage-2-area').classList.add('hidden');
     document.getElementById('stage-3-area').classList.remove('hidden');
@@ -1386,7 +1559,9 @@ function checkBossAnswer(optIdx, event) {
 
 // 13. CẬP NHẬT GIAO DIỆN & LƯU ĐIỂM FIREBASE
 function updateScoreUI() {
-    document.getElementById('current-score').innerText = score;
+    const el = document.getElementById('current-score');
+    if (el) el.innerText = score;
+    updateOverallProgress();
 }
 
 function updateLivesUI() {
