@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bảng Vàng Thành Tích (Trọn Bộ 35 Tuần) - Học toán 5 cùng Robot</title>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&family=Bungee&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -294,19 +294,29 @@
 <body>
     <header>
         <a href="index.html" class="logo">Học toán 5 cùng Robot 🤖</a>
-        <nav><a href="index.html" style="text-decoration:none; color:#333; font-size: 0.85rem; font-weight: 600;">Trang chủ</a></nav>
+        <nav style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <button id="btn-clean-orphans-bv" class="btn-admin-only" onclick="cleanOrphanedScoresBV()" style="display:none; background:#ea580c; color:#fff; border:none; padding:5px 12px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; font-family:'Lexend',sans-serif;" title="Dọn dẹp tất cả lượt thi của các tài khoản đã bị xóa khỏi hệ thống">🧹 Dọn điểm TK đã xóa</button>
+            <button id="btn-toggle-admin-bv" onclick="toggleAdminModeBV()" style="background:#fff7ed; color:#ea580c; border:1.5px solid #fdba74; padding:5px 12px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; display:inline-flex; align-items:center; gap:5px; font-family:'Lexend',sans-serif; transition:all 0.2s;">
+                🛡️ Chế độ Quản trị: <span id="admin-mode-text">TẮT</span>
+            </button>
+            <a href="admin.html" style="text-decoration:none; color:#ea580c; font-size: 0.8rem; font-weight: 600; background:#fef2f2; padding:5px 10px; border-radius:6px; border:1px solid #fecaca;">Cổng Admin</a>
+            <a href="index.html" style="text-decoration:none; color:#333; font-size: 0.85rem; font-weight: 600;">Trang chủ</a>
+        </nav>
     </header>
 
-    <section class="hero">
-        <h1>🏆 BẢNG VÀNG VINH DANH</h1>
-        <p>Thành tích xuất sắc nhất của các nhà thám hiểm (Trọn bộ 35 Trạm)</p>
+    <section class="hero" style="position: relative; overflow: hidden;">
+        <canvas id="hero-antigravity" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></canvas>
+        <div style="position: relative; z-index: 2;">
+            <h1>🏆 BẢNG VÀNG VINH DANH</h1>
+            <p>Thành tích xuất sắc nhất của các nhà thám hiểm (Trọn bộ 35 Trạm)</p>
+        </div>
     </section>
 
     <!-- BỘ LỌC CHẾ ĐỘ & HỌC KỲ -->
     <div class="filter-bar" style="flex-direction:column; gap:8px;">
         <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; width:100%;">
-            <button class="btn-filter-bv active" id="btn-mode-official" onclick="setModeFilter('official')" style="background:#4CAF50; color:#fff; border-color:#4CAF50;">🏆 ĐUA TOP TUẦN (14H T6 - 13H59 T6 SAU)</button>
-            <button class="btn-filter-bv" id="btn-mode-all" onclick="setModeFilter('all')" style="background:#fff; color:#333; border-color:#ccc;">🌟 TẤT CẢ LƯỢT THI (TỰ LUYỆN)</button>
+            <button class="btn-filter-bv" id="btn-mode-official" onclick="setModeFilter('official')" style="background:#fff; color:#333; border-color:#ccc;">🏆 ĐUA TOP TUẦN (14H T6 - 13H59 T6 SAU)</button>
+            <button class="btn-filter-bv active" id="btn-mode-all" onclick="setModeFilter('all')" style="background:#4CAF50; color:#fff; border-color:#4CAF50;">🌟 TẤT CẢ LƯỢT THI (TỰ LUYỆN)</button>
         </div>
         <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; width:100%;">
             <button class="btn-filter-bv active" id="btn-bv-all" onclick="filterBv('all')">🌟 TOÀN BỘ (35 TUẦN)</button>
@@ -643,7 +653,7 @@
                         "is_cap_for_guest": false
             }
 };
-        let currentModeFilter = 'official'; // 'official' (14h T6 -> 13h59 T6 sau) | 'all'
+        let currentModeFilter = 'all'; // 'all' (Tất cả lượt thi tự luyện) | 'official' (Khung giờ đua Top)
         let currentSemesterFilter = 'all'; // 'all' | 'hk1' | 'hk2'
         let cachedAllScores = {};
         const charts = {};
@@ -733,7 +743,11 @@
                             <div class="chart-title">Phân bổ khoảng điểm (Tuần ${i}: ${landmark})</div>
                             <div class="chart-container"><canvas id="chart-canvas-${i}"></canvas></div>
                         </div>
-                        <div class="action-bar"><button class="btn-excel" onclick="exportExcel(${i})">📄 Xuất Excel Tuần ${i}</button></div>
+                        <div class="action-bar" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                            <button class="btn-excel" onclick="exportExcel(${i})">📄 Xuất Excel Tuần ${i}</button>
+                            <button class="btn-clean-test btn-admin-only" style="display:none; background:#ea580c; color:#fff; border:none; padding:7px 12px; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.75rem; font-family:'Lexend',sans-serif;" onclick="cleanTestScoresWeek(${i})">🧹 Dọn dẹp điểm test Tuần ${i}</button>
+                            <button class="btn-clean-all btn-admin-only" style="display:none; background:#dc2626; color:#fff; border:none; padding:7px 12px; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.75rem; font-family:'Lexend',sans-serif;" onclick="resetWeekScores(${i})">⚠️ Xóa toàn bộ điểm Tuần ${i}</button>
+                        </div>
                         <div class="table-responsive">
                             <table>
                                 <thead>
@@ -746,9 +760,10 @@
                                         <th>Thời gian</th>
                                         <th>Lần thi</th>
                                         <th>Ngày đạt</th>
+                                        <th class="th-admin-action" style="display:none; text-align:center;">Thao tác</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbody-${i}"><tr><td colspan="8" style="text-align:center; padding:20px; color:#999;">Chưa có dữ liệu lượt thi nào.</td></tr></tbody>
+                                <tbody id="tbody-${i}"><tr><td colspan="9" style="text-align:center; padding:20px; color:#999;">Chưa có dữ liệu lượt thi nào.</td></tr></tbody>
                             </table>
                         </div>
                     </div>
@@ -891,35 +906,37 @@
                 if (!tbody) continue;
 
                 if (!weekData) {
-                    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:15px; color:#999; font-size:0.8rem;">Chưa có dữ liệu lượt thi nào.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:15px; color:#999; font-size:0.8rem;">Chưa có dữ liệu lượt thi nào.</td></tr>`;
                     countBadge.innerText = `0 bạn`;
                     chartSection.style.display = 'none';
                     continue;
                 }
 
                 let filteredMap = new Map();
-                Object.values(weekData).forEach(entry => {
-                    let key = ((entry.fullName || entry.name || "") + "|" + (entry.className || entry.class || "")).toLowerCase().trim();
-                    if (!filteredMap.has(key)) filteredMap.set(key, entry);
-                    else {
+                for (let pushId in weekData) {
+                    let entry = weekData[pushId];
+                    entry._pushId = pushId;
+                    let key = ((entry.fullName || entry.name || entry.username || "") + "|" + (entry.className || entry.class || "")).toLowerCase().trim();
+                    if (!filteredMap.has(key)) {
+                        filteredMap.set(key, entry);
+                    } else {
                         let old = filteredMap.get(key);
-                        if (entry.score > old.score || (entry.score === old.score && (entry.duration || 999) < (old.duration || 999))) filteredMap.set(key, entry);
+                        if (entry.score > old.score || (entry.score === old.score && (entry.duration || 999) < (old.duration || 999))) {
+                            filteredMap.set(key, entry);
+                        }
                     }
-                });
+                }
 
                 const sched = SCHEDULE[i];
                 let sorted = Array.from(filteredMap.values())
                     .filter(s => {
-                        let nameValue = (s.fullName || s.name || "").trim();
+                        let nameValue = (s.fullName || s.name || s.username || "").trim();
                         let nameLower = nameValue.toLowerCase();
 
-                        const draftKeywords = ['test', 'abc', 'nhap', 'nháp', '123', 'demo', 'đemo', 'xxx', '...', '---', 'utc', 'bts', 'admin'];
-                        if (draftKeywords.some(k => nameLower.includes(k))) return false;
+                        const draftKeywords = ['test', 'abc', 'nhap', 'nháp', '123', 'demo', 'đemo', 'xxx', '...', '---'];
+                        if (draftKeywords.some(k => nameLower === k || nameLower.startsWith(k + ' ') || nameLower.endsWith(' ' + k))) return false;
                         if (/^\d+$/.test(nameLower)) return false;
-
-                        const words = nameValue.split(/\s+/).filter(w => w.length > 0);
-                        if (words.length < 2) return false;
-                        if (words.some(w => w.length > 15)) return false;
+                        if (nameValue.length < 2) return false;
 
                         // Lọc theo khung giờ đua Top tuần chính thức
                         if (currentModeFilter === 'official' && sched) {
@@ -947,28 +964,293 @@
 
                 countBadge.innerText = `${sorted.length} bạn`;
                 if (sorted.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:15px; color:#999; font-size:0.8rem;">Chưa có bạn nào đạt từ 50 điểm trở lên.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:15px; color:#999; font-size:0.8rem;">Chưa có bạn nào đạt từ 50 điểm trở lên.</td></tr>`;
                     chartSection.style.display = 'none';
                 } else {
                     tbody.innerHTML = sorted.map((s, idx) => `
                         <tr>
                             <td><div class="rank">${idx + 1}</div></td>
-                            <td><b>${s.fullName || s.name}</b></td>
-                            <td><span class="class-badge">${s.className || s.class}</span></td>
+                            <td><b>${s.fullName || s.name || s.username}</b></td>
+                            <td><span class="class-badge">${s.className || s.class || '---'}</span></td>
                             <td><span style="font-size:0.8rem; color:#555;">${s.schoolName || '---'}</span></td>
                             <td><span class="score-badge">${s.score}/100</span></td>
                             <td><span class="time-badge">⏱ ${formatTime(s.duration)}</span></td>
                             <td><span class="attempt-badge">Lần ${s.attempt || 1}</span></td>
                             <td style="font-size:0.75rem; color:#888;">${s.date || ""}</td>
+                            <td class="td-admin-action" style="display:${isAdminModeBV ? 'table-cell' : 'none'}; text-align:center;">
+                                <button class="btn-del-score" onclick="deleteWeekScore(${i}, '${s._pushId}', '${(s.fullName || s.name || s.username || '').replace(/'/g, "\\'")}', ${s.score}, '${(s.username || '').replace(/'/g, "\\'")}')" style="background:#ef4444; color:#fff; border:none; padding:4px 9px; border-radius:6px; cursor:pointer; font-size:0.75rem; font-weight:bold; font-family:'Lexend',sans-serif;" title="Xóa triệt để tất cả lượt thi của thí sinh này">🗑️ Xóa</button>
+                            </td>
                         </tr>
                     `).join('');
                     chartSection.style.display = 'block';
                     updateChart(i, dist);
                 }
             }
-        });
+        }
+
+        let isAdminModeBV = false;
+
+        function toggleAdminModeBV() {
+            if (isAdminModeBV) {
+                isAdminModeBV = false;
+                applyAdminModeBV();
+                return;
+            }
+            const role = localStorage.getItem('userRole');
+            const adminUser = localStorage.getItem('adminUsername');
+            if (role === 'admin' || adminUser === 'admin') {
+                isAdminModeBV = true;
+                applyAdminModeBV();
+                return;
+            }
+            const pwd = prompt("Nhập mật khẩu quản trị để bật quyền Xóa/Dọn dẹp điểm:");
+            if (pwd === "EduBot@2026") {
+                isAdminModeBV = true;
+                localStorage.setItem('adminUsername', 'admin');
+                localStorage.setItem('userRole', 'admin');
+                applyAdminModeBV();
+                alert("✅ Đã bật Chế độ Quản trị! Bạn có thể xóa điểm từng thí sinh hoặc dọn dẹp hàng loạt.");
+            } else if (pwd !== null) {
+                alert("❌ Sai mật khẩu quản trị!");
+            }
+        }
+
+        function applyAdminModeBV() {
+            const btn = document.getElementById('btn-toggle-admin-bv');
+            const txt = document.getElementById('admin-mode-text');
+            if (btn && txt) {
+                if (isAdminModeBV) {
+                    btn.style.background = '#10b981';
+                    btn.style.borderColor = '#059669';
+                    btn.style.color = '#fff';
+                    txt.innerText = 'ĐANG BẬT';
+                } else {
+                    btn.style.background = '#fff7ed';
+                    btn.style.borderColor = '#fdba74';
+                    btn.style.color = '#ea580c';
+                    txt.innerText = 'TẮT';
+                }
+            }
+            document.querySelectorAll('.th-admin-action, .td-admin-action').forEach(el => {
+                el.style.display = isAdminModeBV ? 'table-cell' : 'none';
+            });
+            document.querySelectorAll('.btn-admin-only').forEach(el => {
+                el.style.display = isAdminModeBV ? 'inline-block' : 'none';
+            });
+        }
+
+        function cleanLocalIfMatch(username, name, allWeeks, weekNum) {
+            const curUser = localStorage.getItem('studentUsername') || localStorage.getItem('adminUsername');
+            const curName = localStorage.getItem('studentName');
+            const isMatch = (curUser && username && curUser.toLowerCase() === username.toLowerCase()) ||
+                            (curName && name && curName.trim().toLowerCase() === name.trim().toLowerCase());
+            if (isMatch) {
+                if (allWeeks) {
+                    for (let w = 1; w <= 35; w++) {
+                        localStorage.removeItem(`bestScore_Tuan_${w}`);
+                    }
+                } else if (weekNum) {
+                    localStorage.removeItem(`bestScore_Tuan_${weekNum}`);
+                }
+                localStorage.removeItem('lastCompletedWeek');
+                localStorage.removeItem('lastCompletedScore');
+            }
+        }
+
+        function deleteWeekScore(week, pushId, name, score, username) {
+            const scopeChoice = confirm(`Quản trị viên: Bạn muốn xóa thí sinh "${name}"?\n\n• Bấm [OK] để XÓA TRIỆT ĐỂ ở TOÀN BỘ 35 TUẦN trên Bảng Vàng\n• Bấm [HỦY/Cancel] để CHỈ XÓA lượt thi ở Tuần ${week}`);
+            
+            if (scopeChoice) {
+                // XÓA TRIỆT ĐỂ Ở TOÀN BỘ 35 TUẦN
+                db.ref('scores').once('value', (snap) => {
+                    const allScores = snap.val() || {};
+                    const updates = {};
+                    let count = 0;
+                    for (let wk in allScores) {
+                        const weekData = allScores[wk];
+                        if (!weekData) continue;
+                        for (let k in weekData) {
+                            const item = weekData[k];
+                            const isMatch = (k === pushId && wk === `Tuan_${week}`) ||
+                                           (username && item.username && item.username.toLowerCase() === username.toLowerCase()) ||
+                                           (name && item.fullName && item.fullName.trim().toLowerCase() === name.trim().toLowerCase());
+                            if (isMatch) {
+                                updates[`scores/${wk}/${k}`] = null;
+                                count++;
+                            }
+                        }
+                    }
+                    db.ref().update(updates).then(() => {
+                        cleanLocalIfMatch(username, name, true);
+                        alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở TOÀN BỘ 35 TUẦN trên Bảng Vàng!`);
+                    }).catch(err => alert(`⚠️ Lỗi khi xóa: ${err.message}`));
+                });
+            } else {
+                // CHỈ XÓA Ở TUẦN HIỆN TẠI
+                if (!confirm(`Xác nhận CHỈ XÓA các lượt thi của thí sinh "${name}" ở Tuần ${week}?`)) {
+                    return;
+                }
+
+                db.ref(`scores/Tuan_${week}`).once('value', (snap) => {
+                    const weekData = snap.val() || {};
+                    const updates = {};
+                    let count = 0;
+
+                    for (let k in weekData) {
+                        const item = weekData[k];
+                        const isMatch = k === pushId ||
+                                       (username && item.username && item.username.toLowerCase() === username.toLowerCase()) ||
+                                       (name && item.fullName && item.fullName.trim().toLowerCase() === name.trim().toLowerCase());
+                        if (isMatch) {
+                            updates[k] = null;
+                            count++;
+                        }
+                    }
+
+                    if (count === 0 && pushId) {
+                        updates[pushId] = null;
+                        count = 1;
+                    }
+
+                    db.ref(`scores/Tuan_${week}`).update(updates).then(() => {
+                        cleanLocalIfMatch(username, name, false, week);
+                        alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở Tuần ${week}!`);
+                    }).catch((err) => {
+                        alert(`⚠️ Lỗi khi xóa: ${err.message}`);
+                    });
+                });
+            }
+        }
+
+        // DỌN DẸP TOÀN BỘ ĐIỂM THI CỦA CÁC TÀI KHOẢN ĐÃ BỊ XÓA (MỒ CÔI) TRỰC TIẾP TRÊN BẢNG VÀNG
+        function cleanOrphanedScoresBV() {
+            Promise.all([
+                db.ref('users').once('value'),
+                db.ref('scores').once('value')
+            ]).then(([usersSnap, scoresSnap]) => {
+                const usersData = usersSnap.val() || {};
+                const allScores = scoresSnap.val() || {};
+                const validUsernames = new Set(Object.keys(usersData).map(u => u.toLowerCase()));
+                const updates = {};
+                let count = 0;
+                let orphanStudents = {};
+
+                for (let weekKey in allScores) {
+                    const weekData = allScores[weekKey];
+                    if (!weekData) continue;
+                    for (let pushId in weekData) {
+                        const item = weekData[pushId];
+                        const uname = (item.username || '').trim().toLowerCase();
+                        const fname = (item.fullName || item.name || '').trim();
+
+                        if (uname.startsWith('guest_')) continue;
+
+                        if (uname && !validUsernames.has(uname)) {
+                            updates[`scores/${weekKey}/${pushId}`] = null;
+                            count++;
+                            const label = `@${uname} (${fname || 'Chưa rõ tên'})`;
+                            orphanStudents[label] = (orphanStudents[label] || 0) + 1;
+                        }
+                    }
+                }
+
+                if (count === 0) {
+                    alert("✨ Bảng Vàng hoàn toàn sạch sẽ! Tất cả điểm số đều thuộc về các tài khoản đang tồn tại.");
+                    return;
+                }
+
+                const detailList = Object.entries(orphanStudents)
+                    .map(([label, c]) => `• ${label}: ${c} lượt thi`)
+                    .slice(0, 15)
+                    .join('\n');
+                const moreText = Object.keys(orphanStudents).length > 15 ? `\n... và ${Object.keys(orphanStudents).length - 15} tài khoản khác` : '';
+
+                if (confirm(`Quản trị viên: Phát hiện ${count} lượt thi trên Bảng Vàng của ${Object.keys(orphanStudents).length} tài khoản ĐÃ BỊ XÓA khỏi hệ thống:\n\n${detailList}${moreText}\n\nXác nhận XÓA TRIỆT ĐỂ toàn bộ ${count} lượt thi này khỏi Bảng Vàng?`)) {
+                    db.ref().update(updates).then(() => {
+                        alert(`✨ Đã dọn dẹp sạch sẽ ${count} lượt thi mồ côi trên Bảng Vàng!`);
+                    }).catch((err) => {
+                        alert(`⚠️ Lỗi khi dọn dẹp: ${err.message}`);
+                    });
+                }
+            }).catch(err => {
+                alert(`⚠️ Lỗi khi kiểm tra dữ liệu: ${err.message}`);
+            });
+        }
+
+        function cleanTestScoresWeek(week) {
+            const weekData = cachedAllScores[`Tuan_${week}`] || cachedAllScores[`tuan${week}`];
+            if (!weekData) {
+                alert(`Tuần ${week} chưa có lượt thi nào!`);
+                return;
+            }
+            const draftKeywords = ['test', 'abc', 'nhap', 'nháp', '123', 'demo', 'đemo', 'xxx', '...', '---', 'admin'];
+            const toDelete = [];
+            for (let key in weekData) {
+                const item = weekData[key];
+                const uname = (item.username || '').toLowerCase();
+                const fname = (item.fullName || item.name || '').toLowerCase();
+                const isTest = draftKeywords.some(k => uname.includes(k) || fname.includes(k)) || uname.startsWith('guest_');
+                if (isTest) {
+                    toDelete.push({ key, name: item.fullName || item.name || item.username, score: item.score, date: item.date });
+                }
+            }
+            if (toDelete.length === 0) {
+                alert(`Tuần ${week}: Không tìm thấy lượt thi nháp / tài khoản test nào!`);
+                return;
+            }
+            const preview = toDelete.map((x, i) => `${i + 1}. ${x.name} - ${x.score}đ (${x.date || '---'})`).join('\n');
+            if (confirm(`Tìm thấy ${toDelete.length} lượt thi test/nháp ở Tuần ${week}:\n\n${preview}\n\nBạn có chắc chắn muốn XÓA TOÀN BỘ ${toDelete.length} lượt thi này?`)) {
+                const updates = {};
+                toDelete.forEach(x => {
+                    updates[`scores/Tuan_${week}/${x.key}`] = null;
+                });
+                db.ref().update(updates).then(() => {
+                    alert(`✅ Đã dọn dẹp thành công ${toDelete.length} lượt thi test ở Tuần ${week}!`);
+                }).catch(err => {
+                    alert(`⚠️ Lỗi: ${err.message}`);
+                });
+            }
+        }
+
+        function resetWeekScores(week) {
+            const weekData = cachedAllScores[`Tuan_${week}`] || cachedAllScores[`tuan${week}`];
+            const count = weekData ? Object.keys(weekData).length : 0;
+            if (count === 0) {
+                alert(`Tuần ${week} không có dữ liệu để xóa!`);
+                return;
+            }
+            const check = prompt(`⚠️ CẢNH BÁO: Thao tác này sẽ xóa vĩnh viễn TOÀN BỘ ${count} lượt thi của Tuần ${week}!\nNhập chữ 'XOA' để xác nhận:`);
+            if (check === 'XOA') {
+                db.ref(`scores/Tuan_${week}`).remove().then(() => {
+                    alert(`✅ Đã xóa toàn bộ điểm số của Tuần ${week}!`);
+                }).catch(err => {
+                    alert(`⚠️ Lỗi: ${err.message}`);
+                });
+            } else if (check !== null) {
+                alert("Đã hủy thao tác xóa.");
+            }
+        }
 
         initAccordion();
+
+        // Tự động kiểm tra quyền Admin khi tải trang
+        const savedRole = localStorage.getItem('userRole');
+        const savedAdmin = localStorage.getItem('adminUsername');
+        if (savedRole === 'admin' || savedAdmin === 'admin') {
+            isAdminModeBV = true;
+            setTimeout(applyAdminModeBV, 200);
+        }
+    </script>
+    <script src="js/antigravity.js"></script>
+    <script>
+        if (window.EduAntigravity) {
+            EduAntigravity.startAmbient('hero-antigravity', {
+                count: window.innerWidth < 600 ? 18 : 28,
+                speed: 0.35,
+                colors: ['#FFD700', '#FF9800', '#FFFFFF', '#38BDF8', '#F43F5E'],
+                opacity: 0.65
+            });
+        }
     </script>
 </body>
 

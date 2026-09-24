@@ -295,6 +295,7 @@
     <header>
         <a href="index.html" class="logo">Học toán 5 cùng Robot 🤖</a>
         <nav style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <button id="btn-clean-orphans-bv" class="btn-admin-only" onclick="cleanOrphanedScoresBV()" style="display:none; background:#ea580c; color:#fff; border:none; padding:5px 12px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; font-family:'Lexend',sans-serif;" title="Dọn dẹp tất cả lượt thi của các tài khoản đã bị xóa khỏi hệ thống">🧹 Dọn điểm TK đã xóa</button>
             <button id="btn-toggle-admin-bv" onclick="toggleAdminModeBV()" style="background:#fff7ed; color:#ea580c; border:1.5px solid #fdba74; padding:5px 12px; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; display:inline-flex; align-items:center; gap:5px; font-family:'Lexend',sans-serif; transition:all 0.2s;">
                 🛡️ Chế độ Quản trị: <span id="admin-mode-text">TẮT</span>
             </button>
@@ -1038,45 +1039,141 @@
             });
         }
 
-        function deleteWeekScore(week, pushId, name, score, username) {
-            if (!confirm(`Quản trị viên: Xác nhận XÓA TRIỆT ĐỂ tất cả các lượt thi của thí sinh "${name}" ở Tuần ${week}?`)) {
-                return;
+        function cleanLocalIfMatch(username, name, allWeeks, weekNum) {
+            const curUser = localStorage.getItem('studentUsername') || localStorage.getItem('adminUsername');
+            const curName = localStorage.getItem('studentName');
+            const isMatch = (curUser && username && curUser.toLowerCase() === username.toLowerCase()) ||
+                            (curName && name && curName.trim().toLowerCase() === name.trim().toLowerCase());
+            if (isMatch) {
+                if (allWeeks) {
+                    for (let w = 1; w <= 35; w++) {
+                        localStorage.removeItem(`bestScore_Tuan_${w}`);
+                    }
+                } else if (weekNum) {
+                    localStorage.removeItem(`bestScore_Tuan_${weekNum}`);
+                }
+                localStorage.removeItem('lastCompletedWeek');
+                localStorage.removeItem('lastCompletedScore');
             }
+        }
 
-            db.ref(`scores/Tuan_${week}`).once('value', (snap) => {
-                const weekData = snap.val() || {};
+        function deleteWeekScore(week, pushId, name, score, username) {
+            const scopeChoice = confirm(`Quản trị viên: Bạn muốn xóa thí sinh "${name}"?\n\n• Bấm [OK] để XÓA TRIỆT ĐỂ ở TOÀN BỘ 35 TUẦN trên Bảng Vàng\n• Bấm [HỦY/Cancel] để CHỈ XÓA lượt thi ở Tuần ${week}`);
+            
+            if (scopeChoice) {
+                // XÓA TRIỆT ĐỂ Ở TOÀN BỘ 35 TUẦN
+                db.ref('scores').once('value', (snap) => {
+                    const allScores = snap.val() || {};
+                    const updates = {};
+                    let count = 0;
+                    for (let wk in allScores) {
+                        const weekData = allScores[wk];
+                        if (!weekData) continue;
+                        for (let k in weekData) {
+                            const item = weekData[k];
+                            const isMatch = (k === pushId && wk === `Tuan_${week}`) ||
+                                           (username && item.username && item.username.toLowerCase() === username.toLowerCase()) ||
+                                           (name && item.fullName && item.fullName.trim().toLowerCase() === name.trim().toLowerCase());
+                            if (isMatch) {
+                                updates[`scores/${wk}/${k}`] = null;
+                                count++;
+                            }
+                        }
+                    }
+                    db.ref().update(updates).then(() => {
+                        cleanLocalIfMatch(username, name, true);
+                        alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở TOÀN BỘ 35 TUẦN trên Bảng Vàng!`);
+                    }).catch(err => alert(`⚠️ Lỗi khi xóa: ${err.message}`));
+                });
+            } else {
+                // CHỈ XÓA Ở TUẦN HIỆN TẠI
+                if (!confirm(`Xác nhận CHỈ XÓA các lượt thi của thí sinh "${name}" ở Tuần ${week}?`)) {
+                    return;
+                }
+
+                db.ref(`scores/Tuan_${week}`).once('value', (snap) => {
+                    const weekData = snap.val() || {};
+                    const updates = {};
+                    let count = 0;
+
+                    for (let k in weekData) {
+                        const item = weekData[k];
+                        const isMatch = k === pushId ||
+                                       (username && item.username && item.username.toLowerCase() === username.toLowerCase()) ||
+                                       (name && item.fullName && item.fullName.trim().toLowerCase() === name.trim().toLowerCase());
+                        if (isMatch) {
+                            updates[k] = null;
+                            count++;
+                        }
+                    }
+
+                    if (count === 0 && pushId) {
+                        updates[pushId] = null;
+                        count = 1;
+                    }
+
+                    db.ref(`scores/Tuan_${week}`).update(updates).then(() => {
+                        cleanLocalIfMatch(username, name, false, week);
+                        alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở Tuần ${week}!`);
+                    }).catch((err) => {
+                        alert(`⚠️ Lỗi khi xóa: ${err.message}`);
+                    });
+                });
+            }
+        }
+
+        // DỌN DẸP TOÀN BỘ ĐIỂM THI CỦA CÁC TÀI KHOẢN ĐÃ BỊ XÓA (MỒ CÔI) TRỰC TIẾP TRÊN BẢNG VÀNG
+        function cleanOrphanedScoresBV() {
+            Promise.all([
+                db.ref('users').once('value'),
+                db.ref('scores').once('value')
+            ]).then(([usersSnap, scoresSnap]) => {
+                const usersData = usersSnap.val() || {};
+                const allScores = scoresSnap.val() || {};
+                const validUsernames = new Set(Object.keys(usersData).map(u => u.toLowerCase()));
                 const updates = {};
                 let count = 0;
+                let orphanStudents = {};
 
-                for (let k in weekData) {
-                    const item = weekData[k];
-                    const isMatch = k === pushId ||
-                                   (username && item.username && item.username.toLowerCase() === username.toLowerCase()) ||
-                                   (name && item.fullName && item.fullName.trim().toLowerCase() === name.trim().toLowerCase());
-                    if (isMatch) {
-                        updates[k] = null;
-                        count++;
+                for (let weekKey in allScores) {
+                    const weekData = allScores[weekKey];
+                    if (!weekData) continue;
+                    for (let pushId in weekData) {
+                        const item = weekData[pushId];
+                        const uname = (item.username || '').trim().toLowerCase();
+                        const fname = (item.fullName || item.name || '').trim();
+
+                        if (uname.startsWith('guest_')) continue;
+
+                        if (uname && !validUsernames.has(uname)) {
+                            updates[`scores/${weekKey}/${pushId}`] = null;
+                            count++;
+                            const label = `@${uname} (${fname || 'Chưa rõ tên'})`;
+                            orphanStudents[label] = (orphanStudents[label] || 0) + 1;
+                        }
                     }
                 }
 
-                if (count === 0 && pushId) {
-                    updates[pushId] = null;
-                    count = 1;
+                if (count === 0) {
+                    alert("✨ Bảng Vàng hoàn toàn sạch sẽ! Tất cả điểm số đều thuộc về các tài khoản đang tồn tại.");
+                    return;
                 }
 
-                db.ref(`scores/Tuan_${week}`).update(updates).then(() => {
-                    // Xóa trong localStorage nếu trùng với tài khoản đang đăng nhập
-                    const curUser = localStorage.getItem('studentUsername') || localStorage.getItem('adminUsername');
-                    const curName = localStorage.getItem('studentName');
-                    if (curUser === username || (curName && curName.trim().toLowerCase() === name.trim().toLowerCase())) {
-                        localStorage.removeItem(`bestScore_Tuan_${week}`);
-                        localStorage.removeItem('lastCompletedWeek');
-                        localStorage.removeItem('lastCompletedScore');
-                    }
-                    alert(`✅ Đã xóa triệt để ${count} lượt thi của "${name}" ở Tuần ${week}!`);
-                }).catch((err) => {
-                    alert(`⚠️ Lỗi khi xóa: ${err.message}`);
-                });
+                const detailList = Object.entries(orphanStudents)
+                    .map(([label, c]) => `• ${label}: ${c} lượt thi`)
+                    .slice(0, 15)
+                    .join('\n');
+                const moreText = Object.keys(orphanStudents).length > 15 ? `\n... và ${Object.keys(orphanStudents).length - 15} tài khoản khác` : '';
+
+                if (confirm(`Quản trị viên: Phát hiện ${count} lượt thi trên Bảng Vàng của ${Object.keys(orphanStudents).length} tài khoản ĐÃ BỊ XÓA khỏi hệ thống:\n\n${detailList}${moreText}\n\nXác nhận XÓA TRIỆT ĐỂ toàn bộ ${count} lượt thi này khỏi Bảng Vàng?`)) {
+                    db.ref().update(updates).then(() => {
+                        alert(`✨ Đã dọn dẹp sạch sẽ ${count} lượt thi mồ côi trên Bảng Vàng!`);
+                    }).catch((err) => {
+                        alert(`⚠️ Lỗi khi dọn dẹp: ${err.message}`);
+                    });
+                }
+            }).catch(err => {
+                alert(`⚠️ Lỗi khi kiểm tra dữ liệu: ${err.message}`);
             });
         }
 

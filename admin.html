@@ -361,6 +361,7 @@
         </div>
         <div class="header-actions">
             <span id="admin-user-display" style="font-size:0.85rem; color:var(--gold); font-weight:600;"></span>
+            <button class="btn-action" onclick="cleanOrphanedScoresGlobal()" style="background:#ea580c; border-color:#ea580c; color:#fff; font-weight:700;" title="Quét và xóa triệt để lượt thi của các tài khoản đã bị xóa khỏi hệ thống">🧹 Dọn Điểm TK Đã Xóa</button>
             <button class="btn-action" onclick="cleanAllTestScoresGlobal()" style="background:#dc2626; border-color:#dc2626; color:#fff; font-weight:700;">🧹 Dọn Dẹp Điểm Test</button>
             <button class="btn-action" onclick="showChangePwdModal()">🔑 Đổi mật khẩu</button>
             <a href="bang-vang.html" class="btn-action" style="color:var(--gold); border-color:var(--gold);">🏆 Bảng Vàng</a>
@@ -708,14 +709,14 @@
                     // Reset password
                     actions += `<button class="btn-table btn-reset-pwd" onclick="resetPassword('${u.username}')">🔑 Đổi MK</button>`;
 
-                    // Delete
-                    actions += `<button class="btn-table btn-delete" onclick="deleteUser('${u.username}')" title="Xóa tài khoản">🗑️</button>`;
+                    // Delete (Triệt để: xóa tài khoản + điểm thi trên Bảng Vàng)
+                    actions += `<button class="btn-table btn-delete" onclick="deleteUser('${u.username}', '${(u.fullName || '').replace(/'/g, "\\'")}')" title="Xóa vĩnh viễn tài khoản VÀ toàn bộ điểm thi trên Bảng Vàng (Triệt để)">🗑️ Xóa</button>`;
                 } else {
                     actions = '<span style="color:var(--text-sec); font-size:0.75rem; margin-right:4px;">(Gốc)</span>';
                 }
 
-                // Nút xóa điểm thi (áp dụng cho mọi tài khoản bao gồm cả tài khoản admin)
-                actions += `<button class="btn-table" onclick="deleteUserAllScores('${u.username}', '${(u.fullName || '').replace(/'/g, "\\'")}')" style="background:#be123c; color:#fff;" title="Xóa toàn bộ điểm thi của tài khoản này ở tất cả 35 tuần">🎯 Xóa điểm</button>`;
+                // Nút xóa điểm thi (áp dụng khi chỉ muốn reset điểm thi mà giữ lại tài khoản đăng nhập)
+                actions += `<button class="btn-table" onclick="deleteUserAllScores('${u.username}', '${(u.fullName || '').replace(/'/g, "\\'")}')" style="background:#be123c; color:#fff;" title="Chỉ xóa điểm thi 35 tuần, giữ lại tài khoản để thi lại">🎯 Xóa điểm</button>`;
 
                 return `
                     <tr>
@@ -774,12 +775,108 @@
             }
         }
 
-        function deleteUser(username) {
-            if (confirm(`⚠️ CẢNH BÁO: Bạn có chắc chắn muốn xóa vĩnh viễn tài khoản @${username}?`)) {
-                db.ref('users/' + username).remove().then(() => {
-                    alert(`Đã xóa tài khoản @${username}`);
-                });
+        // XÓA TÀI KHOẢN VÀ TOÀN BỘ ĐIỂM THI TRÊN BẢNG VÀNG (TRIỆT ĐỂ)
+        function deleteUser(username, fullName) {
+            const displayName = fullName ? `@${username} (${fullName})` : `@${username}`;
+            if (!confirm(`⚠️ CẢNH BÁO QUẢN TRỊ VIÊN:\nBạn có chắc chắn muốn XÓA VĨNH VIỄN tài khoản ${displayName}?\n\nThao tác này sẽ XÓA TRIỆT ĐỂ:\n1. Tài khoản đăng nhập trong danh sách người dùng\n2. TOÀN BỘ các lượt thi của học sinh này trên BẢNG VÀNG ở tất cả 35 tuần!`)) {
+                return;
             }
+
+            // Quét toàn bộ scores để xóa liên hoàn
+            db.ref('scores').once('value', (snap) => {
+                const allScores = snap.val() || {};
+                const updates = {};
+                let scoreCount = 0;
+
+                for (let weekKey in allScores) {
+                    const weekData = allScores[weekKey];
+                    if (!weekData) continue;
+                    for (let pushId in weekData) {
+                        const item = weekData[pushId];
+                        const isMatch = (item.username && item.username.toLowerCase() === username.toLowerCase()) ||
+                                       (item.fullName && fullName && item.fullName.trim().toLowerCase() === fullName.trim().toLowerCase());
+                        if (isMatch) {
+                            updates[`scores/${weekKey}/${pushId}`] = null;
+                            scoreCount++;
+                        }
+                    }
+                }
+
+                // Xóa tài khoản trong users
+                updates[`users/${username}`] = null;
+
+                db.ref().update(updates).then(() => {
+                    const curUser = localStorage.getItem('studentUsername') || localStorage.getItem('adminUsername');
+                    if (curUser === username) {
+                        for (let w = 1; w <= 35; w++) {
+                            localStorage.removeItem(`bestScore_Tuan_${w}`);
+                        }
+                        localStorage.removeItem('lastCompletedWeek');
+                        localStorage.removeItem('lastCompletedScore');
+                    }
+                    alert(`✅ Đã xóa triệt để tài khoản @${username} cùng ${scoreCount} lượt thi trên Bảng Vàng (35 tuần)!`);
+                }).catch((err) => {
+                    alert(`⚠️ Lỗi khi xóa: ${err.message}`);
+                });
+            });
+        }
+
+        // DỌN DẸP TOÀN BỘ ĐIỂM THI CỦA CÁC TÀI KHOẢN ĐÃ BỊ XÓA (ĐIỂM MỒ CÔI TRÊN BẢNG VÀNG)
+        function cleanOrphanedScoresGlobal() {
+            Promise.all([
+                db.ref('users').once('value'),
+                db.ref('scores').once('value')
+            ]).then(([usersSnap, scoresSnap]) => {
+                const usersData = usersSnap.val() || {};
+                const allScores = scoresSnap.val() || {};
+
+                const validUsernames = new Set(Object.keys(usersData).map(u => u.toLowerCase()));
+                const updates = {};
+                let count = 0;
+                let orphanStudents = {};
+
+                for (let weekKey in allScores) {
+                    const weekData = allScores[weekKey];
+                    if (!weekData) continue;
+                    for (let pushId in weekData) {
+                        const item = weekData[pushId];
+                        const uname = (item.username || '').trim().toLowerCase();
+                        const fname = (item.fullName || item.name || '').trim();
+
+                        // Bỏ qua tài khoản khách hợp lệ (guest_...)
+                        if (uname.startsWith('guest_')) continue;
+
+                        // Nếu có username mà không còn tồn tại trong users -> điểm mồ côi
+                        if (uname && !validUsernames.has(uname)) {
+                            updates[`scores/${weekKey}/${pushId}`] = null;
+                            count++;
+                            const label = `@${uname} (${fname || 'Chưa rõ tên'})`;
+                            orphanStudents[label] = (orphanStudents[label] || 0) + 1;
+                        }
+                    }
+                }
+
+                if (count === 0) {
+                    alert("✨ Cơ sở dữ liệu hoàn toàn sạch sẽ! Toàn bộ điểm số trên Bảng Vàng đều khớp với các tài khoản đang tồn tại.");
+                    return;
+                }
+
+                const detailList = Object.entries(orphanStudents)
+                    .map(([label, c]) => `• ${label}: ${c} lượt thi`)
+                    .slice(0, 15)
+                    .join('\n');
+                const moreText = Object.keys(orphanStudents).length > 15 ? `\n... và ${Object.keys(orphanStudents).length - 15} tài khoản khác` : '';
+
+                if (confirm(`Quản trị viên: Phát hiện ${count} lượt thi trên Bảng Vàng của ${Object.keys(orphanStudents).length} tài khoản ĐÃ BỊ XÓA khỏi hệ thống:\n\n${detailList}${moreText}\n\nXác nhận XÓA TRIỆT ĐỂ toàn bộ ${count} lượt thi này khỏi Bảng Vàng?`)) {
+                    db.ref().update(updates).then(() => {
+                        alert(`✨ Đã dọn dẹp sạch sẽ ${count} lượt thi mồ côi trên Bảng Vàng!`);
+                    }).catch((err) => {
+                        alert(`⚠️ Lỗi khi dọn dẹp: ${err.message}`);
+                    });
+                }
+            }).catch(err => {
+                alert(`⚠️ Lỗi khi kiểm tra dữ liệu: ${err.message}`);
+            });
         }
 
         function approveAllPending() {
